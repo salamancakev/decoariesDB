@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <h1 class="page-header">Products</h1>
+    </div>
+    <h4>Click on a row to edit a product</h4>
+  
+    <div class="row">
+      <div class="table-responsive-md">
+        <table class="table table-hover">
+            <thead class="thead-light">
+              <tr>
+                  <th *ngFor="let col of columns">{{col}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of products" (click)="onClick(p)">
+                  <td *ngFor="let col of columns">{{p[col]}}</td>
+                  
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
+    <div *ngIf="selectedProduct">
+      <form (submit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Product Name</label>
+            <input class="form-control" type="text" [(ngModel)]="selectedProduct.ProductName" name="name" id="name" placeholder="name" >
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Update Product</button>
+      </form>
+    </div>
+
+   </div>

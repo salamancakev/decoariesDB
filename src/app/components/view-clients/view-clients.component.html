@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="row">
+      <h1 class="page-header">Clients</h1>
+  </div>
+  <h4>Click on a row to edit client data</h4>
+  <div class="row">
+    <div class="table-responsive-md">
+      <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+                <th *ngFor="let col of columns">{{col}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of clients" (click)="onClick(c)">
+                <td *ngFor="let col of columns">{{c[col]}}</td>
+                
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+    
+  <div *ngIf="selectedClient">
+    <br>
+    <form (submit) = "onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="selectedClient.Name" name="name" id="name" placeholder="name">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="selectedClient.Email" name="email" id="email" placeholder="email">
+          </div>
+        </div>
+      
+        <div class="form-row">
+            <div class="form-group col-2">
+                <label for="gender">Gender</label>
+                <select class="form-control" [(ngModel)]="selectedClient.Gender" name="gender" id="gender">
+                  <option value="M">M</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+      
+        <div class="form-group col-4">
+          <label for="status">Status</label>
+          <input type="text" class="form-control" [(ngModel)]="selectedClient.Status" name="status" id="status" placeholder="status">
+        </div>
+          <div class="form-group col-3">
+              <label for="phone1">Phone 1</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedClient.Phone1" name="phone1" id="phone1" placeholder="phone1">
+          </div>
+      
+          <div class="form-group col-3">
+              <label for="status">Phone 2 (opt)</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedClient.Phone2" name="phone2" id="phone2" placeholder="phone2">
+          </div>
+      
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="company">Company</label>
+            <input [ngbTypeahead]="search"
+            (focus)="focus$.next($event.target.value)"
+            (click)="click$.next($event.target.value)"
+            #instance="ngbTypeahead" type="text" class="form-control" [(ngModel)]="selectedClient.Company" name="company" id="company" placeholder="company">
+          </div>
+        </div>
+      
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+      </form> 
+
+
+  </div>
+</div>

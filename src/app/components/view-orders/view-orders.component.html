@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="row">
+      <h1 class="page-header">Order</h1>
+  </div>
+  <h4>Click on a row to view order details</h4>
+
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Order Details</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngFor="let d of orderDetails">
+        <p>Product: {{d.Product}}. Quantity: {{d.Quantity}} </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2"  (click)="onEdit()" (click)="c()">Edit</button>
+      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <div class="row">
+    <div class="table-responsive-md">
+      <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+                <th *ngFor="let col of columns">{{col}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of orders" (click)="openOrderDetails(o, content)">
+                <td *ngFor="let col of columns">{{o[col]}}</td>
+                
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+  <div *ngIf="edit">
+      <br>
+      <form (submit)="onSubmit()">
+          <h4>Select a client</h4>
+      
+          <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="client">Client</label>
+                <select [(ngModel)]="selectedClient" name="client" id="client">
+                  <option *ngFor="let c of clients" [ngValue]="c.idClient"> {{c.Name}} {{c.Email}} </option>
+                </select>
+            </div>
+          </div>
+      
+          <div *ngIf="selectedClient">
+            <h4>Select products and quantities</h4>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="product">Product</label>
+                <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
+                  <option *ngFor="let p of products" [ngValue]="p.idProduct"> {{p.ProductName}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="status">Quantity</label>
+                <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity" required>
+            </div>
+            <div class="form-group col-md-4">
+              <br>
+              <br>
+              <button class="btn btn-primary"  type="button" (click)="addProduct()">Add Product to Order</button>
+            </div>
+          </div>
+      
+          <button class="btn btn-primary" type="submit">Update Order</button>
+          </div>
+          
+      
+      
+        </form>
+  
+  
+    </div>
+</div>

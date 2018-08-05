@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <h1>Create Order</h1>
+  </div>
+
+  <form (submit)="onSubmit()">
+    <h4>Select a client</h4>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+          <label for="client">Client</label>
+          <select [(ngModel)]="selectedClient" name="client" id="client">
+            <option *ngFor="let c of clients" [ngValue]="c.idClient"> {{c.Name}} {{c.Email}} </option>
+          </select>
+      </div>
+    </div>
+
+    <div *ngIf="selectedClient">
+      <h4>Select products and quantities</h4>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+          <label for="product">Product</label>
+          <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
+            <option *ngFor="let p of products" [ngValue]="p.idProduct"> {{p.ProductName}}</option>
+          </select>
+      </div>
+      <div class="form-group col-md-2">
+          <label for="status">Quantity</label>
+          <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity" required>
+      </div>
+      <div class="form-group col-md-4">
+        <br>
+        <br>
+        <button class="btn btn-primary"  type="button" (click)="addProduct()">Add Product to Order</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Create Order</button>
+    </div>
+    
+
+
+  </form>
+</div>

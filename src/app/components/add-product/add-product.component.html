@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <h1>Add Product</h1>
+  </div>
+
+  <form (submit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group col-4-md">
+        <label for="name">Product Name</label>
+        <input class="form-control" type="text" [(ngModel)]="name" name="name" id="name">
+      </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Add Product</button>
+  </form>
+
+</div>
