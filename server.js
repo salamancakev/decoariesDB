@@ -39,6 +39,6 @@ app.use('/', routes);
 
 
 app.listen(port, then=>{
-    console.log('Listening...');
+    console.log('Listening on port 8080');
 })
 
