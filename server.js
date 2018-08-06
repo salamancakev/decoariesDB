@@ -10,6 +10,8 @@ var routes = require('./routes/index');
 var port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
+var distDir = __dirname + "/dist/";
+app.use(express.static(distDir));
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
@@ -31,8 +33,7 @@ app.use(function (req, res, next) {
 
 app.use('/', routes);
 
-var distDir = __dirname + "/dist/";
-app.use(express.static(distDir));
+
 
 
 
