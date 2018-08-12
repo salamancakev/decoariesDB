@@ -2,15 +2,29 @@
   <div class="row">
     <h1>Add Product</h1>
   </div>
-
-  <form (submit)="onSubmit()">
+  <div class="row">
+     <form ngNativeValidate (submit)="onSubmit()">
     <div class="form-row">
       <div class="form-group col-4-md">
         <label for="name">Product Name</label>
-        <input class="form-control" type="text" [(ngModel)]="name" name="name" id="name">
+        <input class="form-control" type="text" [(ngModel)]="name" name="name" id="name" required>
       </div>
+      <div class="form-group col-4-md">
+          <label for="size">Size</label>
+          <input class="form-control" type="number" [(ngModel)]="size" name="size" id="size" required>
+        </div>
+        <div class="form-group col-4-md">
+            <label for="cloth">Cloth Type</label>
+            <input class="form-control" type="text" [(ngModel)]="cloth" name="cloth" id="cloth" required>
+          </div>
     </div>
     <button class="btn btn-primary" type="submit">Add Product</button>
+    <h1></h1>
+    <button class="btn btn-primary" routerLink="/products">Back</button>
   </form>
+  </div>
+ 
+
+  
 
 </div>

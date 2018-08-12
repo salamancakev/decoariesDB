@@ -13,6 +13,8 @@ import { ValidateService } from "../../services/validate.service";
 export class AddProductComponent implements OnInit {
 
   name : String;
+  size : Number;
+  cloth : String;
 
   constructor(private router : Router,
     private datePipe : DatePipe,
@@ -25,7 +27,9 @@ export class AddProductComponent implements OnInit {
 
     onSubmit(){
       let product = {
-        name : this.name
+        name : this.name,
+        size : this.size,
+        cloth : this.cloth
       }
 
       if(!this.validateService.validateProduct(product)){

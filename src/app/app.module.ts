@@ -14,18 +14,21 @@ import { ClientsDashboardComponent } from './components/clients-dashboard/client
 import { OrdersDashboardComponent } from './components/orders-dashboard/orders-dashboard.component';
 import { ProductsDashboardComponent } from './components/products-dashboard/products-dashboard.component';
 import { AddClientComponent } from './components/add-client/add-client.component';
-
 import {DatabaseService} from './services/database.service';
 import {ValidateService} from './services/validate.service';
+import { AuthService } from "./services/auth.service";
 import { ViewClientsComponent } from './components/view-clients/view-clients.component';
 import { ViewCompaniesComponent } from './components/view-companies/view-companies.component';
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { ViewOrdersComponent } from './components/view-orders/view-orders.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { ViewProductsComponent } from './components/view-products/view-products.component';
+import { SearchClientPipe } from "./search-client.pipe";
+import {SearchOrderPipe} from './search-order.pipe';
+import { LoginComponent } from './components/login/login.component';
 
 const appRoutes : Routes = [
-  {path : '', redirectTo : 'home', pathMatch : 'full'},
+  {path : '', redirectTo : 'login', pathMatch : 'full'},
   {path : 'home', component : HomeComponent},
   {path : 'clients', component : ClientsDashboardComponent},
   {path : 'orders', component : OrdersDashboardComponent},
@@ -36,7 +39,8 @@ const appRoutes : Routes = [
   {path : 'add-order', component : AddOrderComponent},
   {path: 'view-orders', component : ViewOrdersComponent},
   {path : 'add-product', component : AddProductComponent},
-  {path : 'view-products', component :ViewProductsComponent}
+  {path : 'view-products', component :ViewProductsComponent},
+  {path : 'login', component : LoginComponent}
 ]
 
 @NgModule({
@@ -52,7 +56,10 @@ const appRoutes : Routes = [
     AddOrderComponent,
     ViewOrdersComponent,
     AddProductComponent,
-    ViewProductsComponent
+    ViewProductsComponent,
+    SearchClientPipe,
+    SearchOrderPipe,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +72,7 @@ const appRoutes : Routes = [
     FormsModule,
     HttpModule
   ],
-  providers: [DatabaseService, ValidateService, DatePipe],
+  providers: [DatabaseService, ValidateService, AuthService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

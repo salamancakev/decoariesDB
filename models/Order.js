@@ -19,6 +19,10 @@ module.exports= function(sequelize, DataTypes){
         idClient : {
             type : DataTypes.INTEGER,
             allowNull : false
+        },
+        Price : {
+            type : DataTypes.FLOAT,
+            allowNull : false
         }
     })
     

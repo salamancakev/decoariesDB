@@ -16,14 +16,15 @@ import {DatabaseService} from '../../services/database.service';
 export class AddClientComponent implements OnInit {
 
     companies :any[];
+    clients : any[];
     companyNames: any[];
     name : String;
     email : String;
     gender : String;
-    status : String;
     phone1 : String;
     phone2 : String;
     company : String;
+    website : String;
     date : Date;
 
     @ViewChild('instance') instance: NgbTypeahead;
@@ -57,6 +58,10 @@ export class AddClientComponent implements OnInit {
         names.push(value.CompanyName)
       })
       this.companyNames = names;
+    });
+
+    this.dbService.getClients().subscribe(data=>{
+      this.clients=data;
     })
   }
 
@@ -69,18 +74,15 @@ export class AddClientComponent implements OnInit {
         exists=true;
       }
 
-      console.log(exists);
-    
-
-
     const client = {
       name : this.name,
       email : this.email,
       gender : this.gender,
-      status : this.status,
+      status : 'Active',
       phone1 : this.phone1,
       phone2 : this.phone2,
       companyName : this.company,
+      companyWebsite : this.website,
       registerDate : registerDate,
       exists : exists
     }
@@ -95,13 +97,25 @@ export class AddClientComponent implements OnInit {
       return false;
     }
 
+    if(!this.validateService.validateWebsite(client)){
+      this.flashMessage.show('Please fill in the Website field.', {cssClass : 'alert-danger'})
+      return false;
+    }
+
+    this.clients.forEach(value=>{
+      if(value.Name == client.name || value.Email == client.email){
+        this.flashMessage.show("Client already exists in database", {cssClass : 'alert-danger'})
+        return false;
+      }
+    })
+
     this.dbService.registerClient(client).subscribe(data=>{
       if(data.success){
         this.flashMessage.show('Client added to DB', {cssClass : "alert-success"});
         this.router.navigate(['clients']);
       }
       else{
-        this.flashMessage.show('Something went wrong', {cssClass : "alert-danger"});
+        this.flashMessage.show('Client already exists in database', {cssClass : "alert-danger"});
         return false;
       }
     })

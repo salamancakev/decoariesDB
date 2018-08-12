@@ -15,6 +15,16 @@ module.exports= function(sequelize, DataTypes){
             type : DataTypes.STRING,
             unique : true,
             allowNull : false
+        },
+
+        Size : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+
+        ClothType: {
+            type : DataTypes.STRING,
+            allowNull : false
         }
     })
     
