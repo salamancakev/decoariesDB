@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `client` (
   `idClient` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE `client` (
   UNIQUE KEY `Email_UNIQUE` (`Email`),
   KEY `fk_Client_Company_idx` (`idCompany`),
   CONSTRAINT `fk_Client_Company` FOREIGN KEY (`idCompany`) REFERENCES `company` (`idcompany`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (1,'Kevin','kevin@reponic.org','M','Active','2018-08-04',10,'04125992464',NULL),(2,'John Doe','johndoe@email.com','M','Active','2018-08-04',4,'84773829358',NULL),(3,'Jorge Salamanca','yuribiac@gmail.com','M','Active','2018-08-04',3,'04128684939',NULL),(4,'Kimberly Salamanca','kimberly@reponic.org','F','Active','2018-08-04',8,'04143595345',NULL),(6,'Diego Rodriguez','diego@email.com','M','Active','2018-08-04',3,'02124938586',NULL),(8,'Steve Jobs','jobs@apple.com','M','Active','2018-08-04',9,'04246372813',NULL);
+INSERT INTO `client` VALUES (9,'Kevin Salamanca','kevin@reponic.org','M','Active','2018-08-11',11,'6547648432','3452365475'),(10,'Jorge Salamanca','jorge@gmail.com','M','Active','2018-08-11',12,'843785378',NULL);
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,14 +55,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `company`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `company` (
   `idCompany` int(11) NOT NULL AUTO_INCREMENT,
   `CompanyName` varchar(100) NOT NULL,
   `Website` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idCompany`),
   UNIQUE KEY `Name_UNIQUE` (`CompanyName`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `company` (
 
 LOCK TABLES `company` WRITE;
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
-INSERT INTO `company` VALUES (1,'company',NULL),(3,'Reponic',NULL),(4,'John\'s Company',NULL),(8,'Kim\'s Company',NULL),(9,'Apple','www.apple.com'),(10,'Android',NULL);
+INSERT INTO `company` VALUES (11,'Reponic','www.reponic.org'),(12,'Jorge\'s Company','www.jorge.com');
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orderdetails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `orderdetails` (
   `idOrderDetail` int(11) NOT NULL AUTO_INCREMENT,
   `idOrder` int(11) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `orderdetails` (
   KEY `fk_Order_has_Product_Order1_idx` (`idOrder`),
   CONSTRAINT `fk_Order_has_Product_Order1` FOREIGN KEY (`idOrder`) REFERENCES `orders` (`idorder`),
   CONSTRAINT `fk_Order_has_Product_Product1` FOREIGN KEY (`idProduct`) REFERENCES `product` (`idproduct`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `orderdetails` (
 
 LOCK TABLES `orderdetails` WRITE;
 /*!40000 ALTER TABLE `orderdetails` DISABLE KEYS */;
-INSERT INTO `orderdetails` VALUES (1,1,1,1),(2,1,3,2),(3,2,2,5),(4,2,1,1),(8,3,1,8);
+INSERT INTO `orderdetails` VALUES (10,4,4,12);
 /*!40000 ALTER TABLE `orderdetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,15 +111,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `orders` (
   `idOrder` int(11) NOT NULL AUTO_INCREMENT,
   `OrderDate` date NOT NULL,
+  `Price` float NOT NULL,
   `idClient` int(11) NOT NULL,
   PRIMARY KEY (`idOrder`),
   KEY `fk_Order_Client1_idx` (`idClient`),
   CONSTRAINT `fk_Order_Client1` FOREIGN KEY (`idClient`) REFERENCES `client` (`idclient`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +129,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'2018-08-04',1),(2,'2018-08-04',6),(3,'2018-08-05',8);
+INSERT INTO `orders` VALUES (4,'2018-08-11',30,9);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +139,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `phone`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `phone` (
   `idPhone` int(11) NOT NULL AUTO_INCREMENT,
   `PhoneNumber` varchar(50) NOT NULL,
@@ -147,7 +148,7 @@ CREATE TABLE `phone` (
   UNIQUE KEY `PhoneNumber_UNIQUE` (`PhoneNumber`),
   KEY `fk_Phone_Client1_idx` (`idClient`),
   CONSTRAINT `fk_Phone_Client1` FOREIGN KEY (`idClient`) REFERENCES `client` (`idclient`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,12 +166,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8 ;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `product` (
   `idProduct` int(11) NOT NULL AUTO_INCREMENT,
   `ProductName` varchar(50) NOT NULL,
+  `Size` varchar(45) NOT NULL,
+  `ClothType` varchar(45) NOT NULL,
   PRIMARY KEY (`idProduct`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +182,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Hammer'),(2,'Flower'),(3,'Carpet'),(4,'Laptop');
+INSERT INTO `product` VALUES (4,'Denim','12.5','Denim');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -192,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-06  9:13:37
+-- Dump completed on 2018-08-12 17:27:55
