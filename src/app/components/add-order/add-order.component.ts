@@ -17,11 +17,11 @@ export class AddOrderComponent implements OnInit {
     products : any[];
 
     quantity : Number;
-
+    price : Number;
     selectedClient : any;
     selectedProduct : any;
     date : Date;
-
+    
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
@@ -52,7 +52,7 @@ export class AddOrderComponent implements OnInit {
       return false;
     }
     this.orderProducts.push(product);
-
+    this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
     this.quantity=null;
   }
@@ -64,7 +64,16 @@ export class AddOrderComponent implements OnInit {
   let order = {
     idClient : this.selectedClient,
     orderProducts: this.orderProducts,
+    price : this.price,
     orderDate : registerDate
+  }
+  if(this.orderProducts.length==0){
+    this.flashMessage.show('Please add products to the order', {cssClass: 'alert-danger'})
+    return false;
+  }
+  if(!this.validateService.validateOrder(order)){
+    this.flashMessage.show("Please fill in all fields", {cssClass : 'alert-danger'})
+    return false;
   }
 
  this.dbService.addOrder(order).subscribe(data=>{

@@ -3,57 +3,41 @@
       <h1 class="page-header">Clients</h1>
   </div>
   <h4>Click on a row to edit client data</h4>
-  <div class="row">
-    <div class="table-responsive-md">
-      <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-                <th *ngFor="let col of columns">{{col}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of clients" (click)="onClick(c)">
-                <td *ngFor="let col of columns">{{c[col]}}</td>
-                
-            </tr>
-          </tbody>
-        </table>
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Client details</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-  </div>
-    
-  <div *ngIf="selectedClient">
-    <br>
-    <form (submit) = "onSubmit()">
+    <div class="modal-body">
+      <form ngNativeValidate (submit) = "onSubmit()">
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="name">Name</label>
-            <input type="text" class="form-control" [(ngModel)]="selectedClient.Name" name="name" id="name" placeholder="name">
+            <input type="text" class="form-control" [(ngModel)]="selectedClient.Name" name="name" id="name" placeholder="name" required>
           </div>
           <div class="form-group col-md-6">
             <label for="email">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="selectedClient.Email" name="email" id="email" placeholder="email">
+            <input type="email" class="form-control" [(ngModel)]="selectedClient.Email" name="email" id="email" placeholder="email" required>
           </div>
         </div>
       
         <div class="form-row">
             <div class="form-group col-2">
                 <label for="gender">Gender</label>
-                <select class="form-control" [(ngModel)]="selectedClient.Gender" name="gender" id="gender">
+                <select class="form-control" [(ngModel)]="selectedClient.Gender" name="gender" id="gender" required>
                   <option value="M">M</option>
                   <option value="F">F</option>
                 </select>
               </div>
       
-        <div class="form-group col-4">
-          <label for="status">Status</label>
-          <input type="text" class="form-control" [(ngModel)]="selectedClient.Status" name="status" id="status" placeholder="status">
-        </div>
-          <div class="form-group col-3">
+          <div class="form-group col-5">
               <label for="phone1">Phone 1</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedClient.Phone1" name="phone1" id="phone1" placeholder="phone1">
+              <input type="text" class="form-control" [(ngModel)]="selectedClient.Phone1" name="phone1" id="phone1" placeholder="phone1" required>
           </div>
       
-          <div class="form-group col-3">
+          <div class="form-group col-5">
               <label for="status">Phone 2 (opt)</label>
               <input type="text" class="form-control" [(ngModel)]="selectedClient.Phone2" name="phone2" id="phone2" placeholder="phone2">
           </div>
@@ -63,17 +47,47 @@
         <div class="form-row">
           <div class="form-group col-6">
             <label for="company">Company</label>
-            <input [ngbTypeahead]="search"
-            (focus)="focus$.next($event.target.value)"
-            (click)="click$.next($event.target.value)"
-            #instance="ngbTypeahead" type="text" class="form-control" [(ngModel)]="selectedClient.Company" name="company" id="company" placeholder="company">
+            <input type="text" class="form-control" [(ngModel)]="selectedClient.Company" name="company" id="company" placeholder="company" required>
           </div>
         </div>
       
         
-        <button type="submit" class="btn btn-primary">Update</button>
-      </form> 
+        <button type="button" class="btn btn-primary" (click)="onConfirm()">Update</button>
+        <div *ngIf="confirm">
+            <h1></h1>      
+            <p>Do you want to confirm this changes?</p>
+            <button type="submit" class="btn btn-outline-primary mb-2 mr-2">Yes</button>
+            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+    
+  <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
 
+  
 
+  <div class="row">
+    <div class="table-responsive-md">
+      <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+                <th *ngFor="let col of columns">{{col}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of clients | clientsFilter:email" (click)="onClick(c, content)">
+                <td *ngFor="let col of columns">{{c[col]}}</td>
+                
+            </tr>
+          </tbody>
+        </table>
+    </div>
   </div>
+    
+  <h1></h1>
+  <button class="btn btn-primary" routerLink="/clients">Back</button>
 </div>

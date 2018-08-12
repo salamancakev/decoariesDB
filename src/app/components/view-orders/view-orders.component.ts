@@ -11,19 +11,22 @@ import { ValidateService } from "../../services/validate.service";
   styleUrls: ['./view-orders.component.css']
 })
 export class ViewOrdersComponent implements OnInit {
-    columns = ['idOrder', 'Client', 'Email', 'Company', 'Order Date'];
+    columns = ['idOrder', 'Client', 'Email', 'Company', 'Date', 'Price'];
     edit = false;
     orders : any[];
     orderDetails: any;
     selectedOrder : any;
 
-    clients : any[];
+    detailsModalReference: any;
+    editModalReference : any;
+
     products: any[];
-    selectedClient : any;
     selectedProduct: any;
     orderProducts = [];
     quantity: any;
-
+    confirm =false;
+    email :any;
+    
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
@@ -32,9 +35,6 @@ export class ViewOrdersComponent implements OnInit {
     private modalService : NgbModal) { }
 
   ngOnInit() {
-    this.dbService.getClients().subscribe(data=>{
-      this.clients=data[0]
-    })
 
     this.dbService.getProducts().subscribe(data=>{
       this.products=data
@@ -44,23 +44,27 @@ export class ViewOrdersComponent implements OnInit {
     })
   }
 
-  openOrderDetails(order, content){
+  openOrderDetails(order, details){
     this.edit=false;
     this.selectedOrder= order;
+
    this.dbService.getOrderDetails(order).subscribe(data=>{
      this.orderDetails = data[0];
-     this.modalService.open(content);
+     this.detailsModalReference=this.modalService.open(details);
    })
   }
 
-  onEdit(){
+  onEdit(content){
+    this.detailsModalReference.close();
     this.edit=true;
+    this.editModalReference=this.modalService.open(content)
     
   }
 
   addProduct(){
     let product = {
-      idProduct : this.selectedProduct,
+      idProduct : this.selectedProduct.idProduct,
+      productName: this.selectedProduct.ProductName,
       Quantity : this.quantity
     }
     if(this.selectedProduct==undefined){
@@ -76,26 +80,44 @@ export class ViewOrdersComponent implements OnInit {
       return false;
     }
     this.orderProducts.push(product);
-
+    this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
     this.quantity=null;
+  }
+
+  onConfirm(){
+    this.confirm=true;
+    console.log(this.orderProducts);
   }
 
   onSubmit(){
 
     let order = {
       idOrder : this.selectedOrder.idOrder,
-      idClient : this.selectedClient,
+      idClient : this.selectedOrder.idClient,
       orderProducts : this.orderProducts,
+      price : this.selectedOrder.Price
+    }
+
+    if(this.orderProducts.length==0){
+      this.flashMessage.show('Please add products to the order', {cssClass: 'alert-danger'});
+      return false;
+    }
+
+    if(!this.validateService.validateOrder(order)){
+      this.flashMessage.show("Please fill in all fields", {cssClass: "alert-danger"})
+      return false;
     }
 
     this.dbService.updateOrder(order).subscribe(data=>{
       if(data.success){
+        this.editModalReference.close();
         this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
         this.router.navigate(['orders']);
       }
 
       else{
+        this.editModalReference.close();
         this.flashMessage.show(data.msg, {cssClass : 'alert-danger'})
         this.router.navigate(['alert-danger']);
       }

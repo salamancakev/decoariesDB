@@ -3,7 +3,7 @@
     <h1>Create Order</h1>
   </div>
 
-  <form (submit)="onSubmit()">
+  <form ngNativeValidate (submit)="onSubmit()">
     <h4>Select a client</h4>
 
     <div class="form-row">
@@ -26,7 +26,7 @@
       </div>
       <div class="form-group col-md-2">
           <label for="status">Quantity</label>
-          <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity" required>
+          <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity">
       </div>
       <div class="form-group col-md-4">
         <br>
@@ -35,10 +35,15 @@
       </div>
     </div>
 
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="price">Total Price</label>
+        $<input type="text" class="form-control" [(ngModel)]="price" name="price" id="price" placeholder="Price" required>
+      </div>
+    </div>
     <button class="btn btn-primary" type="submit">Create Order</button>
     </div>
-    
-
-
   </form>
+  <h1></h1>
+  <button class="btn btn-primary" routerLink="/orders">Back</button>
 </div>

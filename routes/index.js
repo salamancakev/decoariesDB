@@ -54,7 +54,8 @@ router.post('/api/register-client', function(req, res){
     if(!req.body.exists){
       //Create Company//
      Company.create({
-      CompanyName : req.body.companyName
+      CompanyName : req.body.companyName,
+      Website : req.body.companyWebsite
     }).then(company =>{
       //Store ID of created company//
       idCompany = company.dataValues.idCompany
@@ -230,13 +231,14 @@ router.post('/api/add-order', function(req,res){
   auxArray = req.body.orderProducts;
   Order.create({
     idClient : req.body.idClient,
-    OrderDate : req.body.orderDate
+    OrderDate : req.body.orderDate,
+    Price : req.body.price
   }).then(order=>{
     auxArray.forEach(value=>{
       OrderDetails.create({
         idOrder : order.dataValues.idOrder,
         idProduct : value.idProduct,
-        Quantity : value.Quantity
+        Quantity : value.Quantity,
       })
     })
   }).then(finish=>{
@@ -249,7 +251,7 @@ router.post('/api/add-order', function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.CompanyName as 'Company', orders.idOrder, orders.OrderDate as 'Order Date' from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.CompanyName as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -274,7 +276,8 @@ router.post('/api/update-order', function(req,res){
   let auxArray = [];
   auxArray=req.body.orderProducts;
   Order.update({
-    idClient : req.body.idClient
+    idClient : req.body.idClient,
+    Price : req.body.price
   }, {
     where : {
       idOrder : req.body.idOrder
@@ -303,7 +306,9 @@ router.post('/api/update-order', function(req,res){
 
 router.post('/api/add-product',function(req,res){
   Product.create({
-    ProductName : req.body.name
+    ProductName : req.body.name,
+    Size : req.body.size,
+    ClothType : req.body.cloth
   }).then(product=>{
     res.json({success :true, msg : "Product added to database"})
   }).catch(e=>{
@@ -314,7 +319,9 @@ router.post('/api/add-product',function(req,res){
 
 router.post('/api/update-product', function(req, res){
   Product.update({
-    ProductName : req.body.name
+    ProductName : req.body.name,
+    Size : req.body.size,
+    ClothType : req.body.cloth
   }, {
     where : {
       idProduct : req.body.idProduct
@@ -324,6 +331,19 @@ router.post('/api/update-product', function(req, res){
   }).catch(e=>{
     console.log(e)
     res.json({success :false, msg : "Something sent wrong"});
+  })
+});
+
+router.post('/api/clients-company', function(req,res){
+  Client.findAll({
+    where : {
+      idCompany : req.body.idCompany
+    }
+  }).then(clients=>{
+    res.send(clients)
+  }).catch(e=>{
+    console.log(e)
+    res.json({success : false, msg : "Something went wrong"});
   })
 })
 

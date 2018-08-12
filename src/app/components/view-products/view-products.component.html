@@ -3,7 +3,42 @@
         <h1 class="page-header">Products</h1>
     </div>
     <h4>Click on a row to edit a product</h4>
-  
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title">Client details</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form ngNativeValidate (submit)="onSubmit()">
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="name">Product Name</label>
+                    <input class="form-control" type="text" [(ngModel)]="selectedProduct.ProductName" name="name" id="name" placeholder="name" required>
+                  </div>
+                  <div class="form-group col-md-4">
+                      <label for="size">Size</label>
+                      <input class="form-control" type="text" [(ngModel)]="selectedProduct.Size" name="size" id="size" placeholder="size" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="cloth">Cloth Type</label>
+                        <input class="form-control" type="text" [(ngModel)]="selectedProduct.ClothType" name="cloth" id="cloth" placeholder="cloth" required>
+                      </div>
+                </div>
+                <button class="btn btn-primary" type="button" (click)="onConfirm()">Update</button>
+                <div *ngIf="confirm">
+                    <h1></h1>      
+                    <p>Do you want to confirm this changes?</p>
+                    <button type="submit" class="btn btn-outline-primary mb-2 mr-2">Yes</button>
+                    <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+        </div>
+      </ng-template>
     <div class="row">
       <div class="table-responsive-md">
         <table class="table table-hover">
@@ -13,7 +48,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let p of products" (click)="onClick(p)">
+              <tr *ngFor="let p of products" (click)="onClick(p,content)">
                   <td *ngFor="let col of columns">{{p[col]}}</td>
                   
               </tr>
@@ -21,17 +56,7 @@
           </table>
       </div>
     </div>
-
-    <div *ngIf="selectedProduct">
-      <form (submit)="onSubmit()">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="name">Product Name</label>
-            <input class="form-control" type="text" [(ngModel)]="selectedProduct.ProductName" name="name" id="name" placeholder="name" >
-          </div>
-        </div>
-        <button class="btn btn-primary" type="submit">Update Product</button>
-      </form>
-    </div>
+    <h1></h1>
+    <button class="btn btn-primary" routerLink="/products">Back</button>
 
    </div>

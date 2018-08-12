@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {Router} from '@angular/router';
-import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
+import {NgbTypeahead, NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {Observable, Subject, merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -18,6 +18,9 @@ export class ViewClientsComponent implements OnInit {
   clients : any[];
   selectedClient : any;
   companyNames:  any[];
+  modalReference :any;
+  email : any;
+  confirm = false;
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -37,6 +40,7 @@ export class ViewClientsComponent implements OnInit {
   constructor(private router : Router,
   private dbService : DatabaseService,
   private validateService : ValidateService,
+  private modalService : NgbModal,
   private flashMessage : FlashMessagesService) { }
 
   ngOnInit() {
@@ -58,9 +62,14 @@ export class ViewClientsComponent implements OnInit {
     })
 }
 
-onClick(client){
+onClick(client, content){
   this.selectedClient=client;
   console.log(this.selectedClient);
+  this.modalReference=this.modalService.open(content);
+}
+
+onConfirm(){
+  this.confirm=true;
 }
 
 onSubmit(){
@@ -93,11 +102,13 @@ let exists;
 
 this.dbService.updateClient(client).subscribe(data =>{
   if(data.success){
+    this.modalReference.close();
     this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
     this.router.navigate(['clients']);
   }
 
   else{
+    this.modalReference.close();
     this.flashMessage.show(data.msg, {cssClass : 'alert-danger'})
     this.router.navigate(['clients']);
   }

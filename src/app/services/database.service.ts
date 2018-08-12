@@ -77,4 +77,10 @@ export class DatabaseService {
     return this.http.post('http://localhost:8080/api/update-product',product, {headers:headers}).pipe(map(res=>res.json()));    
   }
 
+  searchClientsCompany(company){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:8080/api/clients-company', company, {headers :headers}).pipe(map(res=>res.json()));
+  }
+
 }
