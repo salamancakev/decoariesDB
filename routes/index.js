@@ -64,7 +64,7 @@ router.post('/api/register-client', function(req, res){
         Name : req.body.name,
         Email : req.body.email,
         Gender : req.body.gender,
-        Status : req.body.status,
+        Status : 'Active',
         RegisterDate : req.body.registerDate,
         Phone1 : req.body.phone1,
         Phone2 : req.body.phone2,
@@ -154,7 +154,6 @@ router.post('/api/update-client', function(req, res){
         Name : req.body.name,
         Email : req.body.email,
         Gender : req.body.gender,
-        Status : req.body.status,
         Phone1 : req.body.phone1,
         Phone2 : req.body.phone2,
         idCompany : company.dataValues.idCompany
@@ -276,7 +275,6 @@ router.post('/api/update-order', function(req,res){
   let auxArray = [];
   auxArray=req.body.orderProducts;
   Order.update({
-    idClient : req.body.idClient,
     Price : req.body.price
   }, {
     where : {
