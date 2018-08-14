@@ -15,7 +15,7 @@ export class AuthService {
     domain: 'decoaries.auth0.com',
     responseType: 'token id_token',
     audience: 'https://decoaries.auth0.com/userinfo',
-    redirectUri: 'http://localhost:4200/home',
+    redirectUri: 'http://decoaries.herokuapp.com',
     scope: 'openid'
   });
 
