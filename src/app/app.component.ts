@@ -12,7 +12,7 @@ export class AppComponent {
   isCollapsed = true;
 
   constructor(private authService : AuthService) {
-    authService.handleAuthentication();
+
   }
 
 
