@@ -51,7 +51,7 @@ export class DatabaseService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer '+this.authService.userToken);
-    return this.http.post('http://localhost:8080/apihttp://localhost:8080/add-order', order, {headers : headers}).pipe(map(res=>res.json()))
+    return this.http.post('http://localhost:8080/api/add-order', order, {headers : headers}).pipe(map(res=>res.json()))
   }
 
   getOrders(){
@@ -76,7 +76,7 @@ export class DatabaseService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer '+this.authService.userToken);
-    return this.http.post('http://localhost:8080/apihttp://localhost:8080/add-product',product,{headers:headers}).pipe(map(res=>res.json()));
+    return this.http.post('http://localhost:8080/api/add-product',product,{headers:headers}).pipe(map(res=>res.json()));
   }
 
   updateProduct(product){
