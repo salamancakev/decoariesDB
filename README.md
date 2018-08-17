@@ -85,3 +85,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
      2) Method: POST
      3) Headers: 'Content-Type : application/json'
      4) Body: idCompany : Integer
+     
+ 14) 1) URL: 'https://decoaries.herokuapp.com/api/login'
+     2) Method : POST
+     3) Headers: 'Content-Type : application/json'
+     4) Body: email : String, password : String, clientToken : String
+     
+ 16) 1) URL: 'https://decoaries.herokuapp.com/api/signup'
+     2) Method : POST
+     3) Headers: 'Content-Type : application/json'
+     4) Body : name : String, email : String, password : String, clientToken : String
