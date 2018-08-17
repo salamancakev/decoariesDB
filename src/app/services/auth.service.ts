@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import * as auth0 from 'auth0-js';
+import { Http, Headers } from "@angular/http";
+import { map } from '../../../node_modules/rxjs/operators';
+import { ok } from 'assert';
+
 
 (window as any).global = window;
 
@@ -9,58 +11,56 @@ import * as auth0 from 'auth0-js';
   providedIn: 'root'
 })
 export class AuthService {
+  clientToken : any;
+  userToken : any;
+  user : any;
 
-  auth0 = new auth0.WebAuth({
-    clientID: 'ClE4PpItBuKN1rtyP9Y5vI4CbFh4Q5KO',
-    domain: 'decoaries.auth0.com',
-    responseType: 'token id_token',
-    audience: 'https://decoaries.auth0.com/userinfo',
-    redirectUri: 'http://localhost:4200/home',
-    scope: 'openid'
-  });
+  constructor(private http : Http) { }
 
-  constructor(private router : Router) { }
+  getClientToken(){
+    let body = {
+     grant_type : 'client_credentials',
+     client_id : 'phpxbP6A0vfUur3isYoKi8E6dicA33IM',
+     client_secret : 'A5_dh9O8vxfIeeRupZXl6GafwsDbjpuoT2XXKPi6brSR5p_YN6BAb4Chev7TZ6Rh',
+     audience : 'https://decoaries.auth0.com/api/v2/'
+     
+    }
 
+    let headers = new Headers();
 
-  public login(): void {
-    this.auth0.authorize();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post('https://decoaries.auth0.com/oauth/token', body, {headers : headers}).pipe(map(res=>res.json()));
+
   }
 
-  public handleAuthentication(): void {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
-        this.setSession(authResult);
-        this.router.navigate(['/home']);
-      } else if (err) {
-        this.router.navigate(['/login']);
-        console.log(err);
-      }
-    });
+
+  login(user){
+    let body = {
+      clientToken : this.clientToken,
+      email : user.email,
+      password : user.password
+    }
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:8080/api/login', body, {headers : headers}).pipe(map(res=>res.json()));
   }
 
-  private setSession(authResult): void {
-    // Set the time that the Access Token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
-  }
+  signup(user){
 
-  public logout(): void {
-    // Remove tokens and expiry time from localStorage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-    // Go back to the home route
-    this.router.navigate(['/']);
-  }
+    let body = {
+      clientToken : this.clientToken,
+      email : user.email,
+      password : user.password,
+      name : user.name
+    }
 
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // Access Token's expiry time
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at') || '{}');
-    return new Date().getTime() < expiresAt;
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post('http://localhost:8080/api/signup',body, {headers : headers}).pipe(map(res=>res.json()));
+
   }
+ 
 
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('sequelize');
 const router = express.Router();
 const path = require('path');
+const request = require('request');
 
 var connection;
 
@@ -64,7 +65,7 @@ router.post('/api/register-client', function(req, res){
         Name : req.body.name,
         Email : req.body.email,
         Gender : req.body.gender,
-        Status : req.body.status,
+        Status : 'Active',
         RegisterDate : req.body.registerDate,
         Phone1 : req.body.phone1,
         Phone2 : req.body.phone2,
@@ -154,7 +155,6 @@ router.post('/api/update-client', function(req, res){
         Name : req.body.name,
         Email : req.body.email,
         Gender : req.body.gender,
-        Status : req.body.status,
         Phone1 : req.body.phone1,
         Phone2 : req.body.phone2,
         idCompany : company.dataValues.idCompany
@@ -276,7 +276,6 @@ router.post('/api/update-order', function(req,res){
   let auxArray = [];
   auxArray=req.body.orderProducts;
   Order.update({
-    idClient : req.body.idClient,
     Price : req.body.price
   }, {
     where : {
@@ -345,6 +344,100 @@ router.post('/api/clients-company', function(req,res){
     console.log(e)
     res.json({success : false, msg : "Something went wrong"});
   })
+});
+
+router.post('/api/login', function(req, res){
+let userToken;
+let user;
+let options1 = {
+  url : 'https://decoaries.auth0.com/oauth/token',
+  method : 'POST',
+  headers: {
+    'Content-Type' : 'application/json',
+    'Authorization' : 'Bearer '+req.body.clientToken
+  },
+  form : {
+    grant_type : 'password',
+    client_id : 'phpxbP6A0vfUur3isYoKi8E6dicA33IM',
+    client_secret : 'A5_dh9O8vxfIeeRupZXl6GafwsDbjpuoT2XXKPi6brSR5p_YN6BAb4Chev7TZ6Rh',
+     audience : 'https://decoaries.auth0.com/api/v2/',
+     username : req.body.email,
+     password : req.body.password,
+     scope : 'openid'
+  }
+}
+request(options1, function(err, resp, body){
+  if(err){
+    console.log(err)
+    return res.json({error : true, msg : 'Something went wrong'});
+  }
+  else {
+  
+ let json = JSON.parse(body);
+ if(json.error){
+   return res.json({error : true, msg : json.error_description})
+ }
+  userToken = json.access_token;
+  let options2={
+  url : 'https://decoaries.auth0.com/userinfo',
+  method : 'GET',
+  headers: {
+    'Authorization' : 'Bearer '+userToken
+  }
+  }
+
+request(options2, function(err, resp, body){
+  if(err){
+    return res.json({error : true, msg : 'Something went wrong'});
+  }
+  else{
+    let user = JSON.parse(body);
+    return res.json({userToken : userToken, user : user});
+  }
+
+})
+  
+  
+  }
+ 
+})
+
+});
+
+
+router.post('/api/signup', function(req, res){
+  let options = {
+    url : 'https://decoaries.auth0.com/api/v2/users',
+    method : 'POST',
+    headers : {
+      'Authorization' : 'Bearer '+req.body.clientToken
+    },
+    form : {
+      connection : 'Username-Password-Authentication',
+      email : req.body.email,
+      password : req.body.password,
+      name : req.body.name,
+      verify_email : true
+    }
+  }
+
+  request(options, function(err, resp, body){
+    if(err){
+      return res.json({error: true, msg : "Something went wrong"})
+    }
+
+    let json = JSON.parse(body);
+    if(json.error){
+      return res.json({error : true, msg : json.message})
+    }
+
+    else{
+      res.send(json);
+    }
+    
+
+  })
+
 })
 
 
