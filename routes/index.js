@@ -1,6 +1,9 @@
 const express = require('express');
 const sequelize = require('sequelize');
 const router = express.Router();
+const jwt = require('express-jwt');
+const jwtAuthz = require('express-jwt-authz');
+const jwksRsa = require('jwks-rsa');
 const path = require('path');
 const request = require('request');
 
@@ -39,6 +42,25 @@ if(process.env.JAWSDB_URL){
   
   }
 
+  // Authentication middleware. When used, the
+// Access Token must exist and be verified against
+// the Auth0 JSON Web Key Set
+const checkJwt = jwt({
+  // Dynamically provide a signing key
+  // based on the kid in the header and 
+  // the signing keys provided by the JWKS endpoint.
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://decoaries.auth0.com/.well-known/jwks.json`
+  }),
+
+  // Validate the audience and the issuer.
+  audience: 'https://decoaries.auth0.com/api/v2/',
+  issuer: `https://decoaries.auth0.com/`,
+  algorithms: ['RS256']
+});
 
 
   var Client = connection.import('../models/Client');
@@ -48,7 +70,7 @@ if(process.env.JAWSDB_URL){
   var OrderDetails = connection.import('../models/OrderDetails');
 
 
-router.post('/api/register-client', function(req, res){
+router.post('/api/register-client',checkJwt, function(req, res){
   var idCompany;
 
     //If the company is not in DB, create it//
@@ -145,7 +167,7 @@ router.get('/api/get-clients', function(req,res){
   })
 });
 
-router.post('/api/update-client', function(req, res){
+router.post('/api/update-client', checkJwt,function(req, res){
 
   if(!req.body.exists){
     Company.create({
@@ -201,7 +223,7 @@ router.post('/api/update-client', function(req, res){
   
 });
 
-router.post('/api/update-company', function(req,res){
+router.post('/api/update-company', checkJwt, function(req,res){
 Company.update({
   CompanyName : req.body.name,
   Website : req.body.website
@@ -226,7 +248,7 @@ router.get('/api/get-products', function(req, res){
   })
 });
 
-router.post('/api/add-order', function(req,res){
+router.post('/api/add-order', checkJwt, function(req,res){
   let auxArray = [];
   auxArray = req.body.orderProducts;
   Order.create({
@@ -262,7 +284,7 @@ router.get('/api/get-orders', function(req, res){
 
 })
 
-router.post('/api/get-order-details', function(req,res){
+router.post('/api/get-order-details', checkJwt, function(req,res){
   connection.query("select orderdetails.Quantity, product.ProductName as 'Product' from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = "+req.body.idOrder)
   .then(json=>{
     res.send(json)
@@ -272,7 +294,7 @@ router.post('/api/get-order-details', function(req,res){
   })
 });
 
-router.post('/api/update-order', function(req,res){
+router.post('/api/update-order', checkJwt, function(req,res){
   let auxArray = [];
   auxArray=req.body.orderProducts;
   Order.update({
@@ -303,7 +325,7 @@ router.post('/api/update-order', function(req,res){
   })
 });
 
-router.post('/api/add-product',function(req,res){
+router.post('/api/add-product',checkJwt, function(req,res){
   Product.create({
     ProductName : req.body.name,
     Size : req.body.size,
@@ -316,7 +338,7 @@ router.post('/api/add-product',function(req,res){
   })
 });
 
-router.post('/api/update-product', function(req, res){
+router.post('/api/update-product', checkJwt, function(req, res){
   Product.update({
     ProductName : req.body.name,
     Size : req.body.size,
@@ -333,7 +355,7 @@ router.post('/api/update-product', function(req, res){
   })
 });
 
-router.post('/api/clients-company', function(req,res){
+router.post('/api/clients-company', checkJwt, function(req,res){
   Client.findAll({
     where : {
       idCompany : req.body.idCompany
