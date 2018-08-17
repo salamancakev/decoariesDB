@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers} from "@angular/http";
 import {map} from 'rxjs/operators'
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor(private http : Http) { }
+  constructor(private http : Http, private authService :AuthService) { }
 
   registerClient(client){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/register-client', client, {headers :headers}).pipe(map(res=> res.json()));
   }
 
@@ -30,12 +32,14 @@ export class DatabaseService {
   updateClient(client){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-client', client, {headers : headers}).pipe(map(res=>res.json()))
   }
 
   updateCompany(company){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-company', company, {headers : headers}).pipe(map(res=>res.json()))
   }
 
@@ -46,6 +50,7 @@ export class DatabaseService {
   addOrder(order){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/add-order', order, {headers : headers}).pipe(map(res=>res.json()))
   }
 
@@ -56,30 +61,35 @@ export class DatabaseService {
   getOrderDetails(order){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/get-order-details', order, {headers : headers}).pipe(map(res=>res.json()));
   }
 
   updateOrder(order){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-order', order, {headers : headers}).pipe(map(res=>res.json()));
   }
 
   addProduct(product){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/add-product',product,{headers:headers}).pipe(map(res=>res.json()));
   }
 
   updateProduct(product){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-product',product, {headers:headers}).pipe(map(res=>res.json()));    
   }
 
   searchClientsCompany(company){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/clients-company', company, {headers :headers}).pipe(map(res=>res.json()));
   }
 
