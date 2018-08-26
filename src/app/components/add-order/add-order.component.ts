@@ -4,6 +4,7 @@ import {DatePipe} from "@angular/common";
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-add-order',
@@ -22,11 +23,15 @@ export class AddOrderComponent implements OnInit {
     selectedProduct : any;
     date : Date;
     
+    clientModalReference:  any;
+    productModalReference: any;
+
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
     private validateService : ValidateService,
-    private flashMessage : FlashMessagesService) { }
+    private flashMessage : FlashMessagesService,
+    private modalService : NgbModal) { }
 
   ngOnInit() {
     this.dbService.getClients().subscribe(data=>{
@@ -36,6 +41,10 @@ export class AddOrderComponent implements OnInit {
     this.dbService.getProducts().subscribe(data=>{
       this.products=data
     })
+  }
+
+  openAddClient(content){
+    this.clientModalReference= this.modalService.open(content);
   }
 
   addProduct(){

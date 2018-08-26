@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
-import {DatePipe} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
 import {Observable, Subject, merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import {ValidateService} from '../../services/validate.service';
 import {DatabaseService} from '../../services/database.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-client',
@@ -14,18 +15,18 @@ import {DatabaseService} from '../../services/database.service';
   styleUrls: ['./add-client.component.css']
 })
 export class AddClientComponent implements OnInit {
-
+    idUser : any;
     companies :any[];
     clients : any[];
     companyNames: any[];
     name : String;
     email : String;
     gender : String;
-    phone1 : String;
-    phone2 : String;
+    phones = [];
     company : String;
     website : String;
     date : Date;
+    selectedPhone : String;
 
     @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -46,45 +47,63 @@ export class AddClientComponent implements OnInit {
   private dbService : DatabaseService,
   private router : Router,
   private datePipe : DatePipe,
-  private flashMessage : FlashMessagesService) { }
+  private flashMessage : FlashMessagesService,
+  private authService : AuthService) { }
 
   ngOnInit() {
     let names = [];
     this.dbService.getCompanies().subscribe(data=>{
-      console.log(data);
       this.companies = data;
       this.companies.forEach(function(value){
-        console.log(value)
-        names.push(value.CompanyName)
+        names.push(value.Name)
       })
       this.companyNames = names;
     });
 
-    this.dbService.getClients().subscribe(data=>{
-      this.clients=data;
+    this.dbService.getClients().subscribe(data2=>{
+      this.clients=data2[0]
+      console.log(this.clients)
     })
+    
+    this.idUser=this.authService.user.idUser;
   }
 
+  onAddPhone(){
+    if(this.selectedPhone==undefined){
+      this.flashMessage.show('Please enter a phone number', {cssClasS: 'alert-danger'})
+      return false
+    }
+
+    this.phones.push(this.selectedPhone);
+    this.selectedPhone=null;
+
+  }
+
+  Test(){
+    console.log(this.idUser)
+  }
 
   onSubmit(){
-      this.date = new Date();
-      let registerDate=this.datePipe.transform(this.date, 'yyyy-MM-dd');
+    try{
+this.date = new Date();
+      let registerDate=formatDate(this.date,  'yyyy-MM-dd HH:mm:ss', 'en-us','-0400');
       let exists=false;
       if(this.companyNames.includes(this.company)){
         exists=true;
       }
+    
 
     const client = {
       name : this.name,
       email : this.email,
       gender : this.gender,
       status : 'Active',
-      phone1 : this.phone1,
-      phone2 : this.phone2,
+      phones : this.phones,
       companyName : this.company,
       companyWebsite : this.website,
-      registerDate : registerDate,
-      exists : exists
+      date : registerDate,
+      exists : exists,
+      idUser : this.idUser
     }
 
     if(!this.validateService.validateClientRegister(client)){
@@ -101,7 +120,6 @@ export class AddClientComponent implements OnInit {
       this.flashMessage.show('Please fill in the Website field.', {cssClass : 'alert-danger'})
       return false;
     }
-
     this.clients.forEach(value=>{
       if(value.Name == client.name || value.Email == client.email){
         this.flashMessage.show("Client already exists in database", {cssClass : 'alert-danger'})
@@ -119,6 +137,11 @@ export class AddClientComponent implements OnInit {
         return false;
       }
     })
+    }
+    catch(e){
+      console.log(e)
+    }
+      
 
   }
 

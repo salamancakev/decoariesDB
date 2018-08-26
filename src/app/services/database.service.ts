@@ -93,4 +93,11 @@ export class DatabaseService {
     return this.http.post('http://localhost:8080/api/clients-company', company, {headers :headers}).pipe(map(res=>res.json()));
   }
 
+  getPhones(client){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json')
+    headers.append('Authorization', 'Bearer '+this.authService.userToken)
+    return this.http.post('http://localhost:8080/api/get-phones', client, {headers : headers}).pipe(map(res=>res.json()));
+  }
+
 }

@@ -52,11 +52,14 @@ export class AuthService {
       clientToken : this.clientToken,
       email : user.email,
       password : user.password,
-      name : user.name
+      name : user.name,
+      type : user.type,
+      date : user.date
     }
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.userToken)
 
     return this.http.post('http://localhost:8080/api/signup',body, {headers : headers}).pipe(map(res=>res.json()));
 

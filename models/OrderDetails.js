@@ -4,20 +4,19 @@ module.exports= function(sequelize, DataTypes){
     
         idOrderDetail : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
         idOrder : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             allowNull : false
         },
 
         idProduct : {
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             allowNull : false
         },
 

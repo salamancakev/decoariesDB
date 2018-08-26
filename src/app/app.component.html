@@ -17,6 +17,12 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/products">Products</a>
       </li>
+      <div *ngIf="authService.userToken">
+        <li class="nav-item">
+        <a class="nav-link" routerLink="/login" (click)="logout()">Log Out</a>
+      </li>
+      </div>
+      
     </ul>
   </div>
 </nav>

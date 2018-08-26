@@ -4,13 +4,12 @@ module.exports= function(sequelize, DataTypes){
     
         idCompany : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
-        CompanyName : {
+        Name : {
     
             type : DataTypes.STRING,
             unique : true,
@@ -19,6 +18,16 @@ module.exports= function(sequelize, DataTypes){
 
         Website : {
             type : DataTypes.STRING
+        },
+
+        From : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+
+        idUser : {
+            type : DataTypes.STRING,
+            allowNull : false
         }
     })
     

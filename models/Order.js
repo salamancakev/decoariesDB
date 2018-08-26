@@ -4,9 +4,8 @@ module.exports= function(sequelize, DataTypes){
     
         idOrder: {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
@@ -17,7 +16,7 @@ module.exports= function(sequelize, DataTypes){
         },
 
         idClient : {
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             allowNull : false
         },
         Price : {

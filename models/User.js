@@ -1,24 +1,37 @@
 module.exports= function(sequelize, DataTypes){
 
-    return sequelize.define('phone',{
+    return sequelize.define('user',{
     
-        idPhone : {
+        idUser : {
     
             type : DataTypes.STRING,
             primaryKey : true,
             allowNull : false
         },
     
-        PhoneNumber : {
+        Name : {
+    
             type : DataTypes.STRING,
-            unique : true,
             allowNull : false
         },
 
-        idClient : {
+        Email : {
+           type : DataTypes.STRING,
+           unique : true, 
+           allowNull : false
+        },
+
+        createDate :{
+            type: DataTypes.DATE,
+            allowNull : false
+        },
+
+
+        Type : {
             type : DataTypes.STRING,
             allowNull : false
         }
+
     })
     
     

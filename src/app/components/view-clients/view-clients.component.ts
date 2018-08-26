@@ -6,6 +6,7 @@ import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-view-clients',
   templateUrl: './view-clients.component.html',
@@ -13,14 +14,17 @@ import { ValidateService } from "../../services/validate.service";
 })
 export class ViewClientsComponent implements OnInit {
 
-  columns = ['Name', 'Gender', 'Email', 'Status', 'Company', 'Website', 'Register Date', 'Phone1', 'Phone2'];
+  columns = ['Name', 'Gender', 'Email', 'Status', 'Company', 'Website'];
 
   clients : any[];
   selectedClient : any;
   companyNames:  any[];
+  phone : String;
+  phones=[];
   modalReference :any;
   email : any;
   confirm = false;
+  idUser : any;
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -41,7 +45,8 @@ export class ViewClientsComponent implements OnInit {
   private dbService : DatabaseService,
   private validateService : ValidateService,
   private modalService : NgbModal,
-  private flashMessage : FlashMessagesService) { }
+  private flashMessage : FlashMessagesService,
+  private authService : AuthService) { }
 
   ngOnInit() {
 
@@ -52,20 +57,39 @@ export class ViewClientsComponent implements OnInit {
   let names = [];
   let companies = [];
     this.dbService.getCompanies().subscribe(data=>{
-      console.log(data);
       companies = data;
       companies.forEach(function(value){
-        console.log(value)
-        names.push(value.CompanyName)
+        names.push(value.Name)
       })
       this.companyNames = names;
     })
+    this.idUser=this.authService.user.idUser;
 }
 
 onClick(client, content){
   this.selectedClient=client;
-  console.log(this.selectedClient);
+  this.dbService.getPhones(client).subscribe(data=>{
+    data.forEach(value=>{
+      this.phones.push(value.PhoneNumber)
+    })
+  })
+  console.log(this.phones);
   this.modalReference=this.modalService.open(content);
+}
+
+onAdd(){
+  this.phones.push(this.phone)
+  this.phone=null
+}
+
+onDelete(phone){
+  let index = this.phones.indexOf(phone)
+  let array;
+  if(index>-1){
+   array= this.phones.splice(index, 1)
+  }
+
+  console.log(array)
 }
 
 onConfirm(){
@@ -84,10 +108,11 @@ let exists;
     email : this.selectedClient.Email,
     gender : this.selectedClient.Gender,
     status : this.selectedClient.Status,
-    phone1 : this.selectedClient.Phone1,
-    phone2 : this.selectedClient.Phone2,
+    phones : this.phones,
     companyName : this.selectedClient.Company,
-    exists : exists
+    companyWebsite : this.selectedClient.Website,
+    exists : exists,
+    idUser : this.idUser
   }
 
   if(!this.validateService.validateClientRegister(client)){

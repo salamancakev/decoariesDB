@@ -25,7 +25,10 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { ViewProductsComponent } from './components/view-products/view-products.component';
 import { SearchClientPipe } from "./search-client.pipe";
 import {SearchOrderPipe} from './search-order.pipe';
+import {SearchProductPipe} from './search-product-pipe';
 import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { UsersDashboardComponent } from './components/users-dashboard/users-dashboard.component';
 
 const appRoutes : Routes = [
   {path : '', redirectTo : 'login', pathMatch : 'full'},
@@ -40,7 +43,9 @@ const appRoutes : Routes = [
   {path: 'view-orders', component : ViewOrdersComponent},
   {path : 'add-product', component : AddProductComponent},
   {path : 'view-products', component :ViewProductsComponent},
-  {path : 'login', component : LoginComponent}
+  {path : 'login', component : LoginComponent},
+  {path : 'signup', component : SignupComponent},
+  {path : 'users', component : UsersDashboardComponent}
 ]
 
 @NgModule({
@@ -59,7 +64,10 @@ const appRoutes : Routes = [
     ViewProductsComponent,
     SearchClientPipe,
     SearchOrderPipe,
-    LoginComponent
+    LoginComponent,
+    SignupComponent,
+    UsersDashboardComponent,
+    SearchProductPipe
   ],
   imports: [
     BrowserModule,

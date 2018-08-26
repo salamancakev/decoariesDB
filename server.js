@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-
 var app = express();
 
 
@@ -32,11 +31,6 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', routes);
-
-
-
-
-
 
 app.listen(port, then=>{
     console.log('Listening on port 8080');

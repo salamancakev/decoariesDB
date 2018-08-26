@@ -4,17 +4,21 @@ module.exports= function(sequelize, DataTypes){
     
         idProduct : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
-        ProductName : {
+        Name : {
     
             type : DataTypes.STRING,
             unique : true,
             allowNull : false
+        },
+
+        Description : {
+            type : DataTypes.STRING,
+            allowNull : true
         },
 
         Size : {
@@ -25,6 +29,11 @@ module.exports= function(sequelize, DataTypes){
         ClothType: {
             type : DataTypes.STRING,
             allowNull : false
+        },
+
+        URL : {
+            type : DataTypes.STRING,
+            allowNull : true
         }
     })
     

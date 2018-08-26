@@ -4,9 +4,8 @@ module.exports= function(sequelize, DataTypes){
     
         idClient : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
@@ -32,22 +31,19 @@ module.exports= function(sequelize, DataTypes){
             allowNull : false
         },
 
-        RegisterDate :{
+        createDate :{
             type: DataTypes.DATE,
             allowNull : false
         },
 
-        Phone1 : {
+
+        idCompany : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        Phone2 : {
-            type : DataTypes.STRING,
-            allowNull : true
-        },
-
-        idCompany : {
-            type : DataTypes.INTEGER,
+        
+        idUser : {
+            type :  DataTypes.STRING,
             allowNull : false
         }
     })
