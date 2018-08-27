@@ -4,6 +4,7 @@ import {NgbTypeahead, NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-boot
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: 'app-view-companies',
@@ -12,7 +13,7 @@ import { ValidateService } from "../../services/validate.service";
 })
 export class ViewCompaniesComponent implements OnInit {
 
-  columns = ['Company', 'Website'];
+  columns = [];
   clientCol =['Name', 'Email', 'Gender', 'Status'];
 
   companies : any[];
@@ -27,6 +28,7 @@ export class ViewCompaniesComponent implements OnInit {
   constructor(private router : Router,
     private dbService : DatabaseService,
     private validateService : ValidateService,
+    private authService : AuthService,
     private modalService : NgbModal,
     private flashMessage : FlashMessagesService) { }
 
@@ -34,6 +36,15 @@ export class ViewCompaniesComponent implements OnInit {
     this.dbService.getCompanies2().subscribe(data=>{
       this.companies=data[0];
     })
+
+    if(this.authService.user.Type == 'Admin'){
+      this.columns=['Company', 'Website', 'createdBy', 'From'];
+    }
+
+    else{
+      this.columns=['Company', 'Website'];
+    }
+
   }
 
   onClick(c, details){

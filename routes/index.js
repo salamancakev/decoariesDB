@@ -169,7 +169,7 @@ router.get('/api/get-companies', function(req, res){
 });
 
 router.get('/api/get-companies2', function(req, res){
-  connection.query("select company.idCompany, company.Name as 'Company', company.Website from company").then(json=>{
+  connection.query("select company.idCompany, company.Name as 'Company', company.Website, company.From, user.Name as 'createdBy' from company inner join user on company.idUser = user.idUser").then(json=>{
     res.send(json)
   }).catch(e=>{
     console.log(e)
@@ -178,7 +178,7 @@ router.get('/api/get-companies2', function(req, res){
 })
 
 router.get('/api/get-clients', function(req,res){
-  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.createDate, company.Name as 'Company', company.Website from client inner join company on client.idCompany = company.idCompany")
+  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.createDate, company.Name as 'Company', company.Website, user.Name as 'createdBy' from client inner join company on client.idCompany = company.idCompany inner join user on client.idUser = user.idUser")
   .then(data=>{
     res.send(data)
   }).catch(e=>{
