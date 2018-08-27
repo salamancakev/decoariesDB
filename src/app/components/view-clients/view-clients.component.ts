@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ViewClientsComponent implements OnInit {
 
-  columns = ['Name', 'Gender', 'Email', 'Status', 'Company', 'Website'];
+  columns = [];
 
   clients : any[];
   selectedClient : any;
@@ -64,6 +64,15 @@ export class ViewClientsComponent implements OnInit {
       this.companyNames = names;
     })
     this.idUser=this.authService.user.idUser;
+
+    if(this.authService.user.Type == 'Admin'){
+      this.columns=['Name', 'Gender', 'Email', 'Status', 'Company', 'Website', 'createdBy'];
+    }
+
+    else{
+      this.columns=['Name', 'Gender', 'Email', 'Status', 'Company', 'Website'];
+    }
+
 }
 
 onClick(client, content){
