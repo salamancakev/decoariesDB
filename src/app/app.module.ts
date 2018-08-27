@@ -25,10 +25,12 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { ViewProductsComponent } from './components/view-products/view-products.component';
 import { SearchClientPipe } from "./search-client.pipe";
 import {SearchOrderPipe} from './search-order.pipe';
-import {SearchProductPipe} from './search-product-pipe';
+import {SearchProductPipe} from './search-product.pipe';
+import {SearchUserPipe} from './search-user.pipe';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { UsersDashboardComponent } from './components/users-dashboard/users-dashboard.component';
+import { ViewUsersComponent } from './components/view-users/view-users.component';
 
 const appRoutes : Routes = [
   {path : '', redirectTo : 'login', pathMatch : 'full'},
@@ -45,7 +47,8 @@ const appRoutes : Routes = [
   {path : 'view-products', component :ViewProductsComponent},
   {path : 'login', component : LoginComponent},
   {path : 'signup', component : SignupComponent},
-  {path : 'users', component : UsersDashboardComponent}
+  {path : 'users', component : UsersDashboardComponent},
+  {path : 'view-users', component : ViewUsersComponent}
 ]
 
 @NgModule({
@@ -67,7 +70,9 @@ const appRoutes : Routes = [
     LoginComponent,
     SignupComponent,
     UsersDashboardComponent,
-    SearchProductPipe
+    SearchProductPipe,
+    ViewUsersComponent,
+    SearchUserPipe
   ],
   imports: [
     BrowserModule,

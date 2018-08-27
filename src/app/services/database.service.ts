@@ -18,7 +18,7 @@ export class DatabaseService {
   }
 
   getCompanies(){
-    return this.http.get('http://localhost:8080/api/get-companies').pipe(map(res=> res.json()));
+    return this.http.get('http://localhost:8080/api/get-companies',).pipe(map(res=> res.json()));
   }
   
   getCompanies2(){
@@ -98,6 +98,19 @@ export class DatabaseService {
     headers.append('Content-Type', 'application/json')
     headers.append('Authorization', 'Bearer '+this.authService.userToken)
     return this.http.post('http://localhost:8080/api/get-phones', client, {headers : headers}).pipe(map(res=>res.json()));
+  }
+
+  getUsers(){
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer '+this.authService.userToken)
+    return this.http.get('http://localhost:8080/api/get-users', {headers : headers}).pipe(map(res=>res.json()));
+  }
+
+  updateUser(user){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json')
+    headers.append('Authorization', 'Bearer '+this.authService.userToken)
+    return this.http.post('http://localhost:8080/api/update-user', user, {headers : headers}).pipe(map(res=>res.json()));
   }
 
 }

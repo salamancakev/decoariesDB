@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+      <h1 class="page-header">Users</h1>
+  </div>
+  <h1></h1>
+    
+  <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
+
+  
+
+  <div class="row">
+    <div class="table-responsive-md">
+      <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+                <th *ngFor="let col of columns">{{col}}</th>
+                <th>Register Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of users | usersFilter:email">
+                <td *ngFor="let col of columns">{{u[col]}}</td>
+                <td>{{u.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+    
+  <h1></h1>
+  <button class="btn btn-primary" routerLink="/users">Back</button>
+</div>

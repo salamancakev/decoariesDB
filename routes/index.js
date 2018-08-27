@@ -549,6 +549,30 @@ Phone.findAll({
 })
 
 
+});
+
+router.get('/api/get-users', checkJwt, function(req,res){
+  User.findAll().then(users=>{
+    return res.send(users)
+  }).catch(e=>{
+   return res.json({error : true, msg : e});
+  })
+});
+
+router.post('/api/update-user',checkJwt, function(req,res){
+  User.update({
+    Name : req.body.name,
+    Email : req.body.email,
+    Type : req.body.type
+  }, {
+    where : {
+      idUser : req.body.idUser
+    }
+  }).then(user=>{
+    return res.json({success : true, msg :'User info updated'})
+  }).catch(err=>{
+    return res.json({success : false, msg :err});
+  })
 })
 
 
