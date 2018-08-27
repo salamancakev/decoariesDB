@@ -9,7 +9,7 @@ export class ValidateService {
 
   validateClientRegister(client){
 
-      if(client.name == undefined || client.email == undefined || client.gender == undefined || client.status == undefined ||  client.companyName == undefined || client.phone1 == undefined){
+      if(client.name == undefined || client.email == undefined || client.gender == undefined || client.status == undefined ||  client.companyName == undefined){
         return false
       }
 

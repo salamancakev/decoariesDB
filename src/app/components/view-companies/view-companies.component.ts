@@ -13,7 +13,7 @@ import { ValidateService } from "../../services/validate.service";
 export class ViewCompaniesComponent implements OnInit {
 
   columns = ['Company', 'Website'];
-  clientCol =['Name', 'Email', 'Gender', 'Status', 'Phone1', 'Phone2'];
+  clientCol =['Name', 'Email', 'Gender', 'Status'];
 
   companies : any[];
   clients : any[];

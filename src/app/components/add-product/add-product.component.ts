@@ -15,6 +15,8 @@ export class AddProductComponent implements OnInit {
   name : String;
   size : Number;
   cloth : String;
+  url : String;
+  description : String;
 
   constructor(private router : Router,
     private datePipe : DatePipe,
@@ -29,7 +31,9 @@ export class AddProductComponent implements OnInit {
       let product = {
         name : this.name,
         size : this.size,
-        cloth : this.cloth
+        cloth : this.cloth,
+        url : this.url,
+        description : this.description
       }
 
       if(!this.validateService.validateProduct(product)){

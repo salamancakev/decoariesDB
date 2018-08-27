@@ -15,17 +15,27 @@
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label for="name">Product Name</label>
-                    <input class="form-control" type="text" [(ngModel)]="selectedProduct.ProductName" name="name" id="name" placeholder="name" required>
+                    <input class="form-control" type="text" [(ngModel)]="selectedProduct.Name" name="name" id="name" placeholder="name" required>
                   </div>
                   <div class="form-group col-md-4">
+                    <label for="name">Description</label>
+                    <input class="form-control" type="text" [(ngModel)]="selectedProduct.Description" name="description" id="description" placeholder="description">
+                  </div>
+                </div> 
+                <div class="form-row">
+                   <div class="form-group col-md-4">
                       <label for="size">Size</label>
                       <input class="form-control" type="text" [(ngModel)]="selectedProduct.Size" name="size" id="size" placeholder="size" required>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="cloth">Cloth Type</label>
                         <input class="form-control" type="text" [(ngModel)]="selectedProduct.ClothType" name="cloth" id="cloth" placeholder="cloth" required>
+                      </div> 
+                      <div class="form-group col-md-4">
+                        <label for="url">Image URL</label>
+                        <input class="form-control" type="text" [(ngModel)]="selectedProduct.URL" name="url" id="url">
                       </div>
-                </div>
+                  </div>
                 <button class="btn btn-primary" type="button" (click)="onConfirm()">Update</button>
                 <div *ngIf="confirm">
                     <h1></h1>      
@@ -39,7 +49,10 @@
           <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
         </div>
       </ng-template>
+      <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
     <div class="row">
+      <h1></h1>
+        
       <div class="table-responsive-md">
         <table class="table table-hover">
             <thead class="thead-light">
@@ -48,7 +61,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let p of products" (click)="onClick(p,content)">
+              <tr *ngFor="let p of products | productsFilter:email" (click)="onClick(p,content)">
                   <td *ngFor="let col of columns">{{p[col]}}</td>
                   
               </tr>

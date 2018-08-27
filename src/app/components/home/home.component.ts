@@ -9,11 +9,17 @@ import { AuthService } from "../../services/auth.service";
 export class HomeComponent implements OnInit {
 
   constructor(private authService : AuthService, private router : Router) { }
+  admin = false;
 
   ngOnInit() {
   if(this.authService.user==undefined){
     this.router.navigate(['login'])
   }
+
+  else if(this.authService.user.Type == 'Admin'){
+    this.admin=true;
+  }
+  
   }
 
 }

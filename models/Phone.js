@@ -4,21 +4,19 @@ module.exports= function(sequelize, DataTypes){
     
         idPhone : {
     
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             primaryKey : true,
-            autoIncrement : true,
             allowNull : false
         },
     
         PhoneNumber : {
-    
             type : DataTypes.STRING,
             unique : true,
             allowNull : false
         },
 
         idClient : {
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             allowNull : false
         }
     })

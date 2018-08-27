@@ -11,12 +11,12 @@ import { ValidateService } from "../../services/validate.service";
 })
 export class ViewProductsComponent implements OnInit {
 
-  columns = ['ProductName', 'Size', 'ClothType']
+  columns = ['Name', 'Description', 'Size', 'ClothType', 'URL']
 
   products : any[];
   selectedProduct : any;
   confirm = false;
-
+  email : any;
   modalReference : any;
 
   constructor(private router : Router,
@@ -45,9 +45,11 @@ export class ViewProductsComponent implements OnInit {
 
     let product = {
       idProduct : this.selectedProduct.idProduct,
-      name : this.selectedProduct.ProductName,
+      name : this.selectedProduct.Name,
       size : this.selectedProduct.Size,
-      cloth : this.selectedProduct.ClothType
+      cloth : this.selectedProduct.ClothType,
+      description : this.selectedProduct.Description,
+      url : this.selectedProduct.URL
     }
 
     this.dbService.updateProduct(product).subscribe(data=>{

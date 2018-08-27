@@ -62,63 +62,83 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-
+  var User= connection.import('../models/User');
   var Client = connection.import('../models/Client');
   var Company = connection.import('../models/Company');
   var Product = connection.import('../models/Product');
   var Order = connection.import('../models/Order');
   var OrderDetails = connection.import('../models/OrderDetails');
-
+  var Phone = connection.import('../models/Phone');
+  function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1); 
+}
 
 router.post('/api/register-client',checkJwt, function(req, res){
-  var idCompany;
+    let phones = [];
+    phones = req.body.phones
 
     //If the company is not in DB, create it//
     if(!req.body.exists){
       //Create Company//
+      let guid1 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
      Company.create({
-      CompanyName : req.body.companyName,
-      Website : req.body.companyWebsite
+      idCompany : guid1,
+      Name : req.body.companyName,
+      Website : req.body.companyWebsite,
+      From : 'Web App',
+      idUser : req.body.idUser
     }).then(company =>{
       //Store ID of created company//
       idCompany = company.dataValues.idCompany
       //Create Client//
-      Client.create({
-        Name : req.body.name,
-        Email : req.body.email,
-        Gender : req.body.gender,
-        Status : 'Active',
-        RegisterDate : req.body.registerDate,
-        Phone1 : req.body.phone1,
-        Phone2 : req.body.phone2,
-        idCompany : idCompany
-      }).then(client=>{
-        res.json({success :true});
-      }).catch(e=>{
-        console.log(e);
-      res.json({success : false})
+      let guid2 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+      connection.query("Insert into client (idClient, Name, Email, Gender, Status, createDate, idCompany, idUser) values ('"+guid2+"', '"+req.body.name+"', '"+req.body.email+"', '"+req.body.gender+"', 'Active', '"+req.body.date+"', '"+guid1+"', '"+req.body.idUser+"')")
+      .then(client=>{
+        phones.forEach(value=>{
+          let guid3 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+          Phone.create({
+            idPhone : guid3,
+            PhoneNumber : value,
+            idClient : guid2
+          }).catch(err=>{
+            console.log(err)
+            return res.json({error : true, msg: err});
+          })
+        })
+
+        return res.json({success : true});
+      
       })
+    }).catch(e=>{
+      console.log(e)
+      return res.json({error : true, msg : e});
     })
   } 
   //If the company is already stored in DB, find and store it's ID//
   else{
     Company.find({
       where : {
-        CompanyName : req.body.companyName
+        Name : req.body.companyName
       }
     }).then(company =>{
+      let guid2 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
       //Create client//
-      Client.create({
-        Name : req.body.name,
-        Email : req.body.email,
-        Gender : req.body.gender,
-        Status : req.body.status,
-        RegisterDate : req.body.registerDate,
-        Phone1 : req.body.phone1,
-        Phone2 : req.body.phone2,
-        idCompany : company.dataValues.idCompany
-      }).then(client=>{
-        res.json({success :true});
+      connection.query("Insert into client (idClient, Name, Email, Gender, Status, createDate, idCompany, idUser) values ('"+guid2+"', '"+req.body.name+"', '"+req.body.email+"', '"+req.body.gender+"', 'Active', '"+req.body.date+"', '"+company.idCompany+"', '"+req.body.idUser+"')")
+      .then(client=>{
+        phones.forEach(value=>{
+          let guid3 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+          Phone.create({
+            idPhone : guid3,
+            PhoneNumber : value,
+            idClient : guid2
+          }).catch(err=>{
+            console.log(err)
+            return res.json({error : true, msg: err});
+          })
+        })
+
+        return res.json({success : true});
+
       }).catch(e=>{
         console.log(e);
       res.json({success : false})
@@ -149,7 +169,7 @@ router.get('/api/get-companies', function(req, res){
 });
 
 router.get('/api/get-companies2', function(req, res){
-  connection.query("select company.idCompany, company.CompanyName as 'Company', company.Website from company").then(json=>{
+  connection.query("select company.idCompany, company.Name as 'Company', company.Website from company").then(json=>{
     res.send(json)
   }).catch(e=>{
     console.log(e)
@@ -158,7 +178,7 @@ router.get('/api/get-companies2', function(req, res){
 })
 
 router.get('/api/get-clients', function(req,res){
-  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.RegisterDate as 'Register Date', client.Phone1, client.Phone2, company.CompanyName as 'Company', company.Website from client inner join company on client.idCompany = company.idCompany")
+  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.createDate, company.Name as 'Company', company.Website from client inner join company on client.idCompany = company.idCompany")
   .then(data=>{
     res.send(data)
   }).catch(e=>{
@@ -168,34 +188,58 @@ router.get('/api/get-clients', function(req,res){
 });
 
 router.post('/api/update-client', checkJwt,function(req, res){
-
+  let phones = [];
+  phones = req.body.phones;
   if(!req.body.exists){
+    let guid1 = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
     Company.create({
-      CompanyName : req.body.companyName
+      idCompany : guid1,
+      Name : req.body.companyName,
+      Website : req.body.companyWebsite,
+      From : 'Web App',
+      idUser : req.body.idUser
     }).then(company=>{
       Client.update({
         Name : req.body.name,
         Email : req.body.email,
         Gender : req.body.gender,
-        Phone1 : req.body.phone1,
-        Phone2 : req.body.phone2,
-        idCompany : company.dataValues.idCompany
+        idCompany : guid1,
+        idUser : req.body.idUser
   },{ where : {
     idClient : req.body.idClient
   }}).then(client=>{
-    res.json({success :true, msg : "Client data updated"});
+    Phone.destroy({
+      where : {
+        idClient : req.body.idClient
+      }
+    }).then(destroyed=>{
+      phones.forEach(value=>{
+        let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+        Phone.create({
+        idPhone : guid2,
+        PhoneNumber : value,
+        idClient : req.body.idClient
+        }).catch(err=>{
+          return res.json({success : false, msg : err})
+        })
+      })
+      return res.json({success : true, msg : 'Client info updated'})
+    })
   }).catch(e=>{
     console.log(e)
     res.json({success : false, msg: "Something went wrong"});
   })
 
+    }).catch(e=>{
+      console.log(e)
+    res.json({success : false, msg: "Something went wrong"});
     })
   }
 
   else{
     Company.find({
       where : {
-        CompanyName : req.body.companyName
+        Name : req.body.companyName
       }
     }).then(company=>{
       Client.update({
@@ -203,15 +247,30 @@ router.post('/api/update-client', checkJwt,function(req, res){
         Email : req.body.email,
         Gender : req.body.gender,
         Status : req.body.status,
-        Phone1 : req.body.phone1,
-        Phone2 : req.body.phone2,
-        idCompany : company.dataValues.idCompany
+        idCompany : company.dataValues.idCompany,
+        idUser : req.body.idUser
       }, {
         where : {
           idClient : req.body.idClient
         }
       }).then(client=>{
-        res.json({success :true, msg : "Client info updated"});
+        Phone.destroy({
+          where : {
+            idClient : req.body.idClient
+          }
+        }).then(destroyed=>{
+          phones.forEach(value=>{
+            let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+          Phone.create({
+            idPhone : guid2,
+            PhoneNumber : value,
+            idClient : req.body.idClient
+          }).catch(err=>{
+            return res.json({success :false, msg : err})
+          })
+          })
+          return res.json({success : true, msg : 'Updated client info'})
+        })
       }).catch(e=>{
         console.log(e)
         res.json({success : false, msg : "Something went wrong"})
@@ -249,16 +308,21 @@ router.get('/api/get-products', function(req, res){
 });
 
 router.post('/api/add-order', checkJwt, function(req,res){
+  let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
   let auxArray = [];
   auxArray = req.body.orderProducts;
   Order.create({
+    idOrder : guid2,
     idClient : req.body.idClient,
     OrderDate : req.body.orderDate,
     Price : req.body.price
   }).then(order=>{
     auxArray.forEach(value=>{
+      let guid3= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+
       OrderDetails.create({
-        idOrder : order.dataValues.idOrder,
+        idOrderDetail : guid3,
+        idOrder : guid2,
         idProduct : value.idProduct,
         Quantity : value.Quantity,
       })
@@ -273,7 +337,7 @@ router.post('/api/add-order', checkJwt, function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.CompanyName as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -285,7 +349,7 @@ router.get('/api/get-orders', function(req, res){
 })
 
 router.post('/api/get-order-details', checkJwt, function(req,res){
-  connection.query("select orderdetails.Quantity, product.ProductName as 'Product' from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = "+req.body.idOrder)
+  connection.query("select orderdetails.Quantity, product.Name as 'Product' from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -310,7 +374,9 @@ router.post('/api/update-order', checkJwt, function(req,res){
       }
     }).then(destroyed=>{
       auxArray.forEach(value=>{
+        let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
         OrderDetails.create({
+          idOrderDetail : guid2,
           idOrder : req.body.idOrder,
           idProduct : value.idProduct,
           Quantity : value.Quantity
@@ -326,10 +392,15 @@ router.post('/api/update-order', checkJwt, function(req,res){
 });
 
 router.post('/api/add-product',checkJwt, function(req,res){
+  let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+
   Product.create({
-    ProductName : req.body.name,
+    idProduct : guid2,
+    Name : req.body.name,
+    Description : req.body.description,
     Size : req.body.size,
-    ClothType : req.body.cloth
+    ClothType : req.body.cloth,
+    URL : req.body.url
   }).then(product=>{
     res.json({success :true, msg : "Product added to database"})
   }).catch(e=>{
@@ -340,9 +411,11 @@ router.post('/api/add-product',checkJwt, function(req,res){
 
 router.post('/api/update-product', checkJwt, function(req, res){
   Product.update({
-    ProductName : req.body.name,
+    Name : req.body.name,
+    Description : req.body.description,
     Size : req.body.size,
-    ClothType : req.body.cloth
+    ClothType : req.body.cloth,
+    URL : req.body.url
   }, {
     where : {
       idProduct : req.body.idProduct
@@ -400,25 +473,17 @@ request(options1, function(err, resp, body){
    return res.json({error : true, msg : json.error_description})
  }
   userToken = json.access_token;
-  let options2={
-  url : 'https://decoaries.auth0.com/userinfo',
-  method : 'GET',
-  headers: {
-    'Authorization' : 'Bearer '+userToken
-  }
-  }
-
-request(options2, function(err, resp, body){
-  if(err){
-    return res.json({error : true, msg : 'Something went wrong'});
-  }
-  else{
-    let user = JSON.parse(body);
-    return res.json({userToken : userToken, user : user});
-  }
-
-})
   
+  User.findOne({
+    where : {
+      Email : req.body.email
+    }
+  }).then(user=>{
+    return res.json({userToken : userToken, user : user.dataValues});
+  }).catch(e=>{
+    console.log(e)
+    return res.json({error : true, msg : e});
+  })
   
   }
  
@@ -427,7 +492,8 @@ request(options2, function(err, resp, body){
 });
 
 
-router.post('/api/signup', function(req, res){
+router.post('/api/signup', checkJwt, function(req, res){
+  console.log(req.body.date);
   let options = {
     url : 'https://decoaries.auth0.com/api/v2/users',
     method : 'POST',
@@ -454,12 +520,59 @@ router.post('/api/signup', function(req, res){
     }
 
     else{
-      res.send(json);
+      let guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+      connection.query("Insert into user (idUser, Name, Email, createDate, Type) values ('"+guid+"', '"+req.body.name+"', '"+req.body.email+"', '"+req.body.date+"', '"+req.body.type+"')")
+      .then(user=>{
+        return res.json({error : false})
+      }).catch(e=>{
+        console.log(e)
+        return res.json({error : true, msg: e});
+      })
     }
     
 
   })
 
+});
+
+router.post('/api/get-phones', checkJwt, function(req, res){
+
+Phone.findAll({
+  where : {
+    idClient : req.body.idClient
+  }
+}).then(phones=>{
+  res.send(phones)
+}).catch(err=>{
+  console.log(err)
+  res.json({success : false});
+})
+
+
+});
+
+router.get('/api/get-users', checkJwt, function(req,res){
+  User.findAll().then(users=>{
+    return res.send(users)
+  }).catch(e=>{
+   return res.json({error : true, msg : e});
+  })
+});
+
+router.post('/api/update-user',checkJwt, function(req,res){
+  User.update({
+    Name : req.body.name,
+    Email : req.body.email,
+    Type : req.body.type
+  }, {
+    where : {
+      idUser : req.body.idUser
+    }
+  }).then(user=>{
+    return res.json({success : true, msg :'User info updated'})
+  }).catch(err=>{
+    return res.json({success : false, msg :err});
+  })
 })
 
 

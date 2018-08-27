@@ -11,7 +11,7 @@ import { ValidateService } from "../../services/validate.service";
   styleUrls: ['./view-orders.component.css']
 })
 export class ViewOrdersComponent implements OnInit {
-    columns = ['idOrder', 'Client', 'Email', 'Company', 'Date', 'Price'];
+    columns = ['Client', 'Email', 'Company', 'Date', 'Price'];
     edit = false;
     orders : any[];
     orderDetails: any;
@@ -50,8 +50,10 @@ export class ViewOrdersComponent implements OnInit {
 
    this.dbService.getOrderDetails(order).subscribe(data=>{
      this.orderDetails = data[0];
-     this.detailsModalReference=this.modalService.open(details);
+     console.log(this.orderDetails)
    })
+
+   this.detailsModalReference=this.modalService.open(details);
   }
 
   onEdit(content){
@@ -64,7 +66,7 @@ export class ViewOrdersComponent implements OnInit {
   addProduct(){
     let product = {
       idProduct : this.selectedProduct.idProduct,
-      productName: this.selectedProduct.ProductName,
+      productName: this.selectedProduct.Name,
       Quantity : this.quantity
     }
     if(this.selectedProduct==undefined){

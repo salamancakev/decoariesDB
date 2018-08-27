@@ -1,29 +1,37 @@
 module.exports= function(sequelize, DataTypes){
 
-    return sequelize.define('orderdetails',{
+    return sequelize.define('user',{
     
-        idOrderDetail : {
+        idUser : {
     
             type : DataTypes.STRING,
             primaryKey : true,
             allowNull : false
         },
     
-        idOrder : {
+        Name : {
     
             type : DataTypes.STRING,
             allowNull : false
         },
 
-        idProduct : {
-            type : DataTypes.STRING,
+        Email : {
+           type : DataTypes.STRING,
+           unique : true, 
+           allowNull : false
+        },
+
+        createDate :{
+            type: DataTypes.DATE,
             allowNull : false
         },
 
-        Quantity : {
-            type : DataTypes.INTEGER,
+
+        Type : {
+            type : DataTypes.STRING,
             allowNull : false
         }
+
     })
     
     
