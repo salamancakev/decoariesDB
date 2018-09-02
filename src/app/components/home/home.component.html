@@ -1,0 +1,45 @@
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Decoaries Database</h1>
+      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Clients</h2>
+        <p>Add, view and modifiy clients and companies in your database. </p>
+        <p><a class="btn btn-secondary" routerLink="/clients" role="button">Manage clients &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Orders</h2>
+        <p>Create and view order information.</p>
+        <p><a class="btn btn-secondary" routerLink="/orders" role="button">Manage orders &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Products</h2>
+        <p>Add, view and modify products in your database.</p>
+        <p><a class="btn btn-secondary" routerLink="/products" role="button">Manage products &raquo;</a></p>
+      </div>
+    </div>
+<div *ngIf="admin">
+  <div class="row">
+        <div class="col-md-4">
+            <h2>Users</h2>
+            <p>Add, view and modifiy users in your database. </p>
+            <p><a class="btn btn-secondary" routerLink="/users" role="button">Manage users &raquo;</a></p>
+          </div>
+    </div>
+</div>
+    
+
+    <hr>
+
+  </div> <!-- /container -->
+
+</main>
