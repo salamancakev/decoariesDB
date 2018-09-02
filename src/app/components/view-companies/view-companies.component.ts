@@ -24,6 +24,7 @@ export class ViewCompaniesComponent implements OnInit {
   clientsModalReference : any;
 
   confirm = false;
+  email : any;
 
   constructor(private router : Router,
     private dbService : DatabaseService,

@@ -22,6 +22,16 @@ module.exports= function(sequelize, DataTypes){
         Price : {
             type : DataTypes.FLOAT,
             allowNull : false
+        },
+
+        Status : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+
+        Observations : {
+            type : DataTypes.STRING,
+            allowNull : true
         }
     })
     

@@ -27,6 +27,7 @@ import { SearchClientPipe } from "./search-client.pipe";
 import {SearchOrderPipe} from './search-order.pipe';
 import {SearchProductPipe} from './search-product.pipe';
 import {SearchUserPipe} from './search-user.pipe';
+import {SearchCompanyPipe} from './search-company.pipe';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { UsersDashboardComponent } from './components/users-dashboard/users-dashboard.component';
@@ -72,7 +73,8 @@ const appRoutes : Routes = [
     UsersDashboardComponent,
     SearchProductPipe,
     ViewUsersComponent,
-    SearchUserPipe
+    SearchUserPipe,
+    SearchCompanyPipe
   ],
   imports: [
     BrowserModule,

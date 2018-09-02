@@ -11,7 +11,7 @@ import { ValidateService } from "../../services/validate.service";
   styleUrls: ['./view-orders.component.css']
 })
 export class ViewOrdersComponent implements OnInit {
-    columns = ['Client', 'Email', 'Company', 'Date', 'Price'];
+    columns = ['Client', 'Email', 'Company', 'Date', 'Status', 'Price'];
     edit = false;
     orders : any[];
     orderDetails: any;
@@ -98,7 +98,9 @@ export class ViewOrdersComponent implements OnInit {
       idOrder : this.selectedOrder.idOrder,
       idClient : this.selectedOrder.idClient,
       orderProducts : this.orderProducts,
-      price : this.selectedOrder.Price
+      price : this.selectedOrder.Price,
+      status : this.selectedOrder.Status,
+      observations : this.selectedOrder.Observations
     }
 
     if(this.orderProducts.length==0){

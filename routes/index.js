@@ -315,7 +315,9 @@ router.post('/api/add-order', checkJwt, function(req,res){
     idOrder : guid2,
     idClient : req.body.idClient,
     OrderDate : req.body.orderDate,
-    Price : req.body.price
+    Price : req.body.price,
+    Status : req.body.status,
+    Observations :  req.body.observations
   }).then(order=>{
     auxArray.forEach(value=>{
       let guid3= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
@@ -337,7 +339,7 @@ router.post('/api/add-order', checkJwt, function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -362,7 +364,9 @@ router.post('/api/update-order', checkJwt, function(req,res){
   let auxArray = [];
   auxArray=req.body.orderProducts;
   Order.update({
-    Price : req.body.price
+    Price : req.body.price,
+    Status : req.body.status,
+    Observations : req.body.observations
   }, {
     where : {
       idOrder : req.body.idOrder

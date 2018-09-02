@@ -10,23 +10,117 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">    </div>
+    <div class="modal-body">  
+        <div class="container">
+            <div class="row">
+             <h1 class="page-header">Register Client</h1>
+           </div>
+           
+           <form ngNativeValidate (submit) = "onAddClient()">
+             <div class="form-row">
+               <div class="form-group col-md-6">
+                 <label for="name">Name</label>
+                 <input type="text" class="form-control" [(ngModel)]="name" name="name" id="name" placeholder="Name" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="email">Email</label>
+                 <input type="email" class="form-control" [(ngModel)]="email" name="email" id="email" placeholder="Email" required>
+               </div>
+             </div>
+           
+             <div class="form-row">
+                 <div class="form-group col-2">
+                     <label for="gender">Gender</label>
+                     <select class="form-control" [(ngModel)]="gender" name="gender" id="gender" required>
+                       <option value="M">M</option>
+                       <option value="F">F</option>
+                     </select>
+                   </div>
+           
+               <div class="form-group col-4">
+                   <label for="selectedPhone">Phone Numbers</label>
+                   <input type="text" class="form-control" [(ngModel)]="selectedPhone" name="selectedPhone" id="selectedPhone" placeholder="Phone">
+                   <button type="button" class="btn btn-primary" (click)="onAddPhone()" >Add Phone Number</button>
+               </div>
+           
+             </div>
+           
+             <div class="form-row">
+               <div class="form-group col-4">
+                 <label for="company">Company</label>
+                 <input type="text" class="form-control" [(ngModel)]="company" name="company" id="company" placeholder="Company" required>
+               </div>
+               <div class="form-group col-4">
+                 <label for="website">Website</label>
+                 <input class="form-control" type="text" [(ngModel)]="website" name="website" id="website" placeholder="Website" required>
+               </div>
+             </div>
+           
+             
+             <button type="submit" class="btn btn-primary">Register</button>
+           </form> 
+           
+           <h1></h1>
+           </div>  
+          </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
     </div>
   </ng-template>
 
+  <ng-template #search let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title">Search Client</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4>Select the client</h4>
+              <input type="text" [(ngModel)]="email1" placeholder="Search any field..."/>
+              <div class="row">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                          <tr>
+                              <th *ngFor="let col of columns">{{col}}</th>
+                              <th>Register Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let c of clients | clientsFilter:email1" (click)="onSelectClient(c)">
+                              <td *ngFor="let col of columns">{{c[col]}}</td>
+                              <td>{{c.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+          </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+      </div>
+    </ng-template>
+
   <form ngNativeValidate (submit)="onSubmit()">
-    <h4>Select a client</h4>
+    <h4>Select a client from the list or create a new client</h4>
 
     <div class="form-row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
           <label for="client">Client</label>
           <select [(ngModel)]="selectedClient" name="client" id="client">
             <option *ngFor="let c of clients" [ngValue]="c.idClient"> {{c.Name}} {{c.Email}} </option>
-          </select>
-          
+          </select>    
       </div>
+
+      <div class="form-group col-md-4">
+          <button class="btn btn-primary" type="button" (click)="openSearchClient(search)">Search Client</button>
+        </div>
+
+      <div class="form-group col-md-4">
+        <button class="btn btn-primary" type="button" (click)="openAddClient(content)">Create new client</button>
+      </div>
+
     </div>
 
     <div *ngIf="selectedClient">
@@ -35,12 +129,12 @@
       <div class="form-group col-md-6">
           <label for="product">Product</label>
           <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
-            <option *ngFor="let p of products" [ngValue]="p.idProduct"> {{p.Name}}</option>
+            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}</option>
           </select>
       </div>
       <div class="form-group col-md-2">
           <label for="status">Quantity</label>
-          <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity">
+          <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="Quantity">
       </div>
       <div class="form-group col-md-4">
         <br>
@@ -49,11 +143,42 @@
       </div>
     </div>
 
+    <h4>Order Products: </h4>
+    <h1></h1>
+      <div *ngIf="orderProducts.length==0">
+        <p>This order does not have any products. Please add products to the order.</p>
+      </div>
+
+      <div *ngIf="orderProducts.length>0">
+         <div *ngFor="let op of orderProducts">
+           <p>Product: {{op.Name}}. Quantity: {{op.Quantity}} </p>
+         </div>
+      </div>
+
+    
+
     <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="status">Status</label>
+            <select class="form-control" [(ngModel)]="status" name="status" id="status" required>
+              <option value="Waiting Response">Waiting Response</option>
+              <option value="Confirmed">Confirmed</option> 
+              <option value="Production">Production</option>
+              <option value="Completed">Completed</option>
+              <option value="Denied">Denied</option>
+            </select>
+        </div>
+
       <div class="form-group col-md-4">
         <label for="price">Total Price</label>
         $<input type="text" class="form-control" [(ngModel)]="price" name="price" id="price" placeholder="Price" required>
       </div>
+
+      <div class="form-group col-md-4">
+      <label for="observations">Observations</label>
+      <input type="text" class="form-control" [(ngModel)]="observations" name="observations" id="observations" placeholder="Observations">
+    </div>
+      
     </div>
     <button class="btn btn-primary" type="submit">Create Order</button>
     </div>

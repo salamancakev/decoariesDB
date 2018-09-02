@@ -9,8 +9,7 @@ export class SearchOrderPipe implements PipeTransform {
       return value;
     }
     return value.filter((val) => {
-      console.log(val)
-      let rVal =  (val.idOrder==args) || (val.Client.includes(args)) || (val.Client.toLocaleLowerCase().includes(args)) || (val.Company.includes(args)) || (val.Company.toLocaleLowerCase().includes(args)) || (val.Date.includes(args));
+      let rVal =  (val.idOrder==args) || (val.Client.includes(args)) || (val.Client.toLocaleLowerCase().includes(args)) || (val.Company.includes(args)) || (val.Company.toLocaleLowerCase().includes(args)) || (val.Date.includes(args))|| (val.Status.includes(args)) || (val.Status.toLocaleLowerCase().includes(args)) ;
       return rVal;
     })
 

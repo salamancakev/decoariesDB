@@ -70,7 +70,7 @@
             <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
           </div>
         </ng-template>
-
+        <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
     <div class="row">
       <div class="table-responsive-md">
         <table class="table table-hover">
@@ -80,7 +80,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let c of companies">
+              <tr *ngFor="let c of companies | companiesFilter: email">
                   <td *ngFor="let col of columns"(click)="onClick(c, details)">{{c[col]}}</td>
                   <button class="btn btn-primary" (click)="searchClients(c, rar)">View Clients</button>
               </tr>
