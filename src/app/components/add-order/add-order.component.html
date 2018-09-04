@@ -104,7 +104,15 @@
 
   <form ngNativeValidate (submit)="onSubmit()">
     <h4>Select a client from the list or create a new client</h4>
+    <div class="form-row">
+            <div class="form-group col-md-2">
+              <button class="btn btn-primary" type="button" (click)="openSearchClient(search)">Search Client</button>
+            </div>
 
+          <div class="form-group col-md-2">
+            <button class="btn btn-primary" type="button" (click)="openAddClient(content)">Create new client</button>
+          </div>
+          </div>
     <div class="form-row">
       <div class="form-group col-md-4">
           <label for="client">Client</label>
@@ -112,15 +120,7 @@
             <option *ngFor="let c of clients" [ngValue]="c.idClient"> {{c.Name}} {{c.Email}} </option>
           </select>    
       </div>
-
-      <div class="form-group col-md-4">
-          <button class="btn btn-primary" type="button" (click)="openSearchClient(search)">Search Client</button>
-        </div>
-
-      <div class="form-group col-md-4">
-        <button class="btn btn-primary" type="button" (click)="openAddClient(content)">Create new client</button>
-      </div>
-
+    
     </div>
 
     <div *ngIf="selectedClient">
