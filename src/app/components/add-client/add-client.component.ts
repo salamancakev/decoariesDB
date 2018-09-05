@@ -116,10 +116,6 @@ this.date = new Date();
       return false;
     }
 
-    if(!this.validateService.validateWebsite(client)){
-      this.flashMessage.show('Please fill in the Website field.', {cssClass : 'alert-danger'})
-      return false;
-    }
     this.clients.forEach(value=>{
       if(value.Name == client.name || value.Email == client.email){
         this.flashMessage.show("Client already exists in database", {cssClass : 'alert-danger'})

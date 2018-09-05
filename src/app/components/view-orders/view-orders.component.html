@@ -59,7 +59,7 @@
       <div *ngIf="confirm">
         <h1>Order Review</h1>
         <div *ngFor="let op of orderProducts">
-          <p>Product: {{op.productName}}. Quantity: {{op.Quantity}} </p>
+          <p>Product: {{op.productName}}. Description: {{op.Description}}. Quantity: {{op.Quantity}} </p>
         </div>
         <p>Status: {{selectedOrder.Status}} </p>
         <p>Total order price: ${{selectedOrder.Price}} </p>
@@ -85,7 +85,7 @@
       </div>
       <div class="modal-body">
       <div *ngFor="let o of orderDetails">
-        <p>Product: {{o.Product}}. Quantity : {{o.Quantity}} </p>
+        <p>Product: {{o.Product}}. Description: {{o.Description}}. Quantity : {{o.Quantity}}</p>
       </div>
       <p>Observations: {{selectedOrder.Observations}} </p>
       </div>
