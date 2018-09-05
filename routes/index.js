@@ -351,7 +351,7 @@ router.get('/api/get-orders', function(req, res){
 })
 
 router.post('/api/get-order-details', checkJwt, function(req,res){
-  connection.query("select orderdetails.Quantity, product.Name as 'Product' from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
+  connection.query("select orderdetails.Quantity, product.Name as 'Product', product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
   .then(json=>{
     res.send(json)
   }).catch(e=>{

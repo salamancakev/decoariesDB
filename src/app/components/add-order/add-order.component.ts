@@ -140,10 +140,6 @@ export class AddOrderComponent implements OnInit {
             return false;
           }
       
-          if(!this.validateService.validateWebsite(client)){
-            this.flashMessage.show('Please fill in the Website field.', {cssClass : 'alert-danger'})
-            return false;
-          }
           this.clients.forEach(value=>{
             if(value.Name == client.name || value.Email == client.email){
               this.flashMessage.show("Client already exists in database", {cssClass : 'alert-danger'})
@@ -177,6 +173,7 @@ export class AddOrderComponent implements OnInit {
     let product = {
       idProduct : this.selectedProduct.idProduct,
       Name : this.selectedProduct.Name,
+      Description : this.selectedProduct.Description,
       Quantity : this.quantity
     }
     if(this.selectedProduct==undefined){
