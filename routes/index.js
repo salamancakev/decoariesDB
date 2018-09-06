@@ -386,8 +386,18 @@ router.post('/api/update-order', checkJwt, function(req,res){
           Quantity : value.Quantity
         })
       })
+    }).then(update=>{
+     auxArray.forEach(value=>{
+       Product.update({
+         Description : value.Description
+       }, {
+         where : {
+           idProduct : value.idProduct
+         }
+       })
+     })
     }).then(finish=>{
-      res.json({success : true, msg : "Order info updated"})
+     return res.json({success : true, msg : "Order info updated"});
     }).catch(e=>{
       console.log(e)
       res.json({success : false, msg : "Something went wrong"});

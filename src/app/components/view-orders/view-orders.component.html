@@ -58,8 +58,8 @@
       
       <div *ngIf="confirm">
         <h1>Order Review</h1>
-        <div *ngFor="let op of orderProducts">
-          <p>Product: {{op.productName}}. Description: {{op.Description}}. Quantity: {{op.Quantity}} </p>
+        <div *ngFor="let op of orderProducts; index as i">
+          <p>Product: {{op.productName}}. Description: <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. Quantity: {{op.Quantity}} </p>
         </div>
         <p>Status: {{selectedOrder.Status}} </p>
         <p>Total order price: ${{selectedOrder.Price}} </p>
@@ -67,12 +67,12 @@
         <h1></h1>      
         <p>Do you want to confirm this changes?</p>
         <button type="submit" class="btn btn-outline-primary mb-2 mr-2">Yes</button>
-        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="close()">No</button>
       </div>
     </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="close()">Close</button>
     </div>
   </ng-template>
 

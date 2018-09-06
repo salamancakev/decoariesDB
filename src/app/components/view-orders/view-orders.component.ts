@@ -94,6 +94,12 @@ export class ViewOrdersComponent implements OnInit {
     console.log(this.orderProducts);
   }
 
+  close(){
+    this.confirm=false
+    this.orderProducts=[];
+    this.editModalReference.close();
+  }
+
   onSubmit(){
 
     let order = {
