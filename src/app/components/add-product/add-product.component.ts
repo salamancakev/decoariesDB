@@ -28,13 +28,28 @@ export class AddProductComponent implements OnInit {
   }
 
     onSubmit(){
-      let product = {
+      let product;
+      
+      if(this.description==null){
+        product = {
+          name : this.name,
+          size : this.size,
+          cloth : this.cloth,
+          url : this.url,
+          description : 'No description'
+        }
+      }
+      else{
+        product = {
         name : this.name,
         size : this.size,
         cloth : this.cloth,
         url : this.url,
         description : this.description
       }
+
+      }
+      
 
       if(!this.validateService.validateProduct(product)){
         this.flashMessage.show('Please fill in all fields', {cssClass:'alert-danger'})

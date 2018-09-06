@@ -11,6 +11,7 @@ import { ValidateService } from "../../services/validate.service";
   styleUrls: ['./view-orders.component.css']
 })
 export class ViewOrdersComponent implements OnInit {
+  
     columns = ['idOrder','Client', 'Email', 'Company', 'Date', 'Status', 'Price'];
     edit = false;
     orders : any[];
@@ -91,6 +92,12 @@ export class ViewOrdersComponent implements OnInit {
   onConfirm(){
     this.confirm=true;
     console.log(this.orderProducts);
+  }
+
+  close(){
+    this.confirm=false
+    this.orderProducts=[];
+    this.editModalReference.close();
   }
 
   onSubmit(){
