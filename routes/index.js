@@ -282,6 +282,51 @@ router.post('/api/update-client', checkJwt,function(req, res){
   
 });
 
+router.post('/api/delete-client', checkJwt, function(req,res){
+  let auxArray = [];
+  Order.findAll({
+    where : {
+      idClient : req.body.idClient
+    }
+  }).then(orders=>{
+    auxArray=orders
+    auxArray.forEach(value=>{
+      OrderDetails.destroy({
+        where : {
+          idOrder : value.dataValues.idOrder
+        }
+      }).catch(err=>{
+        console.log(err)
+        return res.json({success : false, msg : "Something went wrong"})
+      })
+    })
+
+  }).then(details=>{
+    Order.destroy({
+      where : {
+        idClient : req.body.idClient
+      }
+    }).then(order=>{
+      Phone.destroy({
+        where : {
+          idClient : req.body.idClient
+        }
+      }).then(phone=>{
+      Client.destroy({
+        where : {
+          idClient : req.body.idClient
+        }
+      }).then(finish=>{
+        return res.json({success : true, msg : "Client deleted"})
+      })
+      })
+    })
+  }).catch(err=>{
+    console.log(err)
+    return res.json({success : false, msg : "Something went wrong"})
+  })
+})
+
 router.post('/api/update-company', checkJwt, function(req,res){
 Company.update({
   CompanyName : req.body.name,
@@ -306,6 +351,49 @@ router.get('/api/get-products', function(req, res){
     res.json({success : false, msg : "Something went wrong"})
   })
 });
+
+router.post('/api/delete-company', checkJwt, function(req, res){
+ let auxArray= [];
+
+ Client.findAll({
+   where : {
+     idCompany : req.body.idCompany
+   }
+ }).then(clients=>{
+   auxArray=clients
+
+   auxArray.forEach(value=>{
+     Phone.destroy({
+       where : {
+         idClient : value.dataValues.idClient
+       }
+     }).catch(err=>{
+       console.log(err)
+       return res.json({success :false, msg : 'Something went wrong'})
+     })
+   })
+
+ }).then(phones=>{
+   Client.destroy({
+    where : {
+      idCompany : req.body.idCompany
+    }
+  }).then(client=>{
+    Company.destroy({
+      where : {
+        idCompany : req.body.idCompany
+      }
+    }).then(finish=>{
+      return res.json({success : true, msg: 'Company deleted'})
+    }).catch(err=>{
+      console.log(err)
+      return res.json({success : false, msg: 'Something went wrong'});
+    })
+  })
+ })
+
+  
+})
 
 router.post('/api/add-order', checkJwt, function(req,res){
   let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
@@ -351,7 +439,7 @@ router.get('/api/get-orders', function(req, res){
 })
 
 router.post('/api/get-order-details', checkJwt, function(req,res){
-  connection.query("select orderdetails.Quantity, product.Name as 'Product', product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
+  connection.query("select orderdetails.Quantity, product.idProduct, product.Name, product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -405,6 +493,25 @@ router.post('/api/update-order', checkJwt, function(req,res){
   })
 });
 
+router.post('/api/delete-order', checkJwt, function(req, res){
+  OrderDetails.destroy({
+    where : {
+      idOrder : req.body.idOrder
+    }
+  }).then(details=>{
+    Order.destroy({
+      where : {
+        idOrder : req.body.idOrder
+      }
+    }).then(order=>{
+      return res.json({success : true, msg : 'Order deleted'})
+    }).catch(err =>{
+      console.log(err)
+      return res.json({success : false, msg :'err'});
+    })
+  })
+})
+
 router.post('/api/add-product',checkJwt, function(req,res){
   let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
 
@@ -441,6 +548,26 @@ router.post('/api/update-product', checkJwt, function(req, res){
     res.json({success :false, msg : "Something sent wrong"});
   })
 });
+
+
+router.post('/api/delete-product', checkJwt, function(req,res){
+  OrderDetails.destroy({
+    where : {
+      idProduct : req.body.idProduct
+    }
+  }).then(order=>{
+    Product.destroy({
+      where : {
+        idProduct : req.body.idProduct
+      }
+    }).then(product=>{
+       return res.json({success : true, msg :"Product deleted"})
+    }).catch(err=>{
+      console.log(err)
+      return res.json({success : false, msg : "Err"});
+    })
+  })
+})
 
 router.post('/api/clients-company', checkJwt, function(req,res){
   Client.findAll({

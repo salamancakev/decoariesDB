@@ -14,10 +14,12 @@
     <div class="modal-body">
       <form (submit) = "onSubmit()">
         <h4>Select products and quantities</h4>
-        <div class="form-row">
+        <button class="btn btn-outline-primary" type="button" (click)="onEditProducts()">Edit Order Products</button>
+        <div *ngIf="editProducts==true">
+          <div class="form-row">
           <div class="form-group col-md-6">
             <label for="product">Product</label>
-            <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product" required>
+            <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
               <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}</option>
             </select>
         </div>
@@ -29,7 +31,11 @@
           <br>
           <button class="btn btn-primary"  type="button" (click)="addProduct()">Add Product</button>
         </div>
+
         </div>
+
+        </div>
+        
 
         <div class="form-row">
             <div class="form-group col-md-4">
@@ -59,7 +65,7 @@
       <div *ngIf="confirm">
         <h1>Order Review</h1>
         <div *ngFor="let op of orderProducts; index as i">
-          <p>Product: {{op.productName}}. Description: <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. Quantity: {{op.Quantity}} </p>
+          <p>Product: {{op.Name}}. Description: <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. Quantity: {{op.Quantity}} </p>
         </div>
         <p>Status: {{selectedOrder.Status}} </p>
         <p>Total order price: ${{selectedOrder.Price}} </p>
@@ -67,7 +73,7 @@
         <h1></h1>      
         <p>Do you want to confirm this changes?</p>
         <button type="submit" class="btn btn-outline-primary mb-2 mr-2">Yes</button>
-        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="close()">No</button>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="unconfirm()">No</button>
       </div>
     </form>
     </div>
@@ -85,12 +91,30 @@
       </div>
       <div class="modal-body">
       <div *ngFor="let o of orderDetails">
-        <p>Product: {{o.Product}}. Description: {{o.Description}}. Quantity : {{o.Quantity}}</p>
+        <p>Product: {{o.Name}}. Description: {{o.Description}}. Quantity : {{o.Quantity}}</p>
       </div>
       <p>Observations: {{selectedOrder.Observations}} </p>
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="onEdit(content)">Edit</button>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+      </div>
+    </ng-template>
+
+    <ng-template #delete let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Order</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h1></h1>
+          <p>Are you sure you want to delete this Order? Changes cannot be undone.</p>
+          <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="onDelete()">Yes</button>
+          <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+      </div>
+      <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
       </div>
     </ng-template>
@@ -106,9 +130,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let o of orders | ordersFilter:email" (click)="openOrderDetails(o, details)">
-                <td *ngFor="let col of columns">{{o[col]}}</td>
-                
+            <tr *ngFor="let o of orders | ordersFilter:email">
+                <td *ngFor="let col of columns" (click)="openOrderDetails(o, details)">{{o[col]}}</td>
+                <div *ngIf="user.Type=='Admin'">
+                  <button class="btn btn-primary" (click)="confirmDelete(o, delete)">Delete Order</button>
+                </div>
             </tr>
           </tbody>
         </table>

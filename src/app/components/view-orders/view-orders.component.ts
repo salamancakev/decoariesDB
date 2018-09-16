@@ -5,6 +5,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-view-orders',
   templateUrl: './view-orders.component.html',
@@ -20,6 +21,7 @@ export class ViewOrdersComponent implements OnInit {
 
     detailsModalReference: any;
     editModalReference : any;
+    deleteModalReference : any;
 
     products: any[];
     selectedProduct: any;
@@ -27,11 +29,16 @@ export class ViewOrdersComponent implements OnInit {
     quantity: any;
     confirm =false;
     email :any;
+
+    editProducts : boolean;
+
+    user : any;
     
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
     private validateService : ValidateService,
+    private authService : AuthService,
     private flashMessage : FlashMessagesService,
     private modalService : NgbModal) { }
 
@@ -43,6 +50,10 @@ export class ViewOrdersComponent implements OnInit {
     this.dbService.getOrders().subscribe(data=>{
       this.orders=data[0]
     })
+
+    this.editProducts=false;
+
+    this.user=this.authService.user;
   }
 
   openOrderDetails(order, details){
@@ -67,7 +78,7 @@ export class ViewOrdersComponent implements OnInit {
   addProduct(){
     let product = {
       idProduct : this.selectedProduct.idProduct,
-      productName: this.selectedProduct.Name,
+      Name: this.selectedProduct.Name,
       Description : this.selectedProduct.Description,
       Quantity : this.quantity
     }
@@ -90,19 +101,51 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   onConfirm(){
+    if(this.orderProducts.length==0){
+      this.orderProducts=this.orderDetails
+    }
     this.confirm=true;
     console.log(this.orderProducts);
+  }
+
+  unconfirm(){
+    this.confirm=false;
+  }
+
+  confirmDelete(order, content){
+    this.selectedOrder=order;
+    this.deleteModalReference=this.modalService.open(content);
   }
 
   close(){
     this.confirm=false
     this.orderProducts=[];
+    this.editProducts=false;
     this.editModalReference.close();
   }
 
-  onSubmit(){
+  onEditProducts(){
+  this.editProducts=true;
+  }
 
-    let order = {
+  onDelete(){
+    this.dbService.deleteOrder(this.selectedOrder).subscribe(data=>{
+      if(data.success){
+        this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
+        this.deleteModalReference.close()
+        this.router.navigate(['orders'])
+      }
+
+      else{
+        this.flashMessage.show("Something went wrong", {cssClass : 'alert-danger'})
+        this.deleteModalReference.close()
+        this.router.navigate(['orders'])
+      }
+    })
+  }
+
+  onSubmit(){
+   let order = {
       idOrder : this.selectedOrder.idOrder,
       idClient : this.selectedOrder.idClient,
       orderProducts : this.orderProducts,
@@ -110,6 +153,9 @@ export class ViewOrdersComponent implements OnInit {
       status : this.selectedOrder.Status,
       observations : this.selectedOrder.Observations
     }
+   
+
+    
 
     if(this.orderProducts.length==0){
       this.flashMessage.show('Please add products to the order', {cssClass: 'alert-danger'});
