@@ -24,7 +24,10 @@ export class ViewClientsComponent implements OnInit {
   modalReference :any;
   email : any;
   confirm = false;
-  idUser : any;
+
+  deleteModalReference : any;
+
+  user : any;
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -63,9 +66,9 @@ export class ViewClientsComponent implements OnInit {
       })
       this.companyNames = names;
     })
-    this.idUser=this.authService.user.idUser;
+    this.user=this.authService.user;
 
-    if(this.authService.user.Type == 'Admin'){
+    if(this.user.Type == 'Admin'){
       this.columns=['Name', 'Gender', 'Email', 'Status', 'Company', 'Website', 'createdBy'];
     }
 
@@ -91,7 +94,7 @@ onAdd(){
   this.phone=null
 }
 
-onDelete(phone){
+onDeletePhone(phone){
   let index = this.phones.indexOf(phone)
   let array;
   if(index>-1){
@@ -101,8 +104,39 @@ onDelete(phone){
   console.log(array)
 }
 
+close(){
+  this.phones=[];
+  this.modalReference.close()
+}
+
+
 onConfirm(){
   this.confirm=true;
+}
+
+unconfirm(){
+  this.confirm=false;
+}
+
+confirmDelete(client, content){
+  this.selectedClient=client;
+  this.deleteModalReference=this.modalService.open(content);
+}
+
+onDelete(){
+  this.dbService.deleteClient(this.selectedClient).subscribe(data=>{
+    if(data.success){
+      this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
+      this.deleteModalReference.close()
+      this.router.navigate(['clients'])
+    }
+
+    else{
+      this.flashMessage.show("Something went wrong", {cssClass : 'alert-danger'})
+      this.deleteModalReference.close()
+      this.router.navigate(['clients'])
+    }
+  })
 }
 
 onSubmit(){
@@ -121,7 +155,7 @@ let exists;
     companyName : this.selectedClient.Company,
     companyWebsite : this.selectedClient.Website,
     exists : exists,
-    idUser : this.idUser
+    idUser : this.user.idUser
   }
 
   if(!this.validateService.validateClientRegister(client)){

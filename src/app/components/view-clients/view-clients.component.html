@@ -6,7 +6,7 @@
   <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
       <h4 class="modal-title">Client details</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <button type="button" class="close" aria-label="Close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -36,7 +36,7 @@
     <h3>Phone Numbers</h3>
         <div *ngFor="let p of phones">
           <div class="form-row">
-            {{p}} <button type="button" class="btn btn-outline-primary ml-2 mb-2" (click)="onDelete(p)">Delete</button>
+            {{p}} <button type="button" class="btn btn-outline-primary ml-2 mb-2" (click)="onDeletePhone(p)">Delete</button>
           </div>
         </div>
 
@@ -65,9 +65,27 @@
             <h1></h1>      
             <p>Do you want to confirm this changes?</p>
             <button type="submit" class="btn btn-outline-primary mb-2 mr-2">Yes</button>
-            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="unconfirm()">No</button>
           </div>
       </form> 
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="close()">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #delete let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Delete Client</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h1></h1>
+        <p>Are you sure you want to delete this Client? Changes cannot be undone.</p>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="onDelete()">Yes</button>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
@@ -88,9 +106,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let c of clients | clientsFilter:email" (click)="onClick(c, content)">
-                <td *ngFor="let col of columns">{{c[col]}}</td>
-                <td>{{c.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
+            <tr *ngFor="let c of clients | clientsFilter:email" >
+                <td *ngFor="let col of columns" (click)="onClick(c, content)">{{c[col]}}</td>
+                <td (click)="onClick(c, content)">{{c.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
+                <div *ngIf="user.Type=='Admin'">
+                  <button class="btn btn-primary" (click)="confirmDelete(c, delete)">Delete Client</button>
+                </div>
             </tr>
           </tbody>
         </table>

@@ -22,9 +22,12 @@ export class ViewCompaniesComponent implements OnInit {
 
   editModalReference : any;
   clientsModalReference : any;
+  deleteModalReference : any;
 
   confirm = false;
   email : any;
+
+  user : any;
 
   constructor(private router : Router,
     private dbService : DatabaseService,
@@ -38,7 +41,9 @@ export class ViewCompaniesComponent implements OnInit {
       this.companies=data[0];
     })
 
-    if(this.authService.user.Type == 'Admin'){
+    this.user=this.authService.user
+
+    if(this.user.Type == 'Admin'){
       this.columns=['Company', 'Website', 'createdBy', 'From'];
     }
 
@@ -62,6 +67,32 @@ export class ViewCompaniesComponent implements OnInit {
   onConfirm(){
     this.confirm=true;
   }
+
+  unconfirm(){
+    this.confirm=false;
+  }
+
+  confirmDelete(company, content){
+    this.selectedCompany=company;
+    this.deleteModalReference=this.modalService.open(content);
+  }
+
+  onDelete(){
+    this.dbService.deleteCompany(this.selectedCompany).subscribe(data=>{
+      if(data.success){
+        this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
+        this.deleteModalReference.close()
+        this.router.navigate(['clients'])
+      }
+
+      else{
+        this.flashMessage.show("Something went wrong", {cssClass : 'alert-danger'})
+        this.deleteModalReference.close()
+        this.router.navigate(['clients'])
+      }
+    })
+  }
+
   onSubmit(){
 
     let company = {

@@ -36,11 +36,25 @@ export class DatabaseService {
     return this.http.post('/api/update-client', client, {headers : headers}).pipe(map(res=>res.json()))
   }
 
+  deleteClient(client){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('/api/delete-client', client, {headers : headers}).pipe(map(res=>res.json())) 
+  }
+
   updateCompany(company){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-company', company, {headers : headers}).pipe(map(res=>res.json()))
+  }
+
+  deleteCompany(company){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('/api/delete-company', company, {headers : headers}).pipe(map(res=>res.json()))
   }
 
   getProducts(){
@@ -72,6 +86,13 @@ export class DatabaseService {
     return this.http.post('/api/update-order', order, {headers : headers}).pipe(map(res=>res.json()));
   }
 
+  deleteOrder(order){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('/api/delete-order', order, {headers : headers}).pipe(map(res=>res.json()));
+  }
+
   addProduct(product){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -84,6 +105,13 @@ export class DatabaseService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer '+this.authService.userToken);
     return this.http.post('/api/update-product',product, {headers:headers}).pipe(map(res=>res.json()));    
+  }
+
+  deleteProduct(product){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('/api/delete-product',product, {headers:headers}).pipe(map(res=>res.json()));
   }
 
   searchClientsCompany(company){

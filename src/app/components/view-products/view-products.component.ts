@@ -4,6 +4,7 @@ import {NgbTypeahead, NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-boot
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-view-products',
   templateUrl: './view-products.component.html',
@@ -17,11 +18,15 @@ export class ViewProductsComponent implements OnInit {
   selectedProduct : any;
   confirm = false;
   email : any;
-  modalReference : any;
+  detailsReference : any;
+  deleteReference : any;
+
+  user : any;
 
   constructor(private router : Router,
   private dbService : DatabaseService,
   private validateService : ValidateService,
+  private authService : AuthService,
   private modalService : NgbModal,
   private flashMessage : FlashMessagesService) { }
 
@@ -29,16 +34,43 @@ export class ViewProductsComponent implements OnInit {
     this.dbService.getProducts().subscribe(data=>{
       this.products=data;
     })
+
+    this.user=this.authService.user;
   }
 
   onClick(product, content){
     this.selectedProduct=product;
-    this.modalReference=this.modalService.open(content);
+    this.detailsReference=this.modalService.open(content);
 
   }
 
   onConfirm(){
     this.confirm=true;
+  }
+
+  unconfirm(){
+    this.confirm=false;
+  }
+
+  confirmDelete(product, content){
+    this.selectedProduct=product;
+    this.deleteReference=this.modalService.open(content);
+  }
+
+  onDelete(){
+    this.dbService.deleteProduct(this.selectedProduct).subscribe(data=>{
+      if(data.success){
+        this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
+        this.deleteReference.close();
+        this.router.navigate(['products']);
+      }
+
+      else{
+        this.flashMessage.show(data.msg, {cssClass : 'alert-danger'})
+        this.deleteReference.close();
+        this.router.navigate(['products']);
+      }
+    })
   }
 
   onSubmit(){
@@ -54,12 +86,12 @@ export class ViewProductsComponent implements OnInit {
 
     this.dbService.updateProduct(product).subscribe(data=>{
       if(data.success){
-        this.modalReference.close();
+        this.detailsReference.close();
         this.flashMessage.show(data.msg, {cssClass :'alert-success'})
         this.router.navigate(['products']);
       }
       else{
-        this.modalReference.close();
+        this.detailsReference.close();
         this.flashMessage.show(data.msg, {cssClass : 'alert-danger'})
         this.router.navigate(['products']);
       }
