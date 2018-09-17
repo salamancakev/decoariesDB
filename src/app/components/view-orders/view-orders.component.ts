@@ -33,7 +33,10 @@ export class ViewOrdersComponent implements OnInit {
     editProducts : boolean;
 
     user : any;
-    
+    adminPass : any;
+    errorMsg: any;
+    auth0 =false;
+
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
@@ -124,8 +127,33 @@ export class ViewOrdersComponent implements OnInit {
     this.editModalReference.close();
   }
 
+  closeDelete(){
+    this.auth0=false;
+    this.errorMsg = null;
+    this.adminPass=null;
+    this.deleteModalReference.close()
+  }
+
   onEditProducts(){
   this.editProducts=true;
+  }
+
+  authDelete(){
+    let user = {
+      email : this.authService.user.Email,
+      password : this.adminPass
+    }
+    this.authService.login(user).subscribe(data=>{
+      if(data.error){
+        this.errorMsg = data.msg;
+        return false;
+      }
+
+      else{
+        this.auth0=true;
+        this.errorMsg = null;
+      }
+    })
   }
 
   onDelete(){

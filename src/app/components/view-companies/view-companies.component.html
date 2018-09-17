@@ -40,7 +40,7 @@
       <ng-template #details let-c="close" let-d="dismiss">
           <div class="modal-header">
             <h4 class="modal-title">Edit Company</h4>
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <button type="button" class="close" aria-label="Close" (click)="close()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -67,25 +67,47 @@
                 </form> 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="close()">Close</button>
           </div>
         </ng-template>
 
         <ng-template #delete let-c="close" let-d="dismiss">
           <div class="modal-header">
             <h4 class="modal-title">Delete Company</h4>
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <button type="button" class="close" aria-label="Close" (click)="closeDelete()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <h1></h1>
-              <p>Are you sure you want to delete this Company? Changes cannot be undone.</p>
+            <div *ngIf="!auth0">
+                <div class="row">
+                  <p>Please enter your password</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="password" class="form-control" [(ngModel)]="adminPass" name="adminPass" id="adminPass">
+                  </div>
+                  <div class="col-md-2">
+                    <button type="button" class="btn btn-outline-primary ml-2" (click)="authDelete()">Submit</button>
+                  </div>
+                   
+                </div>
+                <div *ngIf="errorMsg">
+                  <div class="row">
+                    <p> {{errorMsg}} </p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="auth0">
+                <p>Are you sure you want to delete this Company? Changes cannot be undone.</p>
               <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="onDelete()">Yes</button>
-              <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c()">No</button>
+              <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="closeDelete()">No</button>
+              </div>
+              
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+            <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="closeDelete()">Close</button>
           </div>
         </ng-template>
 

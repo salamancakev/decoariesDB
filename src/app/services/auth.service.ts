@@ -64,6 +64,8 @@ export class AuthService {
     return this.http.post('/api/signup',body, {headers : headers}).pipe(map(res=>res.json()));
 
   }
+
+
  
 
 }

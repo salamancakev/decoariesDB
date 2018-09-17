@@ -28,6 +28,9 @@ export class ViewClientsComponent implements OnInit {
   deleteModalReference : any;
 
   user : any;
+  adminPass : any;
+  errorMsg: any;
+  auth0 =false;
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -106,7 +109,15 @@ onDeletePhone(phone){
 
 close(){
   this.phones=[];
+  this.confirm=false;
   this.modalReference.close()
+}
+
+closeDelete(){
+  this.adminPass=null;
+  this.errorMsg=null;
+  this.auth0=false;
+  this.deleteModalReference.close();
 }
 
 
@@ -121,6 +132,24 @@ unconfirm(){
 confirmDelete(client, content){
   this.selectedClient=client;
   this.deleteModalReference=this.modalService.open(content);
+}
+
+authDelete(){
+  let user = {
+    email : this.authService.user.Email,
+    password : this.adminPass
+  }
+  this.authService.login(user).subscribe(data=>{
+    if(data.error){
+      this.errorMsg = data.msg;
+      return false;
+    }
+
+    else{
+      this.auth0=true;
+      this.errorMsg = null;
+    }
+  })
 }
 
 onDelete(){
