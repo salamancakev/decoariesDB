@@ -22,6 +22,9 @@ export class ViewProductsComponent implements OnInit {
   deleteReference : any;
 
   user : any;
+  adminPass : any;
+  errorMsg: any;
+  auth0 =false;
 
   constructor(private router : Router,
   private dbService : DatabaseService,
@@ -55,6 +58,36 @@ export class ViewProductsComponent implements OnInit {
   confirmDelete(product, content){
     this.selectedProduct=product;
     this.deleteReference=this.modalService.open(content);
+  }
+
+  close(){
+  this.confirm=false;
+  this.detailsReference.close();
+  }
+
+  closeDelete(){
+    this.adminPass=null;
+    this.errorMsg=null;
+    this.auth0=false;
+    this.deleteReference.close();
+  }
+
+  authDelete(){
+    let user = {
+      email : this.authService.user.Email,
+      password : this.adminPass
+    }
+    this.authService.login(user).subscribe(data=>{
+      if(data.error){
+        this.errorMsg = data.msg;
+        return false;
+      }
+  
+      else{
+        this.auth0=true;
+        this.errorMsg = null;
+      }
+    })
   }
 
   onDelete(){

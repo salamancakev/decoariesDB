@@ -28,6 +28,9 @@ export class ViewCompaniesComponent implements OnInit {
   email : any;
 
   user : any;
+  adminPass : any;
+  errorMsg: any;
+  auth0 =false;
 
   constructor(private router : Router,
     private dbService : DatabaseService,
@@ -72,9 +75,40 @@ export class ViewCompaniesComponent implements OnInit {
     this.confirm=false;
   }
 
+  close(){
+    this.confirm=false;
+    this.editModalReference.close();
+  }
+
+  closeDelete(){
+    
+    this.auth0=false;
+    this.errorMsg=null;
+    this.adminPass=null;
+    this.deleteModalReference.close();
+  }
+
   confirmDelete(company, content){
     this.selectedCompany=company;
     this.deleteModalReference=this.modalService.open(content);
+  }
+
+  authDelete(){
+    let user = {
+      email : this.authService.user.Email,
+      password : this.adminPass
+    }
+    this.authService.login(user).subscribe(data=>{
+      if(data.error){
+        this.errorMsg = data.msg;
+        return false;
+      }
+
+      else{
+        this.auth0=true;
+        this.errorMsg = null;
+      }
+    })
   }
 
   onDelete(){
