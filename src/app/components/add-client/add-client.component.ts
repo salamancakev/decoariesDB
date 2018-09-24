@@ -66,6 +66,7 @@ export class AddClientComponent implements OnInit {
     })
     
     this.idUser=this.authService.user.idUser;
+    console.log(this.phones.length)
   }
 
   onAddPhone(){

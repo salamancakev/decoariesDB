@@ -83,7 +83,7 @@ export class AddOrderComponent implements OnInit {
   }
 
   openSearchClient(content){
-    this.searchModalReference=this.modalService.open(content);
+    this.searchModalReference=this.modalService.open(content, {size : 'lg'});
   }
 
   onSelectClient(client){

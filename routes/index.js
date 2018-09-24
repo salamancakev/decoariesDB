@@ -178,7 +178,7 @@ router.get('/api/get-companies2', function(req, res){
 })
 
 router.get('/api/get-clients', function(req,res){
-  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.createDate, company.Name as 'Company', company.Website, user.Name as 'createdBy' from client inner join company on client.idCompany = company.idCompany inner join user on client.idUser = user.idUser")
+  connection.query("select client.idClient, client.Name, client.Gender, client.Email, client.Status, client.createDate, company.Name as 'Company', company.Website, user.Name as 'createdBy' from client inner join company on client.idCompany = company.idCompany inner join user on client.idUser = user.idUser order by company.Name")
   .then(data=>{
     res.send(data)
   }).catch(e=>{

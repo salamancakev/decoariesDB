@@ -40,7 +40,7 @@
                <div class="form-group col-4">
                    <label for="selectedPhone">Phone Numbers</label>
                    <input type="text" class="form-control" [(ngModel)]="selectedPhone" name="selectedPhone" id="selectedPhone" placeholder="Phone">
-                   <button type="button" class="btn btn-primary" (click)="onAddPhone()" >Add Phone Number</button>
+                   <button type="button" class="btn btn-outline-primary" (click)="onAddPhone()" >Add Phone Number</button>
                </div>
            
              </div>
@@ -57,7 +57,7 @@
              </div>
            
              
-             <button type="submit" class="btn btn-primary">Register</button>
+             <button type="submit" class="btn btn-success">Register</button>
            </form> 
            
            <h1></h1>
@@ -129,7 +129,7 @@
       <div class="form-group col-md-6">
           <label for="product">Product</label>
           <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
-            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}</option>
+            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}. Size: {{p.Size}}. Cloth Type: {{p.ClothType}} </option>
           </select>
       </div>
       <div class="form-group col-md-2">
@@ -139,7 +139,7 @@
       <div class="form-group col-md-4">
         <br>
         <br>
-        <button class="btn btn-primary"  type="button" (click)="addProduct()">Add Product to Order</button>
+        <button class="btn btn-outline-primary"  type="button" (click)="addProduct()">Add Product to Order</button>
       </div>
     </div>
 
@@ -180,7 +180,7 @@
     </div>
       
     </div>
-    <button class="btn btn-primary" type="submit">Create Order</button>
+    <button class="btn btn-success" type="submit">Create Order</button>
     </div>
   </form>
   <h1></h1>

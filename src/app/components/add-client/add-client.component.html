@@ -25,12 +25,27 @@
         </div>
 
     <div class="form-group col-4">
-        <label for="selectedPhone">Phone Numbers</label>
+        <label for="selectedPhone">Phone</label>
         <input type="text" class="form-control" [(ngModel)]="selectedPhone" name="selectedPhone" id="selectedPhone" placeholder="Phone">
-        <button type="button" class="btn btn-primary" (click)="onAddPhone()" >Add Phone Number</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onAddPhone()" >Add Phone Number</button>
     </div>
 
   </div>
+
+  <h3>Phone Numbers:</h3>
+  <h1></h1>
+  
+    <div *ngIf="phones.length==0">
+      <p>No phone numbers have been added. Please add at least 1 phone number.</p>
+    </div>
+
+    <div *ngIf="phones.length>0">
+      <div *ngFor="let ph of phones; index as i">
+        <p> {{i+1}}) {{ph}} </p>
+      </div>
+    </div>
+
+  
 
   <div class="form-row">
     <div class="form-group col-4">
@@ -47,7 +62,7 @@
   </div>
 
   
-  <button type="submit" class="btn btn-primary">Register</button>
+  <button type="submit" class="btn btn-success">Register</button>
 </form> 
 
 <h1></h1>
