@@ -23,19 +23,22 @@
                   </div>
                 </div> 
                 <div class="form-row">
-                   <div class="form-group col-md-4">
+                   <div class="form-group col-md-6">
                       <label for="size">Size</label>
                       <input class="form-control" type="text" [(ngModel)]="selectedProduct.Size" name="size" id="size" placeholder="size" required>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label for="cloth">Cloth Type</label>
                         <input class="form-control" type="text" [(ngModel)]="selectedProduct.ClothType" name="cloth" id="cloth" placeholder="cloth" required>
                       </div> 
-                      <div class="form-group col-md-4">
-                        <label for="url">Image URL</label>
-                        <input class="form-control" type="text" [(ngModel)]="selectedProduct.URL" name="url" id="url">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="image">Image</label>
+                        <input type="file" id="image" (change)="onChange($event)" [(ngModel)]="image" accept=".png, .jpg, .jpeg" name="image" required>           
                       </div>
                   </div>
+                  
                 <button class="btn btn-success" type="button" (click)="onConfirm()">Update</button>
                 <div *ngIf="confirm">
                     <h1></h1>      
@@ -90,6 +93,26 @@
         </div>
       </ng-template>
 
+      <ng-template #imagemodal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title">Product Image</h4>
+          <button type="button" class="close" aria-label="Close" (click)="closeImage()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         <div class="container">
+           <div class="row">
+             <img src= {{selectedProduct.URL}}>
+           </div>
+         </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="closeImage()">Close</button>
+        </div>
+      </ng-template>
+
       <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
     <div class="row">
       <h1></h1>
@@ -104,8 +127,9 @@
             <tbody>
               <tr *ngFor="let p of products | productsFilter:email">
                   <td *ngFor="let col of columns" (click)="onClick(p,content)">{{p[col]}}</td>
+                  <button class="btn btn-warning mb-2" (click)="openImage(p, imagemodal)">View Image</button>
                   <div *ngIf="user.Type=='Admin'">
-                    <button class="btn btn-danger" (click)="confirmDelete(p, delete)">Delete Product</button>
+                    <button class="btn btn-danger mb-2" (click)="confirmDelete(p, delete)">Delete Product</button>
                   </div>
                   
               </tr>

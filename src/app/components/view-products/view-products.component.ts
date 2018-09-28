@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ViewProductsComponent implements OnInit {
 
-  columns = ['Name', 'Description', 'Size', 'ClothType', 'URL']
+  columns = ['Name', 'Description', 'Size', 'ClothType']
 
   products : any[];
   selectedProduct : any;
@@ -20,6 +20,9 @@ export class ViewProductsComponent implements OnInit {
   email : any;
   detailsReference : any;
   deleteReference : any;
+  imageReference : any;
+
+  newImage: any;
 
   user : any;
   adminPass : any;
@@ -43,9 +46,16 @@ export class ViewProductsComponent implements OnInit {
 
   onClick(product, content){
     this.selectedProduct=product;
-    this.detailsReference=this.modalService.open(content);
+    this.detailsReference=this.modalService.open(content, {size : 'lg'});
 
   }
+
+  onChange(evt){
+    this.dbService.loadImg(evt.target.files[0]).then(link => {
+      this.selectedProduct.URL = link;
+      this.newImage = true;
+    }).catch(err => console.log(err));
+ }
 
   onConfirm(){
     this.confirm=true;
@@ -55,6 +65,10 @@ export class ViewProductsComponent implements OnInit {
     this.confirm=false;
   }
 
+  openImage(product, content){
+    this.selectedProduct=product
+    this.imageReference=this.modalService.open(content, {size : 'lg'})
+  }
   confirmDelete(product, content){
     this.selectedProduct=product;
     this.deleteReference=this.modalService.open(content);
@@ -70,6 +84,10 @@ export class ViewProductsComponent implements OnInit {
     this.errorMsg=null;
     this.auth0=false;
     this.deleteReference.close();
+  }
+
+  closeImage(){
+    this.imageReference.close();
   }
 
   authDelete(){
@@ -114,7 +132,9 @@ export class ViewProductsComponent implements OnInit {
       size : this.selectedProduct.Size,
       cloth : this.selectedProduct.ClothType,
       description : this.selectedProduct.Description,
-      url : this.selectedProduct.URL
+      url : this.selectedProduct.URL,
+      imageID : this.selectedProduct.imageID,
+      modified : this.newImage
     }
 
     this.dbService.updateProduct(product).subscribe(data=>{

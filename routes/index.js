@@ -6,6 +6,7 @@ const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
 const path = require('path');
 const request = require('request');
+const cloudinary = require('cloudinary');
 
 var connection;
 
@@ -61,6 +62,13 @@ const checkJwt = jwt({
   issuer: `https://decoaries.auth0.com/`,
   algorithms: ['RS256']
 });
+
+cloudinary.config({ 
+  cloud_name: 'hiqgsdump', 
+  api_key: '849621859457668', 
+  api_secret: 'aUkda1wdprjZQEsMVXbvgJPCxiI' 
+});
+
 
   var User= connection.import('../models/User');
   var Client = connection.import('../models/Client');
@@ -515,28 +523,39 @@ router.post('/api/delete-order', checkJwt, function(req, res){
 router.post('/api/add-product',checkJwt, function(req,res){
   let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
 
-  Product.create({
+  cloudinary.v2.uploader.upload(req.body.url, function(error, result){
+    if(result){
+    Product.create({
     idProduct : guid2,
     Name : req.body.name,
     Description : req.body.description,
     Size : req.body.size,
     ClothType : req.body.cloth,
-    URL : req.body.url
+    URL : result.secure_url,
+    imageID : result.public_id
   }).then(product=>{
     res.json({success :true, msg : "Product added to database"})
   }).catch(e=>{
     console.log(e)
     res.json({success :false, msg : "Something went wrong"});
   })
+    }
+    else{
+    console.log(error)
+return res.json({success :false, msg : "Something went wrong"});
+    }
+  })
+
 });
 
 router.post('/api/update-product', checkJwt, function(req, res){
-  Product.update({
+
+  if(!req.body.modified){
+    Product.update({
     Name : req.body.name,
     Description : req.body.description,
     Size : req.body.size,
-    ClothType : req.body.cloth,
-    URL : req.body.url
+    ClothType : req.body.cloth
   }, {
     where : {
       idProduct : req.body.idProduct
@@ -547,6 +566,48 @@ router.post('/api/update-product', checkJwt, function(req, res){
     console.log(e)
     res.json({success :false, msg : "Something sent wrong"});
   })
+  }
+
+  else{
+
+    cloudinary.v2.uploader.destroy(req.body.imageID, function(errorDelete, resultDelete){
+      if(resultDelete){
+      cloudinary.v2.uploader.upload(req.body.url, function(error, result){
+    if(result){
+      Product.update({
+        Name : req.body.name,
+        Description : req.body.description,
+        Size : req.body.size,
+        ClothType : req.body.cloth,
+        URL : result.secure_url,
+        imageID : result.public_id
+      }, {
+        where : {
+          idProduct : req.body.idProduct
+        }
+      }).then(product=>{
+        res.json({success :true, msg : "Product info updated"});
+      }).catch(e=>{
+        console.log(e)
+        res.json({success :false, msg : "Something sent wrong"});
+      })
+    }
+
+    else{
+      console.log(error)
+      return res.json({success :false, msg : "Something sent wrong"});
+    }
+
+  })  
+      }
+      else{
+        console.log('Yolo')
+        return res.json({success :false, msg : "Something sent wrong"});
+      }
+
+    })
+  }
+
 });
 
 
@@ -556,7 +617,9 @@ router.post('/api/delete-product', checkJwt, function(req,res){
       idProduct : req.body.idProduct
     }
   }).then(order=>{
-    Product.destroy({
+    cloudinary.v2.uploader.destroy(req.body.imageID, function(error, result){
+      if(result){
+        Product.destroy({
       where : {
         idProduct : req.body.idProduct
       }
@@ -564,8 +627,15 @@ router.post('/api/delete-product', checkJwt, function(req,res){
        return res.json({success : true, msg :"Product deleted"})
     }).catch(err=>{
       console.log(err)
-      return res.json({success : false, msg : "Err"});
+      return res.json({success : false, msg : "Something sent wrong"});
     })
+      }
+      else{
+      console.log(error)
+      returnres.json({success : false, msg : 'Something sent wrong'});
+    }
+    })
+
   })
 })
 

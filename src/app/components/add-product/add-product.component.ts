@@ -15,7 +15,7 @@ export class AddProductComponent implements OnInit {
   name : String;
   size : Number;
   cloth : String;
-  url : String;
+  url : any;
   description : String;
 
   constructor(private router : Router,
@@ -26,6 +26,13 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  onChange(evt){
+    this.dbService.loadImg(evt.target.files[0]).then(link => {
+      this.url = link;
+    }).catch(err => console.log(err));
+ }
+
 
     onSubmit(){
       let product;

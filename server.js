@@ -8,7 +8,8 @@ var routes = require('./routes/index');
 
 var port = process.env.PORT || 8080;
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit : '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
 app.use(function (req, res, next) {

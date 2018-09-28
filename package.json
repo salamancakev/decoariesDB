@@ -29,6 +29,7 @@
     "auth0-js": "^9.7.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.0.0",
+    "cloudinary": "^1.11.0",
     "core-js": "^2.5.4",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",

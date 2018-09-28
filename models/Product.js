@@ -33,7 +33,12 @@ module.exports= function(sequelize, DataTypes){
 
         URL : {
             type : DataTypes.STRING,
-            allowNull : true
+            allowNull : false
+        },
+
+        imageID :{
+            type : DataTypes.STRING,
+            allowNull : false
         }
     })
     
