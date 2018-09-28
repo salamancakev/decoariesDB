@@ -24,8 +24,8 @@
               <input class="form-control" type="text" [(ngModel)]="cloth" name="cloth" id="cloth" placeholder="cloth" required>
             </div> 
             <div class="form-group col-md-4">
-              <label for="url">Image URL</label>
-              <input class="form-control" type="text" [(ngModel)]="url" name="url" id="url">
+              <label for="image">Image</label>
+              <input type="file" id="image" (change)="onChange($event)" [(ngModel)]="image" accept=".png, .jpg, .jpeg" name="image">
             </div>
         </div>
     <button class="btn btn-success" type="submit">Add Product</button>
