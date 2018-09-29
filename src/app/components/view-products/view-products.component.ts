@@ -22,7 +22,7 @@ export class ViewProductsComponent implements OnInit {
   deleteReference : any;
   imageReference : any;
 
-  newImage: any;
+  newImage = false;
 
   user : any;
   adminPass : any;

@@ -589,20 +589,20 @@ router.post('/api/update-product', checkJwt, function(req, res){
         res.json({success :true, msg : "Product info updated"});
       }).catch(e=>{
         console.log(e)
-        res.json({success :false, msg : "Something sent wrong"});
+        res.json({success :false, msg : "Something went wrong"});
       })
     }
 
     else{
       console.log(error)
-      return res.json({success :false, msg : "Something sent wrong"});
+      return res.json({success :false, msg : "Something went wrong"});
     }
 
   })  
       }
       else{
-        console.log('Yolo')
-        return res.json({success :false, msg : "Something sent wrong"});
+        console.log(errorDelete)
+        return res.json({success :false, msg : "Something went wrong"});
       }
 
     })
