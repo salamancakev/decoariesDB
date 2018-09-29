@@ -35,6 +35,12 @@ export class AddProductComponent implements OnInit {
 
 
     onSubmit(){
+
+      if(this.url==null){
+        this.flashMessage.show('Please add a product image', {cssClass : 'alert-danger'})
+        return false;
+      }
+
       let product;
       
       if(this.description==null){
