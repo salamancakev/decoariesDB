@@ -144,6 +144,7 @@ export class DatabaseService {
   loadImg(file) {
     return new Promise((resolve, reject) => {
       let tipo;
+      console.log(file.type)
       if (file) {
         switch (file.type) {
           case 'image/gif':
@@ -157,6 +158,9 @@ export class DatabaseService {
             break;
           case 'image/svg+xml':
             tipo = 'data:image/svg+xml;base64,';
+            break;
+          case 'application/pdf':
+            tipo = 'data:image/pdf;base64,';
             break;
           default:
             tipo = null;

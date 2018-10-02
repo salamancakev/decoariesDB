@@ -83,11 +83,11 @@ export class AddOrderComponent implements OnInit {
   }
 
   openSearchClient(content){
-    this.searchModalReference=this.modalService.open(content, {size : 'lg'});
+    this.searchModalReference=this.modalService.open(content, {size : 'lg', windowClass: 'modal-xxl'});
   }
 
   onSelectClient(client){
-    this.selectedClient=client.idClient;
+    this.selectedClient=client;
     this.searchModalReference.close();
   }
 
@@ -195,7 +195,7 @@ export class AddOrderComponent implements OnInit {
       let registerDate=this.datePipe.transform(this.date, 'yyyy-MM-dd');
 
   let order = {
-    idClient : this.selectedClient,
+    idClient : this.selectedClient.idClient,
     orderProducts: this.orderProducts,
     price : this.price,
     observations : this.observations,

@@ -30,6 +30,7 @@ export class AddProductComponent implements OnInit {
   onChange(evt){
     this.dbService.loadImg(evt.target.files[0]).then(link => {
       this.url = link;
+      console.log(link)
     }).catch(err => console.log(err));
  }
 

@@ -5,6 +5,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
 import { AuthService } from '../../services/auth.service';
+import { ReplaySubject } from 'rxjs';
 @Component({
   selector: 'app-view-products',
   templateUrl: './view-products.component.html',
@@ -67,6 +68,13 @@ export class ViewProductsComponent implements OnInit {
 
   openImage(product, content){
     this.selectedProduct=product
+    let url : String;
+    let newUrl : String;
+    url = this.selectedProduct.URL
+    if(url.includes('.pdf')){
+     newUrl= url.replace('.pdf', '.jpg')
+      this.selectedProduct.URL=newUrl
+    }
     this.imageReference=this.modalService.open(content, {size : 'lg'})
   }
   confirmDelete(product, content){
