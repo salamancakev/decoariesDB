@@ -113,17 +113,12 @@
             <button class="btn btn-primary" type="button" (click)="openAddClient(content)">Create new client</button>
           </div>
           </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-          <label for="client">Client</label>
-          <select [(ngModel)]="selectedClient" name="client" id="client">
-            <option *ngFor="let c of clients" [ngValue]="c.idClient"> {{c.Name}} {{c.Email}} </option>
-          </select>    
-      </div>
-    
-    </div>
 
     <div *ngIf="selectedClient">
+    <div class="row">
+      <p><b>Client:</b> {{selectedClient.Name}} </p>
+    </div>
+
       <h4>Select products and quantities</h4>
     <div class="form-row">
       <div class="form-group col-md-6">
