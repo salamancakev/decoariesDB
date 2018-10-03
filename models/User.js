@@ -30,6 +30,16 @@ module.exports= function(sequelize, DataTypes){
         Type : {
             type : DataTypes.STRING,
             allowNull : false
+        },
+
+        Auth0 : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+
+        Blocked : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false
         }
 
     })

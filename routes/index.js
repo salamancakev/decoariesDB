@@ -731,8 +731,9 @@ router.post('/api/signup', checkJwt, function(req, res){
     }
 
     else{
+      console.log(resp)
       let guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
-      connection.query("Insert into user (idUser, Name, Email, createDate, Type) values ('"+guid+"', '"+req.body.name+"', '"+req.body.email+"', '"+req.body.date+"', '"+req.body.type+"')")
+      connection.query("Insert into user (idUser, Name, Email, createDate, Type, Auth0, Blocked) values ('"+guid+"', '"+req.body.name+"', '"+req.body.email+"', '"+req.body.date+"', '"+req.body.type+"', '"+json.user_id+"', false)")
       .then(user=>{
         return res.json({error : false})
       }).catch(e=>{
@@ -763,7 +764,11 @@ Phone.findAll({
 });
 
 router.get('/api/get-users', checkJwt, function(req,res){
-  User.findAll().then(users=>{
+  User.findAll({
+    where : {
+      Blocked : 0
+    }
+  }).then(users=>{
     return res.send(users)
   }).catch(e=>{
    return res.json({error : true, msg : e});
@@ -771,19 +776,124 @@ router.get('/api/get-users', checkJwt, function(req,res){
 });
 
 router.post('/api/update-user',checkJwt, function(req,res){
-  User.update({
-    Name : req.body.name,
-    Email : req.body.email,
-    Type : req.body.type
-  }, {
-    where : {
-      idUser : req.body.idUser
+
+  let options1 = {
+    url : 'https://decoaries.auth0.com/api/v2/users/'+req.body.auth0,
+    method : 'PATCH',
+    headers : {
+      'Authorization' : 'Bearer '+req.body.clientToken
+    },
+    form : {
+      email : req.body.email,
     }
-  }).then(user=>{
-    return res.json({success : true, msg :'User info updated'})
-  }).catch(err=>{
-    return res.json({success : false, msg :err});
-  })
+  }
+
+  let options2 = {
+    url : 'https://decoaries.auth0.com/api/v2/users/'+req.body.auth0,
+    method : 'PATCH',
+    headers : {
+     'Authorization' : 'Bearer '+req.body.clientToken
+              },
+    form : {
+      password : req.body.password,
+          }
+      }
+
+    request(options1, function(err, resp, body){
+      if(err){
+        console.log(err)
+        return res.json({success : false, msg : "Something went wrong"})
+      }
+
+      else{
+        let json = JSON.parse(body)
+
+        if(json.error){
+          console.log(json)
+          return res.json({success : false, msg : json.message})
+        }
+      }
+
+    });
+
+     if(req.body.password!=null){
+        request(options2, function(err, resp, body){
+        if(err){
+          console.log(err)
+          return res.json({success : false, msg : "Something went wrong"})
+        }
+  
+        else{
+          let json = JSON.parse(body)
+  
+          if(json.error){
+            console.log(json)
+            return res.json({success : false, msg : json.message})
+          }
+        }
+  
+      });
+      }
+ 
+      User.update({
+        Name : req.body.name,
+        Type : req.body.type,
+        Email : req.body.email
+      }, {
+        where : {
+          idUser : req.body.idUser
+        }
+      }).then(finish=>{
+        return res.json({success : true, msg : "User info updated"})
+      }).catch(error=>{
+        console.log(error)
+        return res.json({success : false, msg : "Something went wrong"})
+      })
+});
+
+router.post('/api/block-user', checkJwt, function(req, res){
+  let options = {
+    url : 'https://decoaries.auth0.com/api/v2/users/'+req.body.auth0,
+    method : 'PATCH',
+    headers : {
+      'Authorization' : 'Bearer '+req.body.clientToken
+    },
+    form : {
+      blocked : true
+    }
+  }
+
+  request(options, function(err, resp, body){
+    if(err){
+      console.log(err)
+          return res.json({success : false, msg : "Something went wrong"})
+    }
+
+    else{
+      let json = JSON.parse(body)
+
+      if(json.error){
+        console.log(json)
+        return res.json({success : false, msg : json.message})
+      }
+
+      else{
+        User.update({
+          Blocked : true
+        }, {
+          where : {
+            idUser : req.body.idUser
+          }
+        }).then(user=>{
+          return res.json({success : true, msg : "User has been deleted"});
+        })
+      }
+    }
+
+  });
+
+  
+
 })
 
 

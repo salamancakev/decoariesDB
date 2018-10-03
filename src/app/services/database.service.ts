@@ -141,6 +141,13 @@ export class DatabaseService {
     return this.http.post('http://localhost:8080/api/update-user', user, {headers : headers}).pipe(map(res=>res.json()));
   }
 
+  blockUser(user){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json')
+    headers.append('Authorization', 'Bearer '+this.authService.userToken)
+    return this.http.post('http://localhost:8080/api/block-user', user, {headers : headers}).pipe(map(res=>res.json()));
+  }
+
   loadImg(file) {
     return new Promise((resolve, reject) => {
       let tipo;

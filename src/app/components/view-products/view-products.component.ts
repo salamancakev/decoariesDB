@@ -71,10 +71,8 @@ export class ViewProductsComponent implements OnInit {
     let url : String;
     let newUrl : String;
     url = this.selectedProduct.URL
-    console.log('Normal url: '+url)
     if(url.includes('.pdf')){
      newUrl= url.replace('.pdf', '.jpg')
-     console.log('New url: '+newUrl)
       this.selectedProduct.URL=newUrl
     }
     this.imageReference=this.modalService.open(content, {size : 'lg'})
