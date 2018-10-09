@@ -116,7 +116,7 @@
 
     <div *ngIf="selectedClient">
     <div class="row">
-      <p><b>Client:</b> {{selectedClient.Name}} </p>
+      <p><b>Company:</b> {{selectedClient.Company}} </p>
     </div>
 
       <h4>Select products and quantities</h4>
@@ -146,8 +146,9 @@
 
       <div *ngIf="orderProducts.length>0">
          <div *ngFor="let op of orderProducts">
-           <p>Product: {{op.Name}}. Description: {{op.Description}}. Quantity: {{op.Quantity}}</p>
+           <p><b>Product:</b> {{op.Name}}. <b>Description:</b> {{op.Description}}. <b>Quantity:</b> {{op.Quantity}}</p>
          </div>
+         <b>Total of Products:</b> {{totalQuantity}}
       </div>
 
     

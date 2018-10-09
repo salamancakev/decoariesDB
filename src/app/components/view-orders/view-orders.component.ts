@@ -26,7 +26,8 @@ export class ViewOrdersComponent implements OnInit {
     products: any[];
     selectedProduct: any;
     orderProducts = [];
-    quantity: any;
+    quantity=0;
+    totalQuantity=0;
     confirm =false;
     email :any;
 
@@ -68,13 +69,17 @@ export class ViewOrdersComponent implements OnInit {
      console.log(this.orderDetails)
    })
 
+   this.orderDetails.forEach(value => {
+     this.totalQuantity=this.totalQuantity+value.Quantity
+   });
+
    this.detailsModalReference=this.modalService.open(details);
   }
 
   onEdit(content){
     this.detailsModalReference.close();
     this.edit=true;
-    this.editModalReference=this.modalService.open(content)
+    this.editModalReference=this.modalService.open(content, {size : 'lg'})
     
   }
 
@@ -97,18 +102,25 @@ export class ViewOrdersComponent implements OnInit {
       this.flashMessage.show("The quantity of the product you entered is invalid. Please enter a valid number", {cssClass : 'alert-danger'})
       return false;
     }
-    this.orderProducts.push(product);
+    this.orderDetails.push(product);
+    this.totalQuantity=this.totalQuantity+this.quantity;
     this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
-    this.quantity=null;
+    this.quantity=0;
+  }
+
+  onDeleteProduct(product){
+    let index = this.orderDetails.indexOf(product)
+  let array;
+  if(index>-1){
+   array= this.orderDetails.splice(index, 1)
+  }
+  this.totalQuantity=this.totalQuantity-product.Quantity;
+  console.log(array)
   }
 
   onConfirm(){
-    if(this.orderProducts.length==0){
-      this.orderProducts=this.orderDetails
-    }
     this.confirm=true;
-    console.log(this.orderProducts);
   }
 
   unconfirm(){
@@ -176,7 +188,7 @@ export class ViewOrdersComponent implements OnInit {
    let order = {
       idOrder : this.selectedOrder.idOrder,
       idClient : this.selectedOrder.idClient,
-      orderProducts : this.orderProducts,
+      orderProducts : this.orderDetails,
       price : this.selectedOrder.Price,
       status : this.selectedOrder.Status,
       observations : this.selectedOrder.Observations
@@ -185,7 +197,7 @@ export class ViewOrdersComponent implements OnInit {
 
     
 
-    if(this.orderProducts.length==0){
+    if(this.orderDetails.length==0){
       this.flashMessage.show('Please add products to the order', {cssClass: 'alert-danger'});
       return false;
     }

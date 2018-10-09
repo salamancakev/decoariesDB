@@ -16,6 +16,11 @@
         <h4>Select products and quantities</h4>
         <button class="btn btn-outline-primary" type="button" (click)="onEditProducts()">Edit Order Products</button>
         <div *ngIf="editProducts==true">
+          <div *ngFor="let od of orderDetails">
+            <div class="form-row">
+               <p><b>Product:</b> {{od.Name}} <b>Quantity:</b> {{od.Quantity}}</p>  <button type="button" class="btn btn-outline-primary ml-2 mb-2" (click)="onDeleteProduct(od)">Delete</button>
+            </div>
+          </div>
           <div class="form-row">
           <div class="form-group col-md-6">
             <label for="product">Product</label>
@@ -64,8 +69,11 @@
       
       <div *ngIf="confirm">
         <h1>Order Review</h1>
-        <div *ngFor="let op of orderProducts; index as i">
+        <div *ngFor="let op of orderDetails; index as i">
           <p> <b>Product:</b> {{op.Name}}. <b>Description:</b> <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. <b>Quantity:</b> {{op.Quantity}} </p>
+        </div>
+        <div>
+          <p><b>Total of products:</b> {{totalQuantity}} </p>
         </div>
         <p> <b>Status:</b> {{selectedOrder.Status}} </p>
         <p><b>Total order price:</b> ${{selectedOrder.Price}} </p>

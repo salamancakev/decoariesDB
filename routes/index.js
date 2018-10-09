@@ -537,7 +537,18 @@ router.post('/api/add-product',checkJwt, function(req,res){
     res.json({success :true, msg : "Product added to database"})
   }).catch(e=>{
     console.log(e)
-    res.json({success :false, msg : "Something went wrong"});
+    cloudinary.v2.uploader.destroy(result.public_id, function(error, result){
+      if(result){
+          return res.json({success :false, msg : "This product already exists in the database."});
+
+        
+      }
+
+      else{
+        console.log(error)
+        return res.json({success :false, msg : "Something went wrong"});
+      }
+    })
   })
     }
     else{
