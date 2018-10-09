@@ -18,7 +18,8 @@ export class AddOrderComponent implements OnInit {
     clients : any[];
     products : any[];
 
-    quantity : Number;
+    quantity=0;
+    totalQuantity=0;
     price : Number;
     selectedClient : any;
     selectedProduct : any;
@@ -185,6 +186,7 @@ export class AddOrderComponent implements OnInit {
       return false;
     }
     this.orderProducts.push(product);
+    this.totalQuantity=this.totalQuantity+product.Quantity;
     this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
     this.quantity=null;
