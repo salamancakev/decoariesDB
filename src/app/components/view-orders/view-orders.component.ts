@@ -67,11 +67,11 @@ export class ViewOrdersComponent implements OnInit {
    this.dbService.getOrderDetails(order).subscribe(data=>{
      this.orderDetails = data[0];
      console.log(this.orderDetails)
+     this.orderDetails.forEach(value => {
+      this.totalQuantity=this.totalQuantity+value.Quantity
+    });
    })
 
-   this.orderDetails.forEach(value => {
-     this.totalQuantity=this.totalQuantity+value.Quantity
-   });
 
    this.detailsModalReference=this.modalService.open(details);
   }
@@ -135,6 +135,7 @@ export class ViewOrdersComponent implements OnInit {
   close(){
     this.confirm=false
     this.orderProducts=[];
+    this.totalQuantity=0;
     this.editProducts=false;
     this.editModalReference.close();
   }
