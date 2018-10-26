@@ -121,15 +121,24 @@
 
       <h4>Select products and quantities</h4>
     <div class="form-row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
           <label for="product">Product</label>
           <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
-            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}. Size: {{p.Size}}. Cloth Type: {{p.ClothType}} </option>
+            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}</option>
           </select>
       </div>
       <div class="form-group col-md-2">
           <label for="status">Quantity</label>
           <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="Quantity">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="color">Color</label>
+        <input type="text" class="form-control" [(ngModel)]="color" name="color" id="color" placeholder="Color">
+      </div>
+
+      <div class="form-group col-md-2">
+        <label for="cloth">Cloth Type</label>
+        <input type="text" class="form-control" [(ngModel)]="cloth" name="cloth" id="cloth" placeholder="Cloth Type">
       </div>
       <div class="form-group col-md-4">
         <br>
@@ -145,8 +154,8 @@
       </div>
 
       <div *ngIf="orderProducts.length>0">
-         <div *ngFor="let op of orderProducts">
-           <p><b>Product:</b> {{op.Name}}. <b>Description:</b> {{op.Description}}. <b>Quantity:</b> {{op.Quantity}}</p>
+         <div *ngFor="let op of orderProducts; index as i">
+           <p> {{i+1}}) <b>Product:</b> {{op.Name}}. <b>Description:</b> {{op.Description}}. <b>Quantity:</b> {{op.Quantity}}. <b>Color:</b> {{op.Color}}. <b>Cloth Type:</b> {{op.ClothType}}. </p>
          </div>
          <b>Total of Products:</b> {{totalQuantity}}
       </div>

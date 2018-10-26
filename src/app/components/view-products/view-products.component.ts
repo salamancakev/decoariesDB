@@ -13,7 +13,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class ViewProductsComponent implements OnInit {
 
-  columns = ['Name', 'Description', 'Size', 'ClothType']
+  columns = ['Name', 'Description', 'Size']
 
   products : any[];
   selectedProduct : any;
@@ -117,7 +117,23 @@ export class ViewProductsComponent implements OnInit {
   }
 
   onDelete(){
-    this.dbService.deleteProduct(this.selectedProduct).subscribe(data=>{
+    if(this.selectedProduct.URL){
+      this.dbService.deleteProductImage(this.selectedProduct).subscribe(data=>{
+        if(data.success){
+          this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
+          this.deleteReference.close();
+          this.router.navigate(['products']);
+        }
+  
+        else{
+          this.flashMessage.show(data.msg, {cssClass : 'alert-danger'})
+          this.deleteReference.close();
+          this.router.navigate(['products']);
+        }
+      })
+    }
+    else{
+      this.dbService.deleteProduct(this.selectedProduct).subscribe(data=>{
       if(data.success){
         this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
         this.deleteReference.close();
@@ -130,6 +146,8 @@ export class ViewProductsComponent implements OnInit {
         this.router.navigate(['products']);
       }
     })
+    }
+    
   }
 
   onSubmit(){

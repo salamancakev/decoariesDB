@@ -423,6 +423,8 @@ router.post('/api/add-order', checkJwt, function(req,res){
         idOrder : guid2,
         idProduct : value.idProduct,
         Quantity : value.Quantity,
+        Color : value.Color,
+        ClothType : value.ClothType
       })
     })
   }).then(finish=>{
@@ -447,7 +449,7 @@ router.get('/api/get-orders', function(req, res){
 })
 
 router.post('/api/get-order-details', checkJwt, function(req,res){
-  connection.query("select orderdetails.Quantity, product.idProduct, product.Name, product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
+  connection.query("select orderdetails.Quantity, orderdetails.Color, orderdetails.ClothType, product.idProduct, product.Name, product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -479,7 +481,9 @@ router.post('/api/update-order', checkJwt, function(req,res){
           idOrderDetail : guid2,
           idOrder : req.body.idOrder,
           idProduct : value.idProduct,
-          Quantity : value.Quantity
+          Quantity : value.Quantity,
+          Color : value.Color,
+          ClothType : value.ClothType
         })
       })
     }).then(update=>{
@@ -523,14 +527,14 @@ router.post('/api/delete-order', checkJwt, function(req, res){
 router.post('/api/add-product',checkJwt, function(req,res){
   let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
 
-  cloudinary.v2.uploader.upload(req.body.url, function(error, result){
+  if(req.body.url!=null){
+    cloudinary.v2.uploader.upload(req.body.url, function(error, result){
     if(result){
     Product.create({
     idProduct : guid2,
     Name : req.body.name,
     Description : req.body.description,
     Size : req.body.size,
-    ClothType : req.body.cloth,
     URL : result.secure_url,
     imageID : result.public_id
   }).then(product=>{
@@ -556,17 +560,35 @@ router.post('/api/add-product',checkJwt, function(req,res){
 return res.json({success :false, msg : "Something went wrong"});
     }
   })
+  }
+
+  else{
+    Product.create({
+      idProduct : guid2,
+      Name : req.body.name,
+      Description : req.body.description,
+      Size : req.body.size
+    }).then(json=>{
+      return res.json({success : true, msg : "Product added to database"})
+      
+    }).catch(e=>{
+      console.log(e)
+      return res.json({success : false, msg : "Something went wrong"});
+    })
+  }
+  
 
 });
 
+
 router.post('/api/update-product', checkJwt, function(req, res){
 
-  if(!req.body.modified){
+  if(req.body.imageID!=null){
+    if(!req.body.modified){
     Product.update({
     Name : req.body.name,
     Description : req.body.description,
-    Size : req.body.size,
-    ClothType : req.body.cloth
+    Size : req.body.size
   }, {
     where : {
       idProduct : req.body.idProduct
@@ -589,7 +611,6 @@ router.post('/api/update-product', checkJwt, function(req, res){
         Name : req.body.name,
         Description : req.body.description,
         Size : req.body.size,
-        ClothType : req.body.cloth,
         URL : result.secure_url,
         imageID : result.public_id
       }, {
@@ -618,11 +639,62 @@ router.post('/api/update-product', checkJwt, function(req, res){
 
     })
   }
+  }
+
+  else{
+    if(!req.body.modified){
+      Product.update({
+      Name : req.body.name,
+      Description : req.body.description,
+      Size : req.body.size
+    }, {
+      where : {
+        idProduct : req.body.idProduct
+      }
+    }).then(product=>{
+      res.json({success :true, msg : "Product info updated"});
+    }).catch(e=>{
+      console.log(e)
+      res.json({success :false, msg : "Something sent wrong"});
+    })
+    }
+
+    else{
+      cloudinary.v2.uploader.upload(req.body.url, function(error, result){
+        if(result){
+          Product.update({
+            Name : req.body.name,
+            Description : req.body.description,
+            Size : req.body.size,
+            URL : result.secure_url,
+            imageID : result.public_id
+          }, {
+            where : {
+              idProduct : req.body.idProduct
+            }
+          }).then(product=>{
+            res.json({success :true, msg : "Product info updated"});
+          }).catch(e=>{
+            console.log(e)
+            res.json({success :false, msg : "Something went wrong"});
+          })
+        }
+    
+        else{
+          console.log(error)
+          return res.json({success :false, msg : "Something went wrong"});
+        }
+    
+      }) 
+    }
+    
+  }
+  
 
 });
 
 
-router.post('/api/delete-product', checkJwt, function(req,res){
+router.post('/api/delete-product-image', checkJwt, function(req,res){
   OrderDetails.destroy({
     where : {
       idProduct : req.body.idProduct
@@ -647,6 +719,24 @@ router.post('/api/delete-product', checkJwt, function(req,res){
     }
     })
 
+  })
+})
+
+router.post('/api/delete-product', checkJwt, function(req,res){
+  OrderDetails.destroy({
+    where : {
+      idProduct : req.body.idProduct
+    }
+  }).then(order=>{
+    Product.destroy({
+      where : {
+        idProduct : req.body.idProduct
+      }
+    }).then(product=>{
+      return res.json({success : true, msg :"Product deleted"});
+    })
+  }).catch(err=>{
+    return res.json({success : false, msg : "Something sent wrong"});
   })
 })
 
