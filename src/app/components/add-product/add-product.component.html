@@ -7,22 +7,18 @@
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="name">Product Name</label>
-          <input class="form-control" type="text" [(ngModel)]="name" name="name" id="name" placeholder="name" required>
+          <input class="form-control" type="text" [(ngModel)]="name" name="name" id="name" placeholder="Name" required>
         </div>
         <div class="form-group col-md-4">
-          <label for="name">Description</label>
-          <input class="form-control" type="text" [(ngModel)]="description" name="description" id="description" placeholder="description">
+          <label for="description">Description</label>
+          <input class="form-control" type="text" [(ngModel)]="description" name="description" id="Description" placeholder="description">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="size">Size</label>
+          <input class="form-control" type="text" [(ngModel)]="size" name="size" id="size" placeholder="Size" required>
         </div>
       </div> 
       <div class="form-row">
-         <div class="form-group col-md-4">
-            <label for="size">Size</label>
-            <input class="form-control" type="text" [(ngModel)]="size" name="size" id="size" placeholder="size" required>
-          </div>
-          <div class="form-group col-md-4">
-              <label for="cloth">Cloth Type</label>
-              <input class="form-control" type="text" [(ngModel)]="cloth" name="cloth" id="cloth" placeholder="cloth" required>
-            </div> 
             <div class="form-group col-md-4">
               <label for="image">Image</label>
               <input type="file" id="image" (change)="onChange($event)" [(ngModel)]="image" accept=".png, .jpg, .jpeg" name="image">

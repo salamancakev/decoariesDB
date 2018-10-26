@@ -19,6 +19,8 @@ export class AddOrderComponent implements OnInit {
     products : any[];
 
     quantity=0;
+    cloth : any;
+    color : any;
     totalQuantity=0;
     price : Number;
     selectedClient : any;
@@ -175,7 +177,9 @@ export class AddOrderComponent implements OnInit {
       idProduct : this.selectedProduct.idProduct,
       Name : this.selectedProduct.Name,
       Description : this.selectedProduct.Description,
-      Quantity : this.quantity
+      Quantity : this.quantity,
+      Color : this.color,
+      ClothType : this.cloth
     }
     if(this.selectedProduct==undefined){
       this.flashMessage.show("Please select a product", {cssClass : "alert-danger"})
@@ -190,6 +194,8 @@ export class AddOrderComponent implements OnInit {
     this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
     this.quantity=null;
+    this.color=null;
+    this.cloth=null;
   }
 
   onSubmit(){

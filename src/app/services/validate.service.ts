@@ -48,7 +48,7 @@ export class ValidateService {
   }
 
   validateProduct(product){
-    if(product.name==undefined || product.size==undefined || product.cloth==undefined){
+    if(product.name==undefined || product.size == undefined){
       return false;
     }
     else{

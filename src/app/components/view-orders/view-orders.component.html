@@ -16,13 +16,13 @@
         <h4>Select products and quantities</h4>
         <button class="btn btn-outline-primary" type="button" (click)="onEditProducts()">Edit Order Products</button>
         <div *ngIf="editProducts==true">
-          <div *ngFor="let od of orderDetails">
+          <div *ngFor="let od of orderDetails; index as i">
             <div class="form-row">
-               <p><b>Product:</b> {{od.Name}} <b>Quantity:</b> {{od.Quantity}}</p>  <button type="button" class="btn btn-outline-primary ml-2 mb-2" (click)="onDeleteProduct(od)">Delete</button>
+               <p> {{i+1}}) <b>Product:</b> {{od.Name}} <b>Quantity:</b> {{od.Quantity}}. <b>Color:</b> {{od.Color}}. <b>Cloth Type:</b> {{od.ClothType}}.</p>  <button type="button" class="btn btn-outline-primary ml-2 mb-2" (click)="onDeleteProduct(od)">Delete</button>
             </div>
           </div>
           <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-4">
             <label for="product">Product</label>
             <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
               <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}</option>
@@ -31,6 +31,15 @@
         <div class="form-group col-md-2">
             <label for="status">Quantity</label>
             <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="quantity" required>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="color">Color</label>
+          <input type="text" class="form-control" [(ngModel)]="color" name="color" id="color" placeholder="Color">
+        </div>
+  
+        <div class="form-group col-md-2">
+          <label for="cloth">Cloth Type</label>
+          <input type="text" class="form-control" [(ngModel)]="cloth" name="cloth" id="cloth" placeholder="Cloth Type">
         </div>
         <div class="form-group col-md-4">
           <br>
@@ -70,7 +79,7 @@
       <div *ngIf="confirm">
         <h1>Order Review</h1>
         <div *ngFor="let op of orderDetails; index as i">
-          <p> <b>Product:</b> {{op.Name}}. <b>Description:</b> <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. <b>Quantity:</b> {{op.Quantity}} </p>
+          <p> {{i+1}}) <b>Product:</b> {{op.Name}}. <b>Description:</b> <input type="text" class="form control" [(ngModel)]="op.Description" name="{{i}}" placeholder="op.Description">. <b>Quantity:</b> {{op.Quantity}}. <b>Color:</b> {{op.Color}}. <b>Cloth Type:</b> {{op.ClothType}}. </p>
         </div>
         <div>
           <p><b>Total of products:</b> {{totalQuantity}} </p>
@@ -98,8 +107,8 @@
         </button>
       </div>
       <div class="modal-body">
-      <div *ngFor="let o of orderDetails">
-        <p><b>Product</b>: {{o.Name}}. <b>Description</b>: {{o.Description}}. <b>Quantity</b>: {{o.Quantity}}</p>
+      <div *ngFor="let o of orderDetails; index as i">
+        <p> {{i+1}}) <b>Product</b>: {{o.Name}}. <b>Description</b>: {{o.Description}}. <b>Quantity</b>: {{o.Quantity}}. <b>Color:</b> {{o.Color}}. <b>Cloth Type:</b> {{o.ClothType}}.</p>
       </div>
       <p><b>Observations</b>: {{selectedOrder.Observations}} </p>
       </div>

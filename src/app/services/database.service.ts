@@ -114,6 +114,13 @@ export class DatabaseService {
     return this.http.post('/api/delete-product',product, {headers:headers}).pipe(map(res=>res.json()));
   }
 
+  deleteProductImage(product){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('/api/delete-product-image',product, {headers:headers}).pipe(map(res=>res.json()));
+  }
+
   searchClientsCompany(company){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

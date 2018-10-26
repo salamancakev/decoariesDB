@@ -27,6 +27,8 @@ export class ViewOrdersComponent implements OnInit {
     selectedProduct: any;
     orderProducts = [];
     quantity=0;
+    color : any;
+    cloth : any;
     totalQuantity=0;
     confirm =false;
     email :any;
@@ -88,7 +90,9 @@ export class ViewOrdersComponent implements OnInit {
       idProduct : this.selectedProduct.idProduct,
       Name: this.selectedProduct.Name,
       Description : this.selectedProduct.Description,
-      Quantity : this.quantity
+      Quantity : this.quantity,
+      Color : this.color,
+      ClothType : this.cloth
     }
     if(this.selectedProduct==undefined){
       this.flashMessage.show("Please select a product", {cssClass : "alert-danger"})
@@ -107,6 +111,8 @@ export class ViewOrdersComponent implements OnInit {
     this.flashMessage.show("Product added to order", {cssClass : 'alert-success'});
     this.selectedProduct=null;
     this.quantity=0;
+    this.color=null;
+    this.cloth=null
   }
 
   onDeleteProduct(product){
@@ -135,6 +141,9 @@ export class ViewOrdersComponent implements OnInit {
   close(){
     this.confirm=false
     this.orderProducts=[];
+    this.quantity=null;
+    this.color=null;
+    this.cloth=null;
     this.totalQuantity=0;
     this.editProducts=false;
     this.editModalReference.close();

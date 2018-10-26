@@ -25,7 +25,7 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { ViewProductsComponent } from './components/view-products/view-products.component';
 import { SearchClientPipe } from "./search-client.pipe";
 import {SearchOrderPipe} from './search-order.pipe';
-import {SearchProductPipe} from './search-product.pipe';
+import {SearchProductPipe} from './search-product-pipe';
 import {SearchUserPipe} from './search-user.pipe';
 import {SearchCompanyPipe} from './search-company.pipe';
 import { LoginComponent } from './components/login/login.component';

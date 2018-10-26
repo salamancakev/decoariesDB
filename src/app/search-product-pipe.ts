@@ -10,11 +10,11 @@ export class SearchProductPipe implements PipeTransform {
     }
     return value.filter((val) => {
         let rVal
-        if(val.Description!=null && val.URL!=null){
-            rVal = (val.Name.includes(args)) || (val.Name.toLocaleLowerCase().includes(args)) || (val.Description.includes(args)) || (val.Description.toLocaleLowerCase().includes(args))  || (val.ClothType.includes(args)) || (val.ClothType.toLocaleLowerCase().includes(args))|| (val.URL.includes(args)) || (val.URL.toLocaleLowerCase().includes(args));
+        if(val.Description!=null){
+            rVal = (val.Name.includes(args)) || (val.Name.toLocaleLowerCase().includes(args)) || (val.Description.includes(args)) || (val.Description.toLocaleLowerCase().includes(args))  || (val.Size.includes(args));
         }
         else{
-            rVal = (val.Name.includes(args)) || (val.Name.toLocaleLowerCase().includes(args)) || (val.ClothType.includes(args)) || (val.ClothType.toLocaleLowerCase().includes(args));
+            rVal = (val.Name.includes(args)) || (val.Name.toLocaleLowerCase().includes(args)) || (val.Size.includes(args));
         }
       
       return rVal;
