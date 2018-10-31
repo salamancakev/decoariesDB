@@ -404,23 +404,22 @@ router.post('/api/delete-company', checkJwt, function(req, res){
 })
 
 router.post('/api/add-order', checkJwt, function(req,res){
-  let guid2= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
   let auxArray = [];
   auxArray = req.body.orderProducts;
   Order.create({
-    idOrder : guid2,
     idClient : req.body.idClient,
     OrderDate : req.body.orderDate,
     Price : req.body.price,
     Status : req.body.status,
-    Observations :  req.body.observations
+    Observations :  req.body.observations,
+    Deleted : 0
   }).then(order=>{
     auxArray.forEach(value=>{
       let guid3= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
 
       OrderDetails.create({
         idOrderDetail : guid3,
-        idOrder : guid2,
+        idOrder : order.dataValues.idOrder,
         idProduct : value.idProduct,
         Quantity : value.Quantity,
         Color : value.Color,
@@ -437,7 +436,7 @@ router.post('/api/add-order', checkJwt, function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 0")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -506,22 +505,30 @@ router.post('/api/update-order', checkJwt, function(req,res){
 });
 
 router.post('/api/delete-order', checkJwt, function(req, res){
-  OrderDetails.destroy({
-    where : {
-      idOrder : req.body.idOrder
-    }
-  }).then(details=>{
-    Order.destroy({
-      where : {
-        idOrder : req.body.idOrder
-      }
-    }).then(order=>{
-      return res.json({success : true, msg : 'Order deleted'})
-    }).catch(err =>{
-      console.log(err)
-      return res.json({success : false, msg :'err'});
-    })
+ Order.update({
+   Deleted : 1,
+   Reason : req.body.Reason
+ }, {
+   where : {
+     idOrder :  req.body.idOrder
+   }
+ }).then(order=>{
+   return res.json({success : true, msg : "Order deleted"})
+ }).catch(error=>{
+   console.log(error)
+   return res.json({success : false, msg : "Something went wrong"});
+ })
+})
+
+router.get('/api/deleted-orders', function(req,res){
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations, orders.Reason from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 1")
+  .then(json=>{
+    return res.send(json)
+  }).catch(error=>{
+    console.log(error)
+    res.json({success : false, msg : "Something went wrong"});
   })
+
 })
 
 router.post('/api/add-product',checkJwt, function(req,res){

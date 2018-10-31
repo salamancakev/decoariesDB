@@ -32,6 +32,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { UsersDashboardComponent } from './components/users-dashboard/users-dashboard.component';
 import { ViewUsersComponent } from './components/view-users/view-users.component';
+import { DeletedOrdersComponent } from './components/deleted-orders/deleted-orders.component';
 
 const appRoutes : Routes = [
   {path : '', redirectTo : 'login', pathMatch : 'full'},
@@ -49,7 +50,8 @@ const appRoutes : Routes = [
   {path : 'login', component : LoginComponent},
   {path : 'signup', component : SignupComponent},
   {path : 'users', component : UsersDashboardComponent},
-  {path : 'view-users', component : ViewUsersComponent}
+  {path : 'view-users', component : ViewUsersComponent},
+  {path : 'deleted-orders', component : DeletedOrdersComponent}
 ]
 
 @NgModule({
@@ -74,7 +76,8 @@ const appRoutes : Routes = [
     SearchProductPipe,
     ViewUsersComponent,
     SearchUserPipe,
-    SearchCompanyPipe
+    SearchCompanyPipe,
+    DeletedOrdersComponent
   ],
   imports: [
     BrowserModule,
