@@ -436,7 +436,7 @@ router.post('/api/add-order', checkJwt, function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 0")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 0 order by orders.OrderDate")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -448,7 +448,7 @@ router.get('/api/get-orders', function(req, res){
 })
 
 router.post('/api/get-order-details', checkJwt, function(req,res){
-  connection.query("select orderdetails.Quantity, orderdetails.Color, orderdetails.ClothType, product.idProduct, product.Name, product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = '"+req.body.idOrder+"'")
+  connection.query("select orderdetails.Quantity, orderdetails.Color, orderdetails.ClothType, product.idProduct, product.Name, product.Description from orders inner join orderdetails on orders.idOrder= orderdetails.idOrder inner join product on orderdetails.idProduct = product.idProduct where orders.idOrder = "+req.body.idOrder+"")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -521,7 +521,7 @@ router.post('/api/delete-order', checkJwt, function(req, res){
 })
 
 router.get('/api/deleted-orders', function(req,res){
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations, orders.Reason from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 1")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations, orders.Reason from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 1 order by orders.OrderDate")
   .then(json=>{
     return res.send(json)
   }).catch(error=>{
