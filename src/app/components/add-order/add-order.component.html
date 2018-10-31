@@ -121,13 +121,15 @@
 
       <h4>Select products and quantities</h4>
     <div class="form-row">
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-6">
           <label for="product">Product</label>
           <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product">
-            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}</option>
+            <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}. Size: {{p.Size}} </option>
           </select>
       </div>
-      <div class="form-group col-md-2">
+    </div>
+    <div class="form-row">
+    <div class="form-group col-md-2">
           <label for="status">Quantity</label>
           <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" id="quantity" placeholder="Quantity">
       </div>
@@ -146,6 +148,8 @@
         <button class="btn btn-outline-primary"  type="button" (click)="addProduct()">Add Product to Order</button>
       </div>
     </div>
+      
+
 
     <h4>Order Products: </h4>
     <h1></h1>

@@ -33,6 +33,8 @@ export class ViewOrdersComponent implements OnInit {
     confirm =false;
     email :any;
 
+    reason : any;
+
     editProducts : boolean;
 
     user : any;
@@ -68,7 +70,6 @@ export class ViewOrdersComponent implements OnInit {
 
    this.dbService.getOrderDetails(order).subscribe(data=>{
      this.orderDetails = data[0];
-     console.log(this.orderDetails)
      this.orderDetails.forEach(value => {
       this.totalQuantity=this.totalQuantity+value.Quantity
     });

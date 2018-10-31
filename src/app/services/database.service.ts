@@ -71,6 +71,10 @@ export class DatabaseService {
   getOrders(){
     return this.http.get('/api/get-orders').pipe(map(res=>res.json()));
   }
+  
+  getDeletedOrders(){
+    return this.http.get('/api/deleted-orders').pipe(map(res=>res.json()));
+  }
 
   getOrderDetails(order){
     let headers = new Headers();
