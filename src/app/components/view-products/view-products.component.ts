@@ -77,8 +77,8 @@ export class ViewProductsComponent implements OnInit {
     }
     this.imageReference=this.modalService.open(content, {size : 'lg'})
   }
-  confirmDelete(product, content){
-    this.selectedProduct=product;
+  confirmDelete(content){
+    this.detailsReference.close();
     this.deleteReference=this.modalService.open(content);
   }
 

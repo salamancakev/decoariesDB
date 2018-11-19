@@ -89,7 +89,7 @@ onClick(client, content){
     })
   })
   console.log(this.phones);
-  this.modalReference=this.modalService.open(content);
+  this.modalReference=this.modalService.open(content, {size : 'lg'});
 }
 
 onAdd(){
@@ -129,8 +129,8 @@ unconfirm(){
   this.confirm=false;
 }
 
-confirmDelete(client, content){
-  this.selectedClient=client;
+confirmDelete(content){
+  this.modalReference.close()
   this.deleteModalReference=this.modalService.open(content);
 }
 

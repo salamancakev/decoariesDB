@@ -184,7 +184,7 @@
           <tbody>
             <tr *ngFor="let o of orders | ordersFilter:email">
                 <td *ngFor="let col of columns" (click)="openOrderDetails(o, details)">{{o[col]}}</td>
-                <div *ngIf="user.Type=='Admin'">
+                <div *ngIf="user.Type=='Admin' && false">
                   <button class="btn btn-danger" (click)="confirmDelete(o, delete)">Delete Order</button>
                 </div>
             </tr>

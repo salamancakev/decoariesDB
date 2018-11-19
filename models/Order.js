@@ -39,6 +39,16 @@ module.exports = function(sequelize, DataTypes) {
     Deleted : {
       type : DataTypes.TINYINT,
       allowNull: false
-    }
+    },
+
+    createdBy : {
+      type : DataTypes.STRING,
+      allowNull : false
+    },
+
+    modifiedBy : {
+      type : DataTypes.STRING,
+      allowNull : false
+    } 
   });
 };

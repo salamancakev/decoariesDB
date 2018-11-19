@@ -33,6 +33,10 @@ import { SignupComponent } from './components/signup/signup.component';
 import { UsersDashboardComponent } from './components/users-dashboard/users-dashboard.component';
 import { ViewUsersComponent } from './components/view-users/view-users.component';
 import { DeletedOrdersComponent } from './components/deleted-orders/deleted-orders.component';
+import { AnalisisDashboardComponent } from './components/analisis-dashboard/analisis-dashboard.component';
+import { AnalysisProductComponent } from './components/analysis-product/analysis-product.component';
+import { AnalysisCompanyComponent } from './components/analysis-company/analysis-company.component';
+import { AnalysisEmployeeComponent } from './components/analysis-employee/analysis-employee.component';
 
 const appRoutes : Routes = [
   {path : '', redirectTo : 'login', pathMatch : 'full'},
@@ -51,7 +55,11 @@ const appRoutes : Routes = [
   {path : 'signup', component : SignupComponent},
   {path : 'users', component : UsersDashboardComponent},
   {path : 'view-users', component : ViewUsersComponent},
-  {path : 'deleted-orders', component : DeletedOrdersComponent}
+  {path : 'deleted-orders', component : DeletedOrdersComponent},
+  {path : 'analysis', component : AnalisisDashboardComponent},
+  {path : 'analysis-product', component : AnalysisProductComponent},
+  {path : 'analysis-company', component : AnalysisCompanyComponent},
+  {path : 'analysis-employee', component : AnalysisEmployeeComponent}
 ]
 
 @NgModule({
@@ -77,7 +85,11 @@ const appRoutes : Routes = [
     ViewUsersComponent,
     SearchUserPipe,
     SearchCompanyPipe,
-    DeletedOrdersComponent
+    DeletedOrdersComponent,
+    AnalisisDashboardComponent,
+    AnalysisProductComponent,
+    AnalysisCompanyComponent,
+    AnalysisEmployeeComponent
   ],
   imports: [
     BrowserModule,

@@ -412,7 +412,9 @@ router.post('/api/add-order', checkJwt, function(req,res){
     Price : req.body.price,
     Status : req.body.status,
     Observations :  req.body.observations,
-    Deleted : 0
+    Deleted : 0,
+    createdBy : req.body.idUser,
+    modifiedBy : req.body.idUser
   }).then(order=>{
     auxArray.forEach(value=>{
       let guid3= (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
@@ -436,7 +438,7 @@ router.post('/api/add-order', checkJwt, function(req,res){
 
 router.get('/api/get-orders', function(req, res){
 
-  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 0 order by orders.OrderDate")
+  connection.query("select client.idClient, client.Name as 'Client', client.Email, client.idCompany , company.Name as 'Company', orders.idOrder, orders.OrderDate as 'Date', orders.Price, orders.Status, orders.Observations from client inner join company on client.idCompany = company.idCompany inner join orders on orders.idClient = client.idClient where orders.Deleted = 0 order by orders.idOrder DESC")
   .then(json=>{
     res.send(json)
   }).catch(e=>{
@@ -463,7 +465,8 @@ router.post('/api/update-order', checkJwt, function(req,res){
   Order.update({
     Price : req.body.price,
     Status : req.body.status,
-    Observations : req.body.observations
+    Observations : req.body.observations,
+    modifiedBy :  req.body.idUser
   }, {
     where : {
       idOrder : req.body.idOrder
@@ -507,7 +510,8 @@ router.post('/api/update-order', checkJwt, function(req,res){
 router.post('/api/delete-order', checkJwt, function(req, res){
  Order.update({
    Deleted : 1,
-   Reason : req.body.Reason
+   Reason : req.body.Reason,
+   modifiedBy : req.body.idUser
  }, {
    where : {
      idOrder :  req.body.idOrder
@@ -999,10 +1003,73 @@ router.post('/api/block-user', checkJwt, function(req, res){
     }
 
   });
+});
 
-  
+router.post('/api/product-report', checkJwt, function(req,res){
 
+  connection.query("SELECT SUM(Quantity) as 'Total' from orderdetails where idProduct ='"+req.body.idProduct+"'", {type : connection.QueryTypes.SELECT})
+  .then(total=>{
+    console.log(total)
+    connection.query("SELECT SUM(orderdetails.Quantity) as 'Completed' from orders inner join orderdetails on orders.idOrder = orderdetails.idOrder where idProduct = '"+req.body.idProduct+"' and orders.Status = 'Completed'", {type : connection.QueryTypes.SELECT})
+    .then(completed=>{
+      connection.query("SELECT SUM(orderdetails.Quantity) as 'Denied' from orders inner join orderdetails on orders.idOrder = orderdetails.idOrder where idProduct = '"+req.body.idProduct+"' and orders.Status = 'Denied'", {type : connection.QueryTypes.SELECT})
+      .then(denied=>{
+        return res.json({total : total[0].Total, completed : completed[0].Completed, denied : denied[0].Denied})
+      })
+    })
+  }).catch(error=>{
+    console.log(error)
+    return res.json({success : false, msg : "Something went wrong"})
+  })
+});
+
+router.post('/api/company-report', checkJwt, function(req,res){
+
+  connection.query("SELECT COUNT(orders.idOrder) as 'Total' from orders inner join client on orders.idClient = client.idClient inner join company on client.idCompany = company.idCompany where company.idCompany = '"+req.body.idCompany+"'", {type : connection.QueryTypes.SELECT})
+  .then(total=>{
+    connection.query("SELECT COUNT(orders.idOrder) as 'Completed' from orders inner join client on orders.idClient = client.idClient inner join company on client.idCompany = company.idCompany where company.idCompany = '"+req.body.idCompany+"' and orders.Status = 'Completed'", {type : connection.QueryTypes.SELECT})
+    .then(completed=>{
+      connection.query("SELECT COUNT(orders.idOrder) as 'Denied' from orders inner join client on orders.idClient = client.idClient inner join company on client.idCompany = company.idCompany where company.idCompany = '"+req.body.idCompany+"' and orders.Status = 'Denied'", {type : connection.QueryTypes.SELECT})
+      .then(denied=>{
+        return res.json({total : total[0].Total, completed : completed[0].Completed, denied : denied[0].Denied})
+      })
+    })
+  }).catch(error=>{
+    console.log(error)
+    return res.json({success : false, msg : "Something went wrong"})
+  })
+});
+
+router.get('/api/get-employees', checkJwt, function(req,res){
+  User.findAll({
+    where : {
+      Type : 'Employee'
+    }
+  }).then(employees=>{
+    return res.send(employees)
+  }).catch(error=>{
+    console.log(error)
+    return res.json({success : false, msg : "Something went wrong"})
+  })
+});
+
+router.post('/api/employee-report', checkJwt, function(req,res){
+  connection.query("SELECT COUNT(orders.idOrder) as 'Total' from orders inner join user on orders.createdBy = user.idUser where user.idUser = '"+req.body.idUser+"'", {type : connection.QueryTypes.SELECT})
+  .then(total=>{
+    connection.query("SELECT COUNT(orders.idOrder) as 'Completed' from orders inner join user on orders.createdBy = user.idUser where user.idUser = '"+req.body.idUser+"' and orders.Status = 'Completed'", {type : connection.QueryTypes.SELECT})
+    .then(completed=>{
+      connection.query("SELECT COUNT(orders.idOrder) as 'Denied' from orders inner join user on orders.createdBy = user.idUser where user.idUser = '"+req.body.idUser+"' and orders.Status = 'Denied'", {type : connection.QueryTypes.SELECT})
+      .then(denied=>{
+        return res.json({total : total[0].Total, completed : completed[0].Completed, denied : denied[0].Denied})
+      })
+    })
+    
+  }).catch(error=>{
+    console.log(error)
+    return res.json({success : false, msg : "Something went wrong"});
+  })
 })
+
 
 
 module.exports = router;

@@ -88,8 +88,8 @@ export class ViewCompaniesComponent implements OnInit {
     this.deleteModalReference.close();
   }
 
-  confirmDelete(company, content){
-    this.selectedCompany=company;
+  confirmDelete(content){
+    this.editModalReference.close()
     this.deleteModalReference=this.modalService.open(content);
   }
 

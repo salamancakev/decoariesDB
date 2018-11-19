@@ -40,7 +40,8 @@
       </div>
     </div>
 <h1></h1>
-      <button type="button" class="btn btn-success" (click)="onConfirm()">Update</button>
+      <button type="button" class="btn btn-success mb-2" (click)="onConfirm()">Update</button>
+      <button class="btn btn-danger mb-2" (click)="confirmDelete(delete)">Delete User</button>
       <div *ngIf="confirm">
           <h1></h1>      
           <p>Do you want to confirm this changes?</p>
@@ -119,7 +120,6 @@
             <tr *ngFor="let u of users | usersFilter:email">
                 <td *ngFor="let col of columns" (click)="onClick(u, content)">{{u[col]}}</td>
                 <td (click)="onClick(u,content)">{{u.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
-                <button class="btn btn-danger" (click)="confirmDelete(u, delete)">Delete User</button>
             </tr>
           </tbody>
         </table>

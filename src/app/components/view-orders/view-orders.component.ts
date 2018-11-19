@@ -180,6 +180,7 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   onDelete(){
+    this.selectedOrder.idUser=this.authService.user.idUser
     this.dbService.deleteOrder(this.selectedOrder).subscribe(data=>{
       if(data.success){
         this.flashMessage.show(data.msg, {cssClass : 'alert-success'})
@@ -202,7 +203,8 @@ export class ViewOrdersComponent implements OnInit {
       orderProducts : this.orderDetails,
       price : this.selectedOrder.Price,
       status : this.selectedOrder.Status,
-      observations : this.selectedOrder.Observations
+      observations : this.selectedOrder.Observations,
+      idUser : this.authService.user.idUser
     }
    
 

@@ -69,8 +69,8 @@ export class ViewUsersComponent implements OnInit {
     this.confirm=false;
   }
 
-  confirmDelete(user, content){
-    this.selectedUser=user;
+  confirmDelete(content){
+    this.modalReference.close()
     this.deleteModalReference=this.modalService.open(content);
   }
 

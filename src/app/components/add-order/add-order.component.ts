@@ -208,7 +208,8 @@ export class AddOrderComponent implements OnInit {
     price : this.price,
     observations : this.observations,
     status : this.status,
-    orderDate : registerDate
+    orderDate : registerDate,
+    idUser : this.idUser
   }
   if(this.orderProducts.length==0){
     this.flashMessage.show('Please add products to the order', {cssClass: 'alert-danger'})

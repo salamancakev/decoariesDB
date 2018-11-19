@@ -57,7 +57,10 @@
                     </div>
                   </div>
               
-                  <button type="button" class="btn btn-success" (click)="onConfirm()">Update</button>
+                  <button type="button" class="btn btn-success mb-2" (click)="onConfirm()">Update</button>
+                  <div *ngIf="user.Type=='Admin'">
+                    <button class="btn btn-danger mb-2" (click)="confirmDelete(delete)">Delete Company</button>
+                  </div>
                   <div *ngIf="confirm">
                       <h1></h1>      
                       <p>Do you want to confirm this changes?</p>
@@ -124,9 +127,6 @@
               <tr *ngFor="let c of companies | companiesFilter: email">
                   <td *ngFor="let col of columns"(click)="onClick(c, details)">{{c[col]}}</td>
                   <button class="btn btn-warning mb-2" (click)="searchClients(c, rar)">View Clients</button>
-                  <div *ngIf="user.Type=='Admin'">
-                    <button class="btn btn-danger mb-2" (click)="confirmDelete(c, delete)">Delete Company</button>
-                  </div>
               </tr>
             </tbody>
           </table>

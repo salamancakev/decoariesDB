@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row">
+    <h1 class="mb-3">Product Analysis</h1>
+  </div>
+
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Product Report</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    <p><b>Total of products placed in orders:</b> {{totalQuantity}} </p>
+    <p><b>Total of products sold:</b> {{completedQuantity}} </p>
+    <p><b>Total of products denied:</b> {{deniedQuantity}} </p>
+    <p><b>Sold products percentage:</b> {{percentage}}% </p>
+        </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+<div class="row">
+  <h4>Select a product</h4>
+</div>
+
+<form (submit)="onSubmit(content)" ngNativeValidate>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="product">Product</label>
+        <select class="form-control" [(ngModel)]="selectedProduct" name="product" id="product" required>
+          <option *ngFor="let p of products" [ngValue]="p"> {{p.Name}}. Description: {{p.Description}}. Size: {{p.Size}} </option>
+        </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <button class="btn btn-success" type="submit">Create Report</button>
+  </div>
+</form>
+<h1></h1>
+<button class="btn btn-primary" routerLink="/analysis">Back</button>
+</div>
