@@ -446,6 +446,20 @@ router.get('/api/get-orders', function(req, res){
     res.json({success : false, msg : "Something went wrong"});
   })
 
+})
+
+router.post('/api/get-order-user', checkJwt, function(req,res){
+
+  connection.query("select user.Name from orders inner join user on orders.createdBy = user.idUser where orders.idOrder = '"+req.body.idOrder+"'", {type : connection.QueryTypes.SELECT})
+  .then(createdBy=>{
+    connection.query("select user.Name from orders inner join user on orders.modifiedBy = user.idUser where orders.idOrder = '"+req.body.idOrder+"'", {type : connection.QueryTypes.SELECT})
+    .then(modifiedBy=>{
+      return res.json({createdBy : createdBy[0].Name, modifiedBy : modifiedBy[0].Name})
+    })
+  }).catch(error=>{
+    console.log(error)
+    return res.json({success : false, msg : "Something went wrong"})
+  })
 
 })
 

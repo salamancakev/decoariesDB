@@ -113,12 +113,15 @@
         <p> {{i+1}}) <b>Product</b>: {{o.Name}}. <b>Description</b>: {{o.Description}}. <b>Quantity</b>: {{o.Quantity}}. <b>Color:</b> {{o.Color}}. <b>Cloth Type:</b> {{o.ClothType}}.</p>
       </div>
       <p><b>Observations</b>: {{selectedOrder.Observations}} </p>
-      
-      <div class="modal-footer">
+      <div *ngIf="user.Type=='Admin'">
+        <p><b>Created By:</b> {{createdBy}} </p>
+        <p><b>Modified By:</b> {{modifiedBy}} </p>
+      </div>
+    </div>
+    <div class="modal-footer">
           <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="onEdit(content)">Edit</button>
         <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
       </div>
-    </div>
     </ng-template>
 
     <ng-template #delete let-c="close" let-d="dismiss">
@@ -187,6 +190,7 @@
                 <div *ngIf="user.Type=='Admin' && false">
                   <button class="btn btn-danger" (click)="confirmDelete(o, delete)">Delete Order</button>
                 </div>
+                
             </tr>
           </tbody>
         </table>

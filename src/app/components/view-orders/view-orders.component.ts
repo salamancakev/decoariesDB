@@ -42,6 +42,9 @@ export class ViewOrdersComponent implements OnInit {
     errorMsg: any;
     auth0 =false;
 
+    createdBy: any;
+    modifiedBy : any;
+
   constructor(private router : Router,
     private datePipe : DatePipe,
     private dbService : DatabaseService,
@@ -72,11 +75,18 @@ export class ViewOrdersComponent implements OnInit {
      this.orderDetails = data[0];
      this.orderDetails.forEach(value => {
       this.totalQuantity=this.totalQuantity+value.Quantity
+      
     });
+      this.detailsModalReference=this.modalService.open(details);
    })
 
+   this.dbService.getOrderUser(order).subscribe(data=>{
+     this.createdBy=data.createdBy
+     this.modifiedBy=data.modifiedBy
+   })
 
-   this.detailsModalReference=this.modalService.open(details);
+   
+   
   }
 
   onEdit(content){

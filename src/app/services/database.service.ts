@@ -83,6 +83,13 @@ export class DatabaseService {
     return this.http.post('http://localhost:8080/api/get-order-details', order, {headers : headers}).pipe(map(res=>res.json()));
   }
 
+  getOrderUser(order){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer '+this.authService.userToken);
+    return this.http.post('http://localhost:8080/api/get-order-user', order, {headers : headers}).pipe(map(res=>res.json()));
+  }
+
   updateOrder(order){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
