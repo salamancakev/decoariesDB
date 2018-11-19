@@ -120,6 +120,10 @@
             <tr *ngFor="let u of users | usersFilter:email">
                 <td *ngFor="let col of columns" (click)="onClick(u, content)">{{u[col]}}</td>
                 <td (click)="onClick(u,content)">{{u.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
+<<<<<<< HEAD
+=======
+                <button class="btn btn-danger" (click)="confirmDelete(u, delete)">Delete User</button>
+>>>>>>> c88f481881a9ac9284a8cf2d236d178e3c210b2e
             </tr>
           </tbody>
         </table>

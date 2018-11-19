@@ -126,7 +126,15 @@
             <tbody>
               <tr *ngFor="let p of products | productsFilter:email">
                   <td *ngFor="let col of columns" (click)="onClick(p,content)">{{p[col]}}</td>
+<<<<<<< HEAD
                   <button class="btn btn-warning mb-2" (click)="openImage(p, imagemodal)">View Image</button>  
+=======
+                  <button class="btn btn-warning mb-2" (click)="openImage(p, imagemodal)">View Image</button>
+                  <div *ngIf="user.Type=='Admin'">
+                    <button class="btn btn-danger mb-2" (click)="confirmDelete(p, delete)">Delete Product</button>
+                  </div>
+                  
+>>>>>>> c88f481881a9ac9284a8cf2d236d178e3c210b2e
               </tr>
             </tbody>
           </table>
