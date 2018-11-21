@@ -15,6 +15,7 @@
     <p><b>Total of products sold:</b> {{completedQuantity}} </p>
     <p><b>Total of products denied:</b> {{deniedQuantity}} </p>
     <p><b>Sold products percentage:</b> {{percentage}}% </p>
+    <button class="btn btn-success mt-2" (click)="downloadProductReport()">Download Report</button>
         </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
@@ -35,9 +36,10 @@
     </div>
   </div>
   <div class="form-row">
-    <button class="btn btn-success" type="submit">Create Report</button>
+    <button class="btn btn-success mb-2" type="submit">Create Report</button>
   </div>
 </form>
+<button class="btn btn-info" (click)="productsReport()">Download Report for all Products</button>
 <h1></h1>
 <button class="btn btn-primary" routerLink="/analysis">Back</button>
 </div>

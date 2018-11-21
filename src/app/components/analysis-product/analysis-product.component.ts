@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {DatabaseService} from '../../services/database.service';
+import {ExcelService} from '../../services/excel.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 
@@ -18,7 +19,7 @@ export class AnalysisProductComponent implements OnInit {
   deniedQuantity: number;
   percentage : number;
 
-  constructor(private authService : AuthService, private dbService : DatabaseService, private modalService : NgbModal) { }
+  constructor(private authService : AuthService, private dbService : DatabaseService, private modalService : NgbModal, private excelService : ExcelService) { }
 
   ngOnInit() {
   this.dbService.getProducts().subscribe(data=>{
@@ -42,14 +43,71 @@ export class AnalysisProductComponent implements OnInit {
       if(this.totalQuantity==null){
         this.totalQuantity=0
       }
-
-    this.percentage= (this.completedQuantity/this.totalQuantity)*100
+    
+      if(this.totalQuantity==0 && this.completedQuantity==0){
+        this.percentage=0
+      }
+      else{
+        this.percentage= (this.completedQuantity/this.totalQuantity)*100
+      }
+    
     console.log(this.percentage)
 
     this.modalService.open(content, {size : 'lg'})
 
     })
 
+  }
+
+
+  downloadProductReport(){
+    let excelJson = [{
+      Name : this.selectedProduct.Name,
+      TotalInOrders : this.totalQuantity,
+      TotalSold : this.completedQuantity,
+      TotalDenied : this.deniedQuantity,
+      PercentageSold : this.percentage
+    } ] 
+
+    return this.excelService.exportAsExcelFile(excelJson, this.selectedProduct.Name+' Report');
+  }
+
+
+  productsReport(){
+    let excelJson = []
+    let percentage
+    this.products.forEach(value=>{
+      this.dbService.getProductReport(value).subscribe(data=>{
+       if(data.completed==null){
+         data.completed=0
+       }
+
+       if(data.denied == null){
+         data.denied=0
+       }
+
+       if(data.total==null){
+         data.total=0
+       }
+
+       if(data.total==0 && data.completed==0){
+         percentage=0
+       }
+       else{
+         percentage=(data.completed/data.total)*100
+       }
+
+       excelJson.push({
+        name : value.Name,
+        total : data.total,
+        sold: data.completed,
+        denied : data.denied,
+        percentage: percentage
+       })
+      })
+      
+    })
+   this.excelService.exportAsExcelFile(excelJson, 'Report')
   }
 
 }

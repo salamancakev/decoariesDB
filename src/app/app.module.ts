@@ -37,6 +37,7 @@ import { AnalisisDashboardComponent } from './components/analisis-dashboard/anal
 import { AnalysisProductComponent } from './components/analysis-product/analysis-product.component';
 import { AnalysisCompanyComponent } from './components/analysis-company/analysis-company.component';
 import { AnalysisEmployeeComponent } from './components/analysis-employee/analysis-employee.component';
+import { ExcelService } from './services/excel.service';
 
 const appRoutes : Routes = [
   {path : '', redirectTo : 'login', pathMatch : 'full'},
@@ -102,7 +103,7 @@ const appRoutes : Routes = [
     FormsModule,
     HttpModule
   ],
-  providers: [DatabaseService, ValidateService, AuthService, DatePipe],
+  providers: [DatabaseService, ValidateService, AuthService, DatePipe, ExcelService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
