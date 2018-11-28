@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {DatabaseService} from '../../services/database.service';
+import {ExcelService} from '../../services/excel.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 
@@ -17,11 +18,39 @@ export class AnalysisCompanyComponent implements OnInit {
  totalCompleted: number;
  totalDenied : number;
  percentage: number;
-  constructor(private authService : AuthService, private dbService : DatabaseService, private modalService : NgbModal) { }
+ excelJson = [];
+  constructor(private authService : AuthService, private dbService : DatabaseService, private excelService : ExcelService, private modalService : NgbModal) { }
  
   ngOnInit() {
     this.dbService.getCompanies().subscribe(data=>{
       this.companies=data;
+      let percentage
+      this.companies.forEach(value=>{
+        this.dbService.getCompanyReport(value).subscribe(data=>{
+          if(data.completed==null){
+            data.completed=0
+          }
+          if(data.denied == null){
+            data.denied=0
+          }
+          if(data.total==null){
+            data.total=0
+          }
+          if(data.total==0 && data.completed==0){
+            percentage=0
+          }
+          else{
+            percentage=(data.completed/data.total)*100
+          }
+          this.excelJson.push({
+        "Name" : value.Name,
+        "Orders Made" : data.total,
+        "Total Sold": data.completed,
+        "Total Denied" : data.denied,
+        "Percentage Sold": percentage+"%"
+          })
+        })
+      })
     })
     }
   
@@ -49,5 +78,9 @@ export class AnalysisCompanyComponent implements OnInit {
   
       })
   
+    }
+
+    downloadReport(){
+     return this.excelService.exportAsExcelFile(this.excelJson, "Company Report")
     }
 }

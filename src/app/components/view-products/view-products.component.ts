@@ -5,6 +5,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
 import { AuthService } from '../../services/auth.service';
+import {ExcelService} from '../../services/excel.service';
 import { ReplaySubject } from 'rxjs';
 @Component({
   selector: 'app-view-products',
@@ -29,17 +30,26 @@ export class ViewProductsComponent implements OnInit {
   adminPass : any;
   errorMsg: any;
   auth0 =false;
+  excelJson = [];
 
   constructor(private router : Router,
   private dbService : DatabaseService,
   private validateService : ValidateService,
   private authService : AuthService,
+  private excelService : ExcelService,
   private modalService : NgbModal,
   private flashMessage : FlashMessagesService) { }
 
   ngOnInit() {
     this.dbService.getProducts().subscribe(data=>{
       this.products=data;
+      this.products.forEach(value=>{
+        this.excelJson.push({
+          Name : value.Name,
+          Description : value.Description,
+          Size : value.Size
+        })
+      })
     })
 
     this.user=this.authService.user;
@@ -176,6 +186,10 @@ export class ViewProductsComponent implements OnInit {
       }
     })
 
+  }
+
+  downloadReport(){
+    return this.excelService.exportAsExcelFile(this.excelJson, "Product Report")
   }
 
 }

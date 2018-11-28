@@ -7,6 +7,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
 import { AuthService } from '../../services/auth.service';
+import {ExcelService} from '../../services/excel.service';
 @Component({
   selector: 'app-view-clients',
   templateUrl: './view-clients.component.html',
@@ -32,6 +33,8 @@ export class ViewClientsComponent implements OnInit {
   errorMsg: any;
   auth0 =false;
 
+  excelJson = []
+
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -52,12 +55,24 @@ export class ViewClientsComponent implements OnInit {
   private validateService : ValidateService,
   private modalService : NgbModal,
   private flashMessage : FlashMessagesService,
-  private authService : AuthService) { }
+  private authService : AuthService,
+  private excelService : ExcelService) { }
 
   ngOnInit() {
 
     this.dbService.getClients().subscribe(data=>{
-      this.clients=data[0] 
+      this.clients=data[0]
+      this.clients.forEach(value=>{
+        this.excelJson.push({
+          Name : value.Name,
+          Gender : value.Gender,
+          Email :value.Email,
+          Status : value.Status,
+          Company : value.Company,
+          Website : value.Website,
+          createdBy : value.createdBy
+        })
+      })
   })
 
   let names = [];
@@ -211,6 +226,10 @@ this.dbService.updateClient(client).subscribe(data =>{
   }
 })
 
+}
+
+downloadReport(){
+  return this.excelService.exportAsExcelFile(this.excelJson, "Clients Report")
 }
 
 }

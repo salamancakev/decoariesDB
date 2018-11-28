@@ -18,13 +18,45 @@ export class AnalysisProductComponent implements OnInit {
   completedQuantity: number;
   deniedQuantity: number;
   percentage : number;
+  excelJson =[];
 
   constructor(private authService : AuthService, private dbService : DatabaseService, private modalService : NgbModal, private excelService : ExcelService) { }
 
   ngOnInit() {
   this.dbService.getProducts().subscribe(data=>{
     this.products=data;
-  })
+    let percentage
+    this.products.forEach(value=>{
+      this.dbService.getProductReport(value).subscribe(data=>{
+        console.log(data)
+       if(data.completed==null){
+         data.completed=0
+       }
+       if(data.denied == null){
+         data.denied=0
+       }
+       if(data.total==null){
+         data.total=0
+       }
+       if(data.total==0 && data.completed==0){
+         percentage=0
+       }
+       else{
+         percentage=(data.completed/data.total)*100
+       }
+       this.excelJson.push({
+        "Name" : value.Name,
+        "Total In Orders" : data.total,
+        "Total Sold": data.completed,
+        "Total Denied" : data.denied,
+        "Percentage Sold": percentage+"%"
+       })
+      })
+    })
+
+    console.log(this.excelJson)
+  });
+  
   }
 
   onSubmit(content){
@@ -74,40 +106,7 @@ export class AnalysisProductComponent implements OnInit {
 
 
   productsReport(){
-    let excelJson = []
-    let percentage
-    this.products.forEach(value=>{
-      this.dbService.getProductReport(value).subscribe(data=>{
-       if(data.completed==null){
-         data.completed=0
-       }
-
-       if(data.denied == null){
-         data.denied=0
-       }
-
-       if(data.total==null){
-         data.total=0
-       }
-
-       if(data.total==0 && data.completed==0){
-         percentage=0
-       }
-       else{
-         percentage=(data.completed/data.total)*100
-       }
-
-       excelJson.push({
-        name : value.Name,
-        total : data.total,
-        sold: data.completed,
-        denied : data.denied,
-        percentage: percentage
-       })
-      })
-      
-    })
-   this.excelService.exportAsExcelFile(excelJson, 'Report')
+  return  this.excelService.exportAsExcelFile(this.excelJson, 'Report')
   }
 
 }
