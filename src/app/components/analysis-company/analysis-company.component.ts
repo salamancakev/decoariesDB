@@ -57,7 +57,6 @@ export class AnalysisCompanyComponent implements OnInit {
     onSubmit(content){
   
       this.dbService.getCompanyReport(this.selectedCompany).subscribe(data=>{
-        console.log(data)
         this.totalCompleted=data.completed
         if(this.totalCompleted==null){
           this.totalCompleted=0
@@ -72,7 +71,6 @@ export class AnalysisCompanyComponent implements OnInit {
         }
   
       this.percentage= (this.totalCompleted/this.totalOrders)*100
-      console.log(this.percentage)
   
       this.modalService.open(content, {size : 'lg'})
   
