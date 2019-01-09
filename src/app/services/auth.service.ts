@@ -43,7 +43,7 @@ export class AuthService {
     }
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:8080/api/login', body, {headers : headers}).pipe(map(res=>res.json()));
+    return this.http.post('/api/login', body, {headers : headers}).pipe(map(res=>res.json()));
   }
 
   signup(user){
@@ -61,7 +61,7 @@ export class AuthService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer '+this.userToken)
 
-    return this.http.post('http://localhost:8080/api/signup',body, {headers : headers}).pipe(map(res=>res.json()));
+    return this.http.post('/api/signup',body, {headers : headers}).pipe(map(res=>res.json()));
 
   }
 
