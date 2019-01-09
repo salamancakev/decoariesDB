@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {Router} from '@angular/router';
 import {DatePipe} from "@angular/common";
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -6,6 +6,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { DatabaseService } from "../../services/database.service";
 import { ValidateService } from "../../services/validate.service";
 import { AuthService } from '../../services/auth.service';
+declare var $;
 @Component({
   selector: 'app-view-orders',
   templateUrl: './view-orders.component.html',
@@ -31,7 +32,14 @@ export class ViewOrdersComponent implements OnInit {
     cloth : any;
     totalQuantity=0;
     confirm =false;
-    email :any;
+    field : any;
+    client : any;
+    orderID : any;
+    email : any;
+    status : any;
+    company : any;
+    price : any;
+    date : any;
 
     reason : any;
 

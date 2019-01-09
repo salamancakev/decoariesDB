@@ -174,7 +174,99 @@
       </div>
     </ng-template>
 
-  <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
+    <div class="row mb-4 align-items-center">
+      <div class="col-md-2">
+       <h5>Search by Field </h5>
+       
+      </div>
+      <div class="col-md-3">
+        <select name="field" id="field" class="form-control" [(ngModel)]="field">
+          <option value="" disabled>Select a Field</option>
+          <option value="orderID">Order ID</option>
+          <option value="client">Client</option>
+          <option value="email">Email</option>
+          <option value="company">Company</option>
+          <option value="status">Status</option>
+          <option value="date">Date</option>
+          <option value="price">Price</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <div *ngIf="field == 'client'">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" placeholder="Search client..." [(ngModel)]="client" name="client">
+          </div>
+        </div>
+        <div *ngIf="field == 'orderID'">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Search ID..." [(ngModel)]="orderID" name="orderID">
+            </div>
+          </div>
+          <div *ngIf="field == 'email'">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Search email..." [(ngModel)]="email" name="email">
+              </div>
+            </div>
+            <div *ngIf="field == 'company'">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Search company..." [(ngModel)]="company" name="company">
+                </div>
+              </div>
+              <div *ngIf="field == 'status'">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search status..." [(ngModel)]="status" name="status">
+                  </div>
+                </div>
+                <div *ngIf="field == 'date'">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-search"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Search date..." [(ngModel)]="date" name="date">
+                    </div>
+                  </div>
+                  <div *ngIf="field == 'price'">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                          </span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search price..." [(ngModel)]="price" name="price">
+                      </div>
+                    </div>
+      </div>
+      
+    </div>
+  
 
   <div class="row">
     <div class="table-responsive-md">
@@ -185,7 +277,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let o of orders | ordersFilter:email">
+            <tr *ngFor="let o of orders | ordersClientFilter:client | ordersIDFilter:orderID | ordersEmailFilter:email | ordersStatusFilter:status | ordersCompanyFilter:company | ordersPriceFilter:price | ordersDateFilter:date">
                 <td *ngFor="let col of columns" (click)="openOrderDetails(o, details)">{{o[col]}}</td>
                 <div *ngIf="user.Type=='Admin' && false">
                   <button class="btn btn-danger" (click)="confirmDelete(o, delete)">Delete Order</button>

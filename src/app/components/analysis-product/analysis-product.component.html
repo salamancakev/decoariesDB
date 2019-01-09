@@ -22,6 +22,39 @@
     </div>
   </ng-template>
 
+  <ng-template #report let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title">Products Report</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+             <div class="table-responsive-md">
+              <table class="table table-hover">
+                  <thead class="thead-light">
+                    <tr>
+                        <th *ngFor="let col of columns">{{col}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let e of excelJson" >
+                        <td *ngFor="let col of columns">{{e[col]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div> 
+        </div>
+          <button class="btn btn-info mt-2" (click)="downloadReport()">Download Report as Excel File</button>
+          </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+      </div>
+    </ng-template>
+
 <div class="row">
   <h4>Select a product</h4>
 </div>
@@ -39,7 +72,7 @@
     <button class="btn btn-success mb-2" type="submit">Create Report</button>
   </div>
 </form>
-<button class="btn btn-info" (click)="productsReport()">Download Report for all Products</button>
+<button class="btn btn-info" (click)="onViewReport(report)">Get Report for all Products</button>
 <h1></h1>
 <button class="btn btn-primary" routerLink="/analysis">Back</button>
 </div>

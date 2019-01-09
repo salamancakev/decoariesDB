@@ -23,7 +23,14 @@ export class ViewClientsComponent implements OnInit {
   phone : String;
   phones=[];
   modalReference :any;
-  email : any;
+  field : any;
+  name : any;
+  email: any;
+  company : any;
+  gender : any;
+  status : any;
+  website : any;
+  date : any;
   confirm = false;
 
   deleteModalReference : any;
@@ -85,14 +92,9 @@ export class ViewClientsComponent implements OnInit {
       this.companyNames = names;
     })
     this.user=this.authService.user;
-
-    if(this.user.Type == 'Admin'){
-      this.columns=['Name', 'Gender', 'Email', 'Status', 'Company', 'Website', 'createdBy'];
-    }
-
-    else{
+    
       this.columns=['Name', 'Gender', 'Email', 'Status', 'Company', 'Website'];
-    }
+  
 
 }
 
@@ -105,6 +107,16 @@ onClick(client, content){
   })
   console.log(this.phones);
   this.modalReference=this.modalService.open(content, {size : 'lg'});
+}
+
+clearFields(){
+  this.name = null;
+  this.company = null;
+  this.date = null;
+  this.email = null;
+  this.gender = null;
+  this.status = null;
+  this.website = null;
 }
 
 onAdd(){

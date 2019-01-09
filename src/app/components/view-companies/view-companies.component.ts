@@ -20,6 +20,9 @@ export class ViewCompaniesComponent implements OnInit {
   clients : any[];
   selectedCompany : any;
 
+  company: any;
+  website: any;
+
   editModalReference : any;
   clientsModalReference : any;
   deleteModalReference : any;
@@ -45,14 +48,7 @@ export class ViewCompaniesComponent implements OnInit {
     })
 
     this.user=this.authService.user
-
-    if(this.user.Type == 'Admin'){
-      this.columns=['Company', 'Website', 'createdBy', 'From'];
-    }
-
-    else{
-      this.columns=['Company', 'Website'];
-    }
+      this.columns=['Company', 'Website', 'From'];
 
   }
 
@@ -65,6 +61,11 @@ export class ViewCompaniesComponent implements OnInit {
       this.clients=data;
       this.clientsModalReference=this.modalService.open(clients, {size : 'lg'});
     })
+  }
+
+  clearFields(){
+    this.company = null;
+    this.website = null;
   }
 
   onConfirm(){

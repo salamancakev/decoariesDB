@@ -41,6 +41,15 @@ export class AddOrderComponent implements OnInit {
     clientModalReference:  any;
     searchModalReference: any;
 
+    field : any;
+    searchName : any;
+    searchEmail: any;
+    searchCompany : any;
+    searchGender : any;
+    searchStatus : any;
+    searchWebsite : any;
+    searchDate : any;
+
     idUser : any;
     method : Number;
     email1 : any;
@@ -87,6 +96,21 @@ export class AddOrderComponent implements OnInit {
 
   openSearchClient(content){
     this.searchModalReference=this.modalService.open(content, {size : 'lg', windowClass: 'modal-xxl'});
+  }
+
+  clearFields(){
+    this.searchName = null;
+    this.searchCompany = null;
+    this.searchDate = null;
+    this.searchEmail = null;
+    this.searchGender = null;
+    this.searchStatus = null;
+    this.searchWebsite = null;
+  }
+
+  closeSearchClient(){
+    this.clearFields()
+    this.searchModalReference.close();
   }
 
   onSelectClient(client){

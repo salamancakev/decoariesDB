@@ -11,6 +11,9 @@
       </button>
     </div>
     <div class="modal-body">
+      <div *ngIf="user.Type == 'Admin'">
+        <h5 class="text-muted">Created By: {{selectedClient.createdBy}} </h5>
+      </div>
       <form ngNativeValidate (submit) = "onSubmit()">
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -117,7 +120,98 @@
     </div>
   </ng-template>
     
-  <input type="text" [(ngModel)]="email" placeholder="Search any field..."/>
+  <div class="row mb-4 align-items-center">
+      <div class="col-md-2">
+       <h5>Search by Field </h5>
+       
+      </div>
+      <div class="col-md-3">
+        <select name="field" id="field" class="form-control" [(ngModel)]="field" (change)="clearFields()">
+          <option value="" disabled>Select a Field</option>
+          <option value="name">Name</option>
+          <option value="gender">Gender</option>         
+          <option value="email">Email</option>
+          <option value="company">Company</option>
+          <option value="website">Website</option>
+          <option value="status">Status</option>
+          <option value="date">Date</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <div *ngIf="field == 'name'">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" placeholder="Search name..." [(ngModel)]="name" name="name">
+          </div>
+        </div>
+        <div *ngIf="field == 'gender'">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Search gender..." [(ngModel)]="gender" name="gender">
+            </div>
+          </div>
+          <div *ngIf="field == 'email'">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Search email..." [(ngModel)]="email" name="email">
+              </div>
+            </div>
+            <div *ngIf="field == 'company'">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Search company..." [(ngModel)]="company" name="company">
+                </div>
+              </div>
+              <div *ngIf="field == 'status'">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search status..." [(ngModel)]="status" name="status">
+                  </div>
+                </div>
+                <div *ngIf="field == 'date'">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-search"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Search date..." [(ngModel)]="date" name="date">
+                    </div>
+                  </div>
+                  <div *ngIf="field == 'website'">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                          </span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search website..." [(ngModel)]="website" name="website">
+                      </div>
+                    </div>
+      </div>
+      
+    </div>
 
   
 
@@ -131,7 +225,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let c of clients | clientsFilter:email" >
+            <tr *ngFor="let c of clients | clientsNameFilter:name | clientsGenderFilter:gender | clientsEmailFilter:email | clientsCompanyFilter:company | clientsStatusFilter:status | clientsWebsiteFilter:website | clientsDateFilter:date | clientsCreatedByFilter:createdBy" >
                 <td *ngFor="let col of columns" (click)="onClick(c, content)">{{c[col]}}</td>
                 <td (click)="onClick(c, content)">{{c.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
             </tr>

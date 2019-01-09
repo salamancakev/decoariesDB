@@ -21,11 +21,13 @@
         <p>View and edit orders. </p>
         <p><a class="btn btn-secondary" routerLink="/view-orders" role="button">View &raquo;</a></p>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" *ngIf="authService.user.Type == 'Admin'">
         <h2>Deleted orders</h2>
         <p>View deleted orders. </p>
         <p><a class="btn btn-secondary" routerLink="/deleted-orders" role="button">View &raquo;</a></p>
       </div>
+      
+      
     </div>
 
     <hr>

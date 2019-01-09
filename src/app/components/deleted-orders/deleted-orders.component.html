@@ -42,7 +42,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let o of orders | ordersFilter:email">
+            <tr *ngFor="let o of orders">
                 <td *ngFor="let col of columns" (click)="openOrderDetails(o, details)">{{o[col]}}</td>
             </tr>
           </tbody>

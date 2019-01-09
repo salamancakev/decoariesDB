@@ -71,13 +71,103 @@
   <ng-template #search let-c="close" let-d="dismiss">
       <div class="modal-header">
         <h4 class="modal-title">Search Client</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <button type="button" class="close" aria-label="Close" (click)="closeSearchClient()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <h4>Select the client</h4>
-              <input type="text" [(ngModel)]="email1" placeholder="Search any field..."/>
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-2">
+             <h5>Search by Field </h5>          
+            </div>
+            <div class="col-md-3">
+              <select name="field" id="field" class="form-control" [(ngModel)]="field" (change)="clearFields()">
+                <option value="" disabled>Select a Field</option>
+                <option value="name">Name</option>
+                <option value="gender">Gender</option>         
+                <option value="email">Email</option>
+                <option value="company">Company</option>
+                <option value="website">Website</option>
+                <option value="status">Status</option>
+                <option value="date">Date</option>
+              </select>
+            </div>
+      
+            <div class="col-md-4">
+              <div *ngIf="field == 'name'">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Search name..." [(ngModel)]="searchName" name="name">
+                </div>
+              </div>
+              <div *ngIf="field == 'gender'">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search gender..." [(ngModel)]="searchGender" name="gender">
+                  </div>
+                </div>
+                <div *ngIf="field == 'email'">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-search"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Search email..." [(ngModel)]="searchEmail" name="email">
+                    </div>
+                  </div>
+                  <div *ngIf="field == 'company'">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                          </span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search company..." [(ngModel)]="searchCompany" name="company">
+                      </div>
+                    </div>
+                    <div *ngIf="field == 'status'">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="fas fa-search"></i>
+                            </span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Search status..." [(ngModel)]="searchStatus" name="status">
+                        </div>
+                      </div>
+                      <div *ngIf="field == 'date'">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                              </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search date..." [(ngModel)]="searchDate" name="date">
+                          </div>
+                        </div>
+                        <div *ngIf="field == 'website'">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="fas fa-search"></i>
+                                </span>
+                              </div>
+                              <input type="text" class="form-control" placeholder="Search website..." [(ngModel)]="searchWebsite" name="website">
+                            </div>
+                          </div>
+            </div>
+            
+          </div>
               <div class="row">
                   <div class="table-responsive">
                     <table class="table table-hover">
@@ -88,7 +178,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let c of clients | clientsFilter:email1" (click)="onSelectClient(c)">
+                          <tr *ngFor="let c of clients | clientsNameFilter:searchName | clientsGenderFilter:searchGender | clientsEmailFilter:searchEmail | clientsCompanyFilter:searchCompany | clientsStatusFilter:searchStatus | clientsWebsiteFilter:searchWebsite | clientsDateFilter:searchDate" (click)="onSelectClient(c)">
                               <td *ngFor="let col of columns">{{c[col]}}</td>
                               <td>{{c.createDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
                           </tr>
@@ -98,7 +188,7 @@
                 </div>
           </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="c('Close click')">Close</button>
+        <button type="button" class="btn btn-outline-primary mb-2 mr-2" (click)="closeSearchClient()">Close</button>
       </div>
     </ng-template>
 

@@ -19,6 +19,7 @@ export class AnalysisProductComponent implements OnInit {
   deniedQuantity: number;
   percentage : number;
   excelJson =[];
+  columns = ['Name', 'Total In Orders', 'Total Sold', 'Total Denied', 'Percentage Sold'];
 
   constructor(private authService : AuthService, private dbService : DatabaseService, private modalService : NgbModal, private excelService : ExcelService) { }
 
@@ -57,6 +58,10 @@ export class AnalysisProductComponent implements OnInit {
     console.log(this.excelJson)
   });
   
+  }
+
+  onViewReport(content){
+    this.modalService.open(content, {size : 'lg'});
   }
 
   onSubmit(content){

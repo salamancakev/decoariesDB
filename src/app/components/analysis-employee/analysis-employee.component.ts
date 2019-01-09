@@ -20,6 +20,7 @@ export class AnalysisEmployeeComponent implements OnInit {
   deniedOrders : number;
   percentage : number;
   excelJson = [];
+  columns = ['Name', 'Orders Made', 'Total Sold', 'Total Denied', 'Percentage Sold'];
 
   constructor(private authService : AuthService, private dbService : DatabaseService, private excelService : ExcelService, private modalService : NgbModal) { }
 
@@ -55,6 +56,10 @@ export class AnalysisEmployeeComponent implements OnInit {
         })
       })
     })
+  }
+
+  onViewReport(content){
+    this.modalService.open(content, {size:'lg'});
   }
 
   onSubmit(content){
