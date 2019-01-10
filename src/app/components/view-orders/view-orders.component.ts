@@ -40,7 +40,11 @@ export class ViewOrdersComponent implements OnInit {
     company : any;
     price : any;
     date : any;
-
+    numOfPages: any;
+    pagesArray = [];
+    currentPage : any;
+    ordersPage = [];
+    ordersIndex : any;
     reason : any;
 
     editProducts : boolean;
@@ -68,12 +72,58 @@ export class ViewOrdersComponent implements OnInit {
     })
     this.dbService.getOrders().subscribe(data=>{
       this.orders=data[0]
+      this.numOfPages= Math.ceil(this.orders.length/25);
+      for(let i=0; i<this.numOfPages;i++){
+        this.pagesArray.push('Page');
+      }
+      this.ordersIndex=0;
+      for(this.ordersIndex; this.ordersIndex<25 && this.ordersIndex<this.orders.length;this.ordersIndex++){
+        this.ordersPage.push(this.orders[this.ordersIndex])
+      }
+      console.log(this.ordersPage)
+      this.currentPage = 1;
+
     })
 
     this.editProducts=false;
 
     this.user=this.authService.user;
+
+
   }
+
+  changePage(opt){
+    this.ordersPage = [];
+    if(opt == 'prev'){
+      this.currentPage= this.currentPage-1;
+      let aux = this.currentPage*25;
+      this.ordersIndex = aux-25
+
+      for(this.ordersIndex; this.ordersIndex<aux && this.ordersIndex<this.orders.length;this.ordersIndex++){
+        this.ordersPage.push(this.orders[this.ordersIndex])
+      } 
+
+    }
+
+    else if(opt == 'next'){
+      let aux = this.ordersIndex+25
+      for(this.ordersIndex; this.ordersIndex<aux && this.ordersIndex<this.orders.length;this.ordersIndex++){
+        this.ordersPage.push(this.orders[this.ordersIndex])
+      }
+      this.currentPage=this.currentPage+1;
+    }
+
+    else{
+      this.currentPage = opt;
+      let aux = this.currentPage*25;
+      this.ordersIndex = aux-25;
+
+      for(this.ordersIndex; this.ordersIndex<aux && this.ordersIndex<this.orders.length;this.ordersIndex++){
+        this.ordersPage.push(this.orders[this.ordersIndex])
+      } 
+    }
+  }
+
 
   openOrderDetails(order, details){
     this.edit=false;

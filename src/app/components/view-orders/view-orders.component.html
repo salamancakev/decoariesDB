@@ -277,7 +277,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let o of orders | ordersClientFilter:client | ordersIDFilter:orderID | ordersEmailFilter:email | ordersStatusFilter:status | ordersCompanyFilter:company | ordersPriceFilter:price | ordersDateFilter:date">
+            <tr *ngFor="let o of ordersPage | ordersClientFilter:client | ordersIDFilter:orderID | ordersEmailFilter:email | ordersStatusFilter:status | ordersCompanyFilter:company | ordersPriceFilter:price | ordersDateFilter:date">
                 <td *ngFor="let col of columns" (click)="openOrderDetails(o, details)">{{o[col]}}</td>
                 <div *ngIf="user.Type=='Admin' && false">
                   <button class="btn btn-danger" (click)="confirmDelete(o, delete)">Delete Order</button>
@@ -288,6 +288,53 @@
         </table>
     </div>
   </div>
+
+  <div class="row">
+    <nav>
+      <ul class="pagination justify-content-center">
+        <div *ngIf="currentPage == 1">
+          <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+          </li>
+        </div>
+        <div *ngIf="currentPage != 1">
+          <li class="page-item">
+            <a class="page-link text-primary" (click)="changePage('prev')">Previous</a>
+          </li>
+        </div>
+
+        <div *ngFor="let p of pagesArray; index as i">
+          <div *ngIf="currentPage == i+1"> 
+              <li class="page-item active">
+                  <a class="page-link text-white">{{i+1}}</a>
+                </li>
+          </div>
+
+          <div *ngIf="currentPage != i+1"> 
+            <li class="page-item">
+              <a class="page-link text-primary" (click)="changePage(i+1)">{{i+1}}</a>
+            </li>
+          </div>
+          
+        </div>
+
+        <div *ngIf="currentPage == numOfPages">
+          <li class="page-item disabled">
+            <a class="page-link">Next</a>
+          </li>
+        </div>
+
+        <div *ngIf="currentPage != numOfPages">
+          <li class="page-item">
+            <a class="page-link text-primary" (click)="changePage('next')">Next</a>
+          </li>
+        </div>
+
+      </ul>
+    </nav>
+  </div>
+    
+  
     <h1></h1>
     <button class="btn btn-primary" routerLink="/orders">Back</button>
 </div> 
