@@ -41,7 +41,7 @@
     "request": "^2.88.0",
     "rxjs": "^6.0.0",
     "sequelize": "^4.38.0",
-    "xlsx": "^0.14.1",
+    "xlsx": "^0.17.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
